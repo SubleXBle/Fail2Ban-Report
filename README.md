@@ -22,10 +22,10 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – ri
    chmod +x /path/to/fail2ban_log2json.sh
    ```
 3. Open the script and adjust the following lines to fit your environment:
-   ```bash
+   `
    LOGFILE="/var/log/fail2ban.log"       # path to your Fail2Ban log
    OUTPUT_JSON_DIR="/var/www/Fail2Ban/archive"  # output directory for .json files (served by webserver)
-   ```
+   `
 4. Run the script manually or via a daily cronjob:
    Run script via
    ```bash
