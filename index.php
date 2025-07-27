@@ -1,6 +1,8 @@
 <?php include(__DIR__ . '/includes/list-files.php'); ?>
 <?php // index.php Version 0.2.1 ?>
-
+<script>
+  const availableFiles = <?php echo $filesJson; ?>;
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
