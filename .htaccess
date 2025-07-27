@@ -15,6 +15,13 @@ Options -Indexes
   Require all denied
 </Files>
 
+# Protect the .json files in archive/
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^archive/.*\.json$ - [F,L]
+</IfModule>
+
+
 # ----------------------------------------------------
 # BASIC HTTPS HEADERS
 # ----------------------------------------------------
