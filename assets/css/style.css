@@ -29,3 +29,27 @@ th {
 tr:nth-child(even) {
       background-color: #1a1a1a;
     }
+.action-btn {
+  background-color: #b8860b; /* dunkles Gold */
+  color: #111;
+  border: none;
+  padding: 8px 16px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 5px rgba(184, 134, 11, 0.6);
+}
+
+.action-btn:hover, 
+.action-btn:focus {
+  background-color: #ffd700; /* helleres Gold beim Hover */
+  color: #000;
+  outline: none;
+  box-shadow: 0 0 10px #ffd700;
+}
+
+.action-btn:active {
+  background-color: #aa7a00;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+}
