@@ -1,0 +1,31 @@
+# ----------------------------------------------------
+# BASIC PROTECTION
+# ----------------------------------------------------
+
+# Disable directory listing
+Options -Indexes
+
+# Block direct access to sensitive file types
+<FilesMatch "\.(json|css|sh|ini|log|bak|htaccess)$">
+  Require all denied
+</FilesMatch>
+
+# Protect the .htaccess file itself
+<Files .htaccess>
+  Require all denied
+</Files>
+
+# ----------------------------------------------------
+# BASIC HTTPS HEADERS
+# ----------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
+
+# ----------------------------------------------------
+# Set UTF-8 as default charset
+# ----------------------------------------------------
+AddDefaultCharset utf-8
