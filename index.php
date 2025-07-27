@@ -10,6 +10,7 @@
     const availableFiles = <?php echo $filesJson; ?>;
   </script>
   <script src="/assets/js/jsonreader.js" defer></script>
+  <script src="/assets/js/actions.js" defer></script>
 </head>
 <body>
   <h1>Fail2Ban Report</h1>
