@@ -1,14 +1,14 @@
 <?php include(__DIR__ . '/includes/list-files.php'); ?>
 <?php // index.php Version 0.2.1 ?>
-<script>
-  const availableFiles = <?php echo $filesJson; ?>;
-</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Fail2Ban Report</title>
   <link rel="stylesheet" href="/assets/css/style.css" />
+  <script>
+    const availableFiles = <?php echo $filesJson; ?>;
+  </script>
   <script src="/assets/js/jsonreader.js" defer></script>
 </head>
 <body>
