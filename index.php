@@ -20,7 +20,7 @@ $filesJson = json_encode($files);
 <head>
   <meta charset="UTF-8" />
   <title>Fail2Ban Report</title>
-  
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Fail2Ban Report</h1>
