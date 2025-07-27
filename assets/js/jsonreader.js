@@ -71,7 +71,7 @@
           <td>${entry.action}</td>
           <td>${entry.ip}</td>
           <td>${entry.jail}</td>
-          <td><button class="action-btn" data-ip="${entry.ip}">Ban IP</button></td>
+          <td><button class="action-btn" data-ip="${entry.ip}">Action!</button></td>
         `;
         tbody.appendChild(row);
       });
