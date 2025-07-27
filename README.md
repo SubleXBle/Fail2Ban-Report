@@ -15,6 +15,7 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – ri
 
 ## 🛡️ This tool does not replace proper intrusion detection and access control. It is a visualization layer and should be deployed accordingly.
 
+## Screenshot
 ![/assets/images/Fail2Ban.png](/assets/images/Fail2Ban.png)
 
 
