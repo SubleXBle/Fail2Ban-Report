@@ -10,10 +10,6 @@ function collectAndExecuteActions(ip, jail = '') {
   selectedActions.forEach(action => {
     const scriptUrl = `/includes/actions/action_${action}-ip.php`;
 
-    // Build POST body with ip and optional jail
-    const postData = { ip };
-    if (jail) postData.jail = jail;
-
     fetch(scriptUrl, {
       method: 'POST',
       headers: {
