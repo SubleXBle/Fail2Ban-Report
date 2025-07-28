@@ -17,7 +17,7 @@ Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, mana
 - 🔄 **Automatic firewall updates** (currently only via `ufw`, `nftables` planned for future release)
 - 🌐 **Lightweight PHP web interface** (no database or frameworks required)
 - 🧱 Compatible with hardened environments (strict HTTP headers, no external assets)
-- 📁 Fully self-hosted — no tracking, no cloud, no dependencies
+- 📁 Fully On-premises — no tracking, no cloud, no dependencies
 - 🔧 **Installer script** included for quick setup
 - 🛠 Easily extensible and modular by design
 
