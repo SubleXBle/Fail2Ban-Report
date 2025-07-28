@@ -1,6 +1,6 @@
 # Fail2Ban-Report
 
-Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, manage, and extend your Fail2Ban bans via a web interface — including automated firewall integration and easy control of blocklists.
+Fail2Ban Report is a privacy-friendly dashboard to monitor, manage, and extend your Fail2Ban bans via a web interface — including automated firewall integration and easy control of blocklists.
 
 > Designed for sysadmins, self-hosters, and security-conscious users who want better insight into Fail2Ban activity and fine-grained control over IP blocking.
 
