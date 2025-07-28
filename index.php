@@ -36,6 +36,8 @@
   <label><input type="checkbox" name="actions" value="ban"> Ban IP</label>
   <label><input type="checkbox" name="actions" value="report"> Report</label>
 
+  <button id="openBlocklistBtn">Edit Blocklist</button>
+
   <div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
   
   <table id="resultTable">
@@ -50,5 +52,15 @@
     <tbody></tbody>
   </table>
 
+  <!-- Edit Blocklist Overlay -->
+<div id="blocklistOverlay" class="overlay hidden">
+  <div class="overlay-content">
+    <h2>Edit Blocklist</h2>
+    <button id="closeOverlayBtn" class="close-btn">× Close</button>
+    <div id="blocklistContainer">Loading blocklist...</div>
+    <button id="reloadBlocklistBtn">Reload Blocklist</button>
+  </div>
+</div>
+  
 </body>
 </html>
