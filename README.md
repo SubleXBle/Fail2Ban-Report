@@ -1,222 +1,158 @@
 # Fail2Ban-Report
 
-A simple and clean web-based reporting tool for Fail2Ban events.  
-Turn your daily Fail2Ban logs into searchable and filterable JSON reports – right on your webspace.
+Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, manage, and extend your Fail2Ban bans via a web interface — including automated firewall integration and easy control of blocklists.
 
-## 📦 Features
-
-- Parses `fail2ban.log` into daily JSON logs
-- Filter by date, action (`Ban` / `Unban`), jail and IP fragment
-- Responsive dark-themed UI
-- Easy to deploy, no database, no frameworks
-- The JSON output is plain and lightweight. You can post-process or archive old data easily.
-- This tool requires no database and can run even on very minimal webspace setups. (e.g. RaspberryPi)
+> Designed for sysadmins, self-hosters, and security-conscious users who want better insight into Fail2Ban activity and fine-grained control over IP blocking.
 
 ---
 
+## 🚀 Features
 
-## 🛡️ This tool does not replace proper intrusion detection and access control. It is a visualization layer and should be deployed accordingly.
-
-## Screenshot
-![/assets/images/Fail2Ban.png](/assets/images/Fail2Ban.png)
-
-## 📝 Version-Notes
-
-### Better Structure
-+ Stylesheet have been moved to /assets/css/style.css for easy customization.
-+ Javascripts mooved to /assets/js/
-+ Screenshot for GitHub Readme mooved to /assets/images/ => I can remove that later with an automated Setup
-+ Action Button added for later Actions like "Ban IP"
-+ improved .htaccess File
+- 📊 **Live overview** of Fail2Ban jails, ban history and active bans
+- 🔒 **Integrated blocklist system** with JSON-based state tracking
+- 🔄 **Automatic firewall updates** (currently via `ufw`, `nftables` planned)
+- 🌐 **Lightweight PHP web interface** (no database or frameworks required)
+- 🧱 Compatible with hardened environments (strict HTTP headers, no external assets)
+- 📁 Fully self-hosted — no tracking, no cloud, no dependencies
+- 🔧 **Installer script** included for quick setup
+- 🛠 Easily extensible and modular by design
 
 ---
 
-## File Structure
-```
-/
-├── index.php               # Main web frontend (PHP + HTML)
-├── .htaccess               # Basic web server protection and security headers
-├── LICENSE                 # License file (GPLv3)
-├── README.md               # Project documentation and setup instructions
-├── fail2ban_log2json.sh    # Bash script to convert Fail2Ban logs to JSON
-├── assets/
-│   ├── css/
-│   │   └── style.css       # Main stylesheet for the Fail2Ban report UI
-│   ├── js/
-│   │   ├── jsonreader.js   # Core JavaScript: loads and renders JSON data
-│   │   └── action.js       # Handles action button events (e.g. Ban IP)
-│   └── images/
-│       └── Fail2Ban.png    # Screenshot for GitHub Readme
-└── includes/
-    └── list-files.php      # PHP script to list and prepare JSON files for frontend
+## 🔐 Architecture & Security
 
-```
-### Files List
-+ `.htaccess`  
-  Basic web server protection and security headers to restrict access to sensitive files and improve security.
+Fail2Ban Report was built with simplicity, security, and control in mind:
 
-+ `Fail2Ban.png`  
-  Screenshot or logo image related to the Fail2Ban Report project.
-
-+ `LICENSE`  
-  License file specifying the usage terms of the project (GPLv3).
-
-+ `README.md`  
-  Project documentation including setup instructions, features, and roadmap.
-
-+ `fail2ban_log2json.sh`  
-  Bash script that parses Fail2Ban logs and converts them into daily JSON files for easy web-based reporting.
-
-+ `index.php`  
-  Main web frontend file combining PHP and HTML to display the report interface and load JSON data dynamically.
-
-+ `assets/`  
-  Directory containing static assets such as CSS, JavaScript, and images.
-
-  - `assets/css/style.css`  
-    Stylesheet defining the appearance and layout of the Fail2Ban report web interface.
-
-  - `assets/js/jsonreader.js`  
-    JavaScript responsible for fetching JSON data and rendering the report table with filters.
-
-  - `assets/js/action.js`  
-    JavaScript handling user interactions with action buttons, such as "Ban IP".
-
-  - `assets/images/Fail2Ban.png`  
-    Screenshot for Github Readme.
-
-+ `includes/`  
-  Directory containing PHP include files.
-
-  - `includes/list-files.php`  
-    PHP script to scan the archive directory, list available JSON log files, and prepare data for the frontend.
-
+- All data is local — no cloud, no external APIs, no tracking
+- No cookies, no JavaScript required
+- Access control via web server authentication or VPN suggested
+- JSON-based blocklist structure: easy to audit, version, and edit
+- Separation of concerns:
+  - Web interface handles display and editing
+  - Backend scripts manage interaction with firewall
+- Security-hardened `.htaccess` and HTTP headers recommended (example included)
 
 ---
 
-## ⚙️ Setup Instructions
+## 🧰 Installation
 
-### 1️⃣ Bash Script Setup (`fail2ban_log2json.sh`)
+### 🔧 Option 1: Using the Installer (recommended)
 
-1. Save the script `fail2ban_log2json.sh` anywhere on your server (e.g. `/usr/local/bin/`).
-2. Make it executable:
-   ```bash
-   chmod +x /path/to/fail2ban_log2json.sh
-   ```
-3. Open the script and adjust the following lines to fit your environment:
-   `LOGFILE="/var/log/fail2ban.log"       # path to your Fail2Ban log`
-   `OUTPUT_JSON_DIR="/var/www/Fail2Ban/archive"  # output directory for .json files (served by webserver)`
-4. Run the script manually or via a daily cronjob:
-   Run script via
-   ```bash
-   ./fail2ban_log2json.sh
-   ```
-   or run it via cronjob:
-   ```
-   crontab -e
-   ```
-   then
-   ```
-   @daily /path/to/fail2ban_log2json.sh
-   ```
-   or any other time that fits your needs (you can try the crontab time generator on [https://suble.net/cronhelper/](https://suble.net/cronhelper/) (⚠️german language)
+Clone the repository:
 
-### 2️⃣ Web Interface Setup (Webspace)
-
-1. On your webserver, create a folder for the tool (e.g. Fail2Ban)
-   ```
-   /var/www/html/Fail2Ban/
-   ```
-2. Place the following files inside this folder:
-   + <code>index.php</code>
-   + <code>style.css</code>
-   + <code>.htaccess</code>
-
-3. Inside the same folder, create a subfolder named <code>archive</code>:
-   ```
-   /var/www/html/Fail2Ban/archive/
-   ```
-5. Make sure the webserver (e.g. www-data) has read access to this directory and write access if you want to store JSON files directly there.
-   ```apache2
-   chown -R www-data:www-data /var/www/html/Fail2Ban/*
-   ```
-
-## 🖥️ Usage
-After the first log run is processed, open your browser and go to:
 ```
-   https://yourdomain.tld/Fail2Ban/
+git clone https://github.com/YOUR_USERNAME/fail2ban-report.git
+cd fail2ban-report
 ```
-You will see a dropdown to choose the date, filter by action, jail, and IP.
+
+Run the installer:
+
+```
+sudo ./install.sh
+```
+
+The installer will:
+- Install required packages (`jq`, `ufw`, etc.)
+- Place the files in `/var/www/html/fail2ban-report/` (or custom path)
+- Set permissions correctly
+- Schedule automatic firewall sync
+- Configure the blocklist path
+
+### 🛠 Option 2: Manual Installation
+
+1. Install dependencies:
+
+```
+sudo apt install jq ufw
+```
+
+2. Copy the project files to your desired web root, e.g.:
+
+```
+/var/www/html/fail2ban-report/
+```
+
+3. Set file permissions:
+
+```
+sudo chown -R www-data:www-data /var/www/html/fail2ban-report
+sudo chmod -R 755 /var/www/html/fail2ban-report
+```
+
+4. Make sure `BLOCKLIST_JSON` path is set correctly in `firewall-update.sh`.
+
+5. (Optional) Add cronjob or systemd timer to run `firewall-update.sh` regularly.
 
 ---
 
-## Protecting Your Fail2Ban Report with .htaccess
+## 🖥️ Web Interface Usage
 
-To enhance the security of your Fail2Ban report, a `.htaccess` file is provided that:
-
-- Disables directory listings
-- Blocks direct access to sensitive files such as `.json` and `.css`
-- Sets basic HTTP security headers for safer browsing
-
-### How to Use the `.htaccess` File
-
-1. Save the provided `.htaccess` file in the root directory of your Fail2Ban report (where `index.php` resides).
-2. Ensure your web server allows `.htaccess` overrides (typically via `AllowOverride` in Apache).
-3. The `.htaccess` will automatically protect files in the main directory and subfolders like `/archive/`.
-
-### Important Security Notice
-
-While this `.htaccess` provides a basic level of protection, **it is highly recommended to implement additional security measures**, such as:
-
-- HTTP authentication (Basic Auth) to restrict access to authorized users only
-- IP-based access restrictions to allow only trusted networks or addresses
-
-Fail2Ban reports often contain sensitive security-related data. Adding these layers of protection will help prevent unauthorized access and keep your data safe.
-
-For example, you can set up Basic Auth with:
-
-```apache
-AuthType Basic
-AuthName "Restricted Area"
-AuthUserFile /path/to/.htpasswd
-Require valid-user
-```
-
-You can use the htpasswd helper for your htpasswd files (choose bcrypt as algorythm as it is better) on [https://suble.net/htpasswd/](https://suble.net/htpasswd/) (⚠️ german language)
-
-or restrict by IP:
+Open the web interface in your browser:
 
 ```
-Require ip 192.168.1.0/24
-Require ip 203.0.113.5
+http://your-server.local/fail2ban-report/
 ```
 
-## 📄 License
-This project is released under the GPLv3 License. Feel free to modify and share.
+There you can:
+
+- View all Fail2Ban jails
+- See recent ban events
+- View, activate or deactivate individual IP blocks
+- Search and sort IPs
+- Toggle firewall integration for each IP
+
+Changes to blocklist state are automatically picked up by `firewall-update.sh`.
+
+---
+
+## 🔁 How Banning and Unbanning Works
+
+### When a ban occurs:
+
+1. Fail2Ban bans the IP and logs the event
+2. `fail2ban-report` collects the event (via `fail2ban-client`)
+3. The IP is added to the JSON blocklist with `"active": true`
+4. `firewall-update.sh` ensures the IP is blocked via `ufw`
+
+### When an IP is unbanned:
+
+1. You uncheck `"active"` in the web UI or set `"active": false` manually
+2. `firewall-update.sh` removes the `ufw` rule for the IP
+3. The IP entry is cleaned up from JSON (if desired)
+
+This ensures full synchronization between Fail2Ban, firewall, and the web interface.
 
 ---
 
 ## 🗺️ Roadmap
 
-**Fail2Ban-Report** is designed to be lightweight, modular, and open to future improvements. The following features are currently planned:
+- ✅ v2: UFW integration and JSON state sync (done!)
+- ⏳ v3: Support for nftables and firewalld
+- ⏳ v4: Optional SQLite history log
+- ⏳ v5: Ban reason enrichment (e.g. from logs)
+- ⏳ Web UI enhancements (sorting, filtering, statistics)
+- ⏳ Multi-server sync support
 
-### ⚙️ Setup & Automation
-- Setup script to automate initial installation, including directory structure and permissions
-- Optionally auto-configure a daily cronjob
+---
 
-### 🔐 Security Features
-- Integration of a stronger `.htaccess` file for basic access control and secure defaults
+## 🤝 Contributing
 
-### 🔥 Active Defense Integration
-- Allow manual IP blocking directly from the interface via `iptables` or `ufw`
-- Optionally enable automatic blocking of suspicious IPs based on defined criteria
+Pull requests and feedback are warmly welcome!
 
-## 🧩 Open to Contributions
-I'm happy to hear from users and contributors!  
-Whether it's:
-- feature requests,  
-- improvement ideas,  
-- or even pull requests —  
-Feel free to reach out or contribute directly.
+If you find a bug, have an idea, or want to contribute code, feel free to:
 
-If you use this tool and think "Hey, wouldn't it be cool if it could also do XYZ?" — I'm all ears!
+- Open an [Issue](https://github.com/YOUR_USERNAME/fail2ban-report/issues)
+- Submit a [Pull Request](https://github.com/YOUR_USERNAME/fail2ban-report/pulls)
+
+For larger features, feel free to start a discussion first.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See `LICENSE` for details.
+
+---
+
+Made with 🛠️ and ❤️ by [Your Name / GitHub handle].
+
