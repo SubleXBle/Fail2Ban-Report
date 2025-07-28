@@ -7,6 +7,7 @@ Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, mana
 ---
 
 ## 🛡️ This tool does not replace proper intrusion detection and access control. It is a visualization layer and should be deployed accordingly.
+### ⚠️ For safety and clarity, Fail2Ban-Report only modifies firewall rules related to its own IP blocklist (blocklist.json). It never touches or overrides other firewall settings, ensuring compatibility with existing Fail2Ban jails and custom rules.
 
 ---
 
@@ -23,9 +24,6 @@ Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, mana
 
 ---
 
-### ⚠️ For safety and clarity, Fail2Ban-Report only modifies firewall rules related to its own IP blocklist (blocklist.json). It never touches or overrides other firewall settings, ensuring compatibility with existing Fail2Ban jails and custom rules.
-
----
 
 ## 🖥️ Screenshots
 
