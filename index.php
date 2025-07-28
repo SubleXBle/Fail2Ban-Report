@@ -36,7 +36,7 @@
   <label><input type="checkbox" name="actions" value="ban"> Ban IP</label>
   <label><input type="checkbox" name="actions" value="report"> Report</label>
 
-  <div id="notification-container" class="notification-container"></div>
+  <div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
   
   <table id="resultTable">
     <thead>
