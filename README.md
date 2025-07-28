@@ -159,7 +159,7 @@ Fail2Ban-Report is designed to be lightweight, modular, and open to future impro
     ⏳ add support for nft iptables firewalld
     ⏳ multiple blocking of suspicious IPs at once
 
-❤️ Love
+❤🌻 Beauty
 
     ⏳ Do some CSS Work to make it look nicer
 
