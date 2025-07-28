@@ -1,4 +1,4 @@
-<?php include(__DIR__ . '/includes/list-files.php'); ?>
+<?php include(__DIR__ . 'includes/list-files.php'); ?>
 <?php // index.php Version 0.2.1 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,9 +9,9 @@
   <script>
     const availableFiles = <?php echo $filesJson; ?>;
   </script>
-  <script src="/assets/js/jsonreader.js" defer></script>
-  <script src="/assets/js/action-collector.js" defer></script>
-  <script src="/assets/js/actions.js" defer></script>
+  <script src="assets/js/jsonreader.js" defer></script>
+  <script src="assets/js/action-collector.js" defer></script>
+  <script src="assets/js/actions.js" defer></script>
 </head>
 <body>
   <h1>Fail2Ban Report</h1>
