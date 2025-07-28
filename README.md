@@ -83,9 +83,9 @@ sudo chown -R www-data:www-data /var/www/html/fail2ban-report
 sudo chmod -R 755 /var/www/html/fail2ban-report
 ```
 
-4. Make sure `BLOCKLIST_JSON` path is set correctly in `firewall-update.sh`.
+4. Make sure `BLOCKLIST_JSON` path is set correctly in `firewall-update.sh` and `fail2ban_log2json.sh`.
 
-5. (Optional) Add cronjob or systemd timer to run `firewall-update.sh` regularly.
+5. (Optional) Add cronjob or systemd timer to run `firewall-update.sh` and `fail2ban_log2json.sh` regularly.
 
 ---
 
@@ -94,7 +94,7 @@ sudo chmod -R 755 /var/www/html/fail2ban-report
 Open the web interface in your browser:
 
 ```
-http://your-server.local/fail2ban-report/
+http://your-server.local/Fail2Ban-Report/
 ```
 
 There you can:
