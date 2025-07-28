@@ -33,7 +33,7 @@ Fail2Ban Report was built with simplicity, security, and control in mind:
 - JSON-based blocklist structure: easy to audit, version, and edit
 - Separation of concerns:
   - Web interface handles display and editing
-  - Backend scripts manage interaction with firewall
+  - Backend scripts manage interaction with firewall and fail2ban
 - Security-hardened `.htaccess` and HTTP headers recommended (example included)
 
 ---
