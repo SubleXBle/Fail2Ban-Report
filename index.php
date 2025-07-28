@@ -12,6 +12,7 @@
   <script src="assets/js/jsonreader.js" defer></script>
   <script src="assets/js/action-collector.js" defer></script>
   <script src="assets/js/action.js" defer></script>
+  <script src="assets/js/blocklist-overlay.js" defer></script>
 </head>
 <body>
   <h1>Fail2Ban Report</h1>
