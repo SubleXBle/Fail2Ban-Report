@@ -36,13 +36,13 @@ function showNotification(message, isError = false) {
   const note = document.createElement('div');
   note.className = 'notification';
   if (isError) {
-    note.style.backgroundColor = '#722'; // rotbraun für Fehler
-    note.style.color = '#fff';
+    note.style.backgroundColor = '#722';
+    note.style.color = '#a8d5ba';
   }
   note.innerText = message;
   container.appendChild(note);
 
-  // Entferne das Element nach 5 Sekunden
+  // Remove Element after 5 Seconds
   setTimeout(() => {
     note.remove();
   }, 5000);
