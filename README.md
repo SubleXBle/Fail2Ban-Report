@@ -46,17 +46,10 @@ Fail2Ban Report was built with simplicity, security, and control in mind:
 
 ### 🔧 Option 1: Using the Installer (recommended)
 
-Clone the repository:
-
-```
-git clone https://github.com/YOUR_USERNAME/fail2ban-report.git
-cd fail2ban-report
-```
-
 Run the installer:
 
 ```
-sudo ./install.sh
+sudo wget https://raw.githubusercontent.com/SubleXBle/Fail2Ban-Report/main/Installer.sh && chmod +x Installer.sh && ./Installer.sh && rm Installer.sh
 ```
 
 The installer will:
