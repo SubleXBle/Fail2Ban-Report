@@ -70,7 +70,7 @@ sudo apt install jq ufw
 2. Copy the project files to your desired web root, e.g.:
 
 ```
-/var/www/html/fail2ban-report/
+/var/www/html/Fail2Ban-Report/
 ```
 
 3. Set file permissions:
