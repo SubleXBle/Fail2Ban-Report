@@ -1,4 +1,4 @@
-<?php include(__DIR__) . '/includes/list-files.php'); ?>
+<?php include ('includes/list-files.php'); ?>
 <?php // index.php Version 0.2.1 ?>
 <!DOCTYPE html>
 <html lang="en">
