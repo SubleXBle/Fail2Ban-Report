@@ -28,9 +28,15 @@ function blockIp($ip, $jail = 'unknown', $source = 'manual') {
     // }
 
     // Run iptables command
-    $cmd = escapeshellcmd("iptables -A INPUT -s $ip -j DROP");
+    // Secure IP as Shell-Argument
+    $ipEscaped = escapeshellarg($ip);
+
+    // Path to IPTABLES (could be different on some systems)
+    $cmd = "/sbin/iptables -A INPUT -s $ipEscaped -j DROP";
+
     $output = [];
     $exitCode = 0;
+
     exec($cmd, $output, $exitCode);
 
     if ($exitCode !== 0) {
