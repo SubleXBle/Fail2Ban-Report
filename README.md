@@ -23,6 +23,10 @@ Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, mana
 
 ---
 
+## Screenshots
+
+---
+
 ## 🔐 Architecture & Security
 
 Fail2Ban Report was built with simplicity, security, and control in mind:
