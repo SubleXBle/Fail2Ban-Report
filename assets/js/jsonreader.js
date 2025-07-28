@@ -1,5 +1,5 @@
 // Files from PHP
-    const availableFiles = <?php echo $filesJson; ?>;
+    //const availableFiles = <?php echo $filesJson; ?>;
     const jsonDirectory = './archive/';
 
     function formatDateFromFilename(filename) {
