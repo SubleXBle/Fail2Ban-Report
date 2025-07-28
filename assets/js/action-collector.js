@@ -8,7 +8,7 @@ function collectAndExecuteActions(ip, jail = '') {
   }
 
   selectedActions.forEach(action => {
-    const scriptUrl = `/includes/actions/action_${action}-ip.php`;
+    const scriptUrl = `includes/actions/action_${action}-ip.php`;
 
     const params = { ip };
     if (jail) params.jail = jail;
