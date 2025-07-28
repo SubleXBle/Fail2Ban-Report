@@ -137,12 +137,23 @@ This ensures full synchronization between Fail2Ban, firewall, and the web interf
 
 ## 🗺️ Roadmap
 
-- ✅ Beta-2: UFW integration and JSON state sync (done!)
-- ⏳ Beta-3: Support for nftables and firewalld
-- ⏳ Beta-4: Optional SQLite history log
-- ⏳ v5: Ban reason enrichment (e.g. from logs)
-- ⏳ Web UI enhancements (sorting, filtering, statistics)
-- ⏳ Multi-server sync support
+Fail2Ban-Report is designed to be lightweight, modular, and open to future improvements. The following features are currently planned:
+⚙️ Setup & Automation
+
+    ✅ Setup script to automate initial installation, including directory structure and permissions
+    ✅ Optionally auto-configure a daily cronjob
+
+🔐 Security Features
+
+    ✅ Integration of a stronger .htaccess file for basic access control and secure defaults
+    ⏳ Make it even more secure and better
+
+🔥 Active Defense Integration
+
+    ✅ Allow manual IP blocking directly from the interface via ufw
+    ⏳ Optionally enable automatic blocking of suspicious IPs based on defined criteria
+    ⏳ add support for nft iptables firewalld
+    ⏳ multiple blocking of suspicious IPs at once
 
 ---
 
@@ -157,11 +168,21 @@ If you find a bug, have an idea, or want to contribute code, feel free to:
 
 For larger features, feel free to start a discussion first.
 
+I'm happy to hear from users and contributors!
+Whether it's:
+
+    feature requests,
+    improvement ideas,
+    or even pull requests —
+    Feel free to reach out or contribute directly.
+
+If you use this tool and think "Hey, wouldn't it be cool if it could also do XYZ?" — I'm all ears!
+
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+This project is licensed under the GPL3 License. See `LICENSE` for details.
 
 ---
 
