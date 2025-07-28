@@ -18,104 +18,120 @@ echo -e "${BLUE}--- Fail2Ban-Report Installer ---${NORMAL}"
 # Ask for Webroot path
 read -rp "Enter your webroot path where the tool should be installed (default: $DEFAULT_WEBROOT): " WEBROOT
 WEBROOT=${WEBROOT:-$DEFAULT_WEBROOT}
-
-# Full target directory where repo will be cloned (webroot + Fail2Ban-Report)
 TARGET_DIR="${WEBROOT%/}/Fail2Ban-Report"
 
-echo -e "Using webroot installation path: $TARGET_DIR"
-
 # Ask for .sh script storage path
-read -rp "Enter path where fail2ban_log2json.sh should be stored (default: $DEFAULT_SH_PATH): " SH_PATH
+read -rp "Enter path where shell scripts should be stored (default: $DEFAULT_SH_PATH): " SH_PATH
 SH_PATH=${SH_PATH:-$DEFAULT_SH_PATH}
+
+echo -e "Using webroot installation path: $TARGET_DIR"
 echo -e "Using shell script path: $SH_PATH"
 
 # Check for git
 echo -e "${BLUE}Checking if git is installed...${NORMAL}"
-if ! command -v git &> /dev/null; then
+if ! command -v git &>/dev/null; then
   echo -e "${RED}Git not found. Please install git and rerun the installer.${NORMAL}"
   exit 1
+fi
+
+# Check and install jq if missing
+echo -e "${BLUE}Checking for jq...${NORMAL}"
+if ! command -v jq &>/dev/null; then
+  echo -e "${YELLOW}jq not found. Installing jq...${NORMAL}"
+  if command -v apt &>/dev/null; then
+    sudo apt update && sudo apt install -y jq
+  elif command -v dnf &>/dev/null; then
+    sudo dnf install -y jq
+  elif command -v pacman &>/dev/null; then
+    sudo pacman -Sy jq --noconfirm
+  else
+    echo -e "${RED}Package manager not supported. Please install jq manually.${NORMAL}"
+    exit 1
+  fi
+else
+  echo -e "${GREEN}jq is installed.${NORMAL}"
 fi
 
 # Clone or update repo
 if [ ! -d "$TARGET_DIR" ]; then
   echo -e "${YELLOW}Cloning Fail2Ban-Report repository into $TARGET_DIR...${NORMAL}"
   git clone -b "$BRANCH_NAME" "$REPO_URL" "$TARGET_DIR"
-  if [ $? -ne 0 ]; then
-    echo -e "${RED}Failed to clone repository.${NORMAL}"
-    exit 1
-  fi
 else
   echo -e "${BLUE}Repository already exists. Pulling latest changes...${NORMAL}"
   cd "$TARGET_DIR" || { echo -e "${RED}Cannot cd to $TARGET_DIR${NORMAL}"; exit 1; }
   git pull origin "$BRANCH_NAME"
-  if [ $? -ne 0 ]; then
-    echo -e "${RED}Failed to pull repository updates.${NORMAL}"
-    exit 1
-  fi
 fi
 
-# Create shell script target dir if needed
+# Ensure shell script path exists
 mkdir -p "$SH_PATH"
 
-# Copy fail2ban_log2json.sh to SH_PATH and make executable
+# === fail2ban_log2json.sh ===
 if [ -f "$TARGET_DIR/fail2ban_log2json.sh" ]; then
-  echo -e "${BLUE}Copying fail2ban_log2json.sh to $SH_PATH...${NORMAL}"
+  echo -e "${BLUE}Installing fail2ban_log2json.sh...${NORMAL}"
   cp "$TARGET_DIR/fail2ban_log2json.sh" "$SH_PATH/"
   chmod +x "$SH_PATH/fail2ban_log2json.sh"
 else
-  echo -e "${RED}fail2ban_log2json.sh not found in repo, please check.${NORMAL}"
+  echo -e "${RED}fail2ban_log2json.sh not found in repo.${NORMAL}"
   exit 1
 fi
 
-# Set archive path inside the .sh script to point to the archive folder inside the webroot repo
+# Set ARCHIVE_PATH in fail2ban_log2json.sh
 ARCHIVE_PATH="${TARGET_DIR}/archive"
-echo -e "${BLUE}Setting archive path in fail2ban_log2json.sh to $ARCHIVE_PATH ...${NORMAL}"
-
-# Escape slashes for sed
 ESCAPED_ARCHIVE_PATH=$(echo "$ARCHIVE_PATH" | sed 's_/_\\/_g')
-
 if grep -q "^ARCHIVE_PATH=" "$SH_PATH/fail2ban_log2json.sh"; then
   sed -i "s/^ARCHIVE_PATH=.*/ARCHIVE_PATH=\"$ESCAPED_ARCHIVE_PATH\"/" "$SH_PATH/fail2ban_log2json.sh"
 else
   sed -i "1iARCHIVE_PATH=\"$ESCAPED_ARCHIVE_PATH\"" "$SH_PATH/fail2ban_log2json.sh"
 fi
 
-# Create archive folder if missing
 mkdir -p "$ARCHIVE_PATH"
 chmod 755 "$ARCHIVE_PATH"
 
-# Set permissions and ownership to www-data:www-data on the entire tool directory
-echo -e "${BLUE}Setting ownership of $TARGET_DIR to www-data:www-data ...${NORMAL}"
-chown -R www-data:www-data "$TARGET_DIR"
+# === firewall-update.sh ===
+if [ -f "$TARGET_DIR/firewall-update.sh" ]; then
+  echo -e "${BLUE}Installing firewall-update.sh...${NORMAL}"
+  cp "$TARGET_DIR/firewall-update.sh" "$SH_PATH/"
+  chmod +x "$SH_PATH/firewall-update.sh"
 
-# Remove fail2ban_log2json.sh from repo folder to avoid duplicates
-if [ -f "$TARGET_DIR/fail2ban_log2json.sh" ]; then
-  echo -e "${BLUE}Removing fail2ban_log2json.sh from repo directory to avoid duplicates...${NORMAL}"
-  rm "$TARGET_DIR/fail2ban_log2json.sh"
+  # Set correct blocklist.json path in firewall-update.sh
+  ESCAPED_BLOCKLIST_PATH=$(echo "$ARCHIVE_PATH/blocklist.json" | sed 's_/_\\/_g')
+  sed -i "s|^BLOCKLIST_JSON=.*|BLOCKLIST_JSON=\"$ESCAPED_BLOCKLIST_PATH\"|" "$SH_PATH/firewall-update.sh"
+else
+  echo -e "${RED}firewall-update.sh not found in repo.${NORMAL}"
 fi
 
-# Inform about .htaccess setup
-echo -e "${BLUE}\nIMPORTANT: Configure your .htaccess in the webroot to secure the application.${NORMAL}"
+# Set ownership to www-data
+echo -e "${BLUE}Setting ownership of $TARGET_DIR to www-data:www-data...${NORMAL}"
+chown -R www-data:www-data "$TARGET_DIR"
+
+# Remove duplicate script in repo
+rm -f "$TARGET_DIR/fail2ban_log2json.sh"
+
+# .htaccess Hinweis
+echo -e "${BLUE}\nIMPORTANT: Configure your .htaccess to secure the application.${NORMAL}"
 echo "Example .htaccess is included in the repo."
 
-# Ask about cronjob setup
-read -rp "Do you want to install a daily cronjob for fail2ban_log2json.sh at 3 AM? (Y/N): " INSTALL_CRON
+# Ask about fail2ban_log2json cronjob
+read -rp "Install daily cronjob for fail2ban_log2json.sh at 3 AM? (Y/N): " INSTALL_CRON
 INSTALL_CRON=${INSTALL_CRON,,}
-
-CRON_CMD="0 3 * * * $SH_PATH/fail2ban_log2json.sh > /dev/null 2>&1"
-
 if [[ "$INSTALL_CRON" == "y" ]]; then
+  CRON_CMD="0 3 * * * $SH_PATH/fail2ban_log2json.sh > /dev/null 2>&1"
   (crontab -l 2>/dev/null | grep -v -F "$SH_PATH/fail2ban_log2json.sh"; echo "$CRON_CMD") | crontab -
-  echo -e "${GREEN}Cronjob installed:${NORMAL} $CRON_CMD"
-else
-  echo -e "${YELLOW}Skipping cronjob setup.${NORMAL}"
-  echo "To set it up manually, add this line to your crontab:"
-  echo "$CRON_CMD"
+  echo -e "${GREEN}Cronjob installed: $CRON_CMD${NORMAL}"
+fi
+
+# Ask about firewall-update.sh cronjob
+read -rp "Install firewall-update.sh to run every 5 minutes via cron? (Y/N): " INSTALL_FW_CRON
+INSTALL_FW_CRON=${INSTALL_FW_CRON,,}
+if [[ "$INSTALL_FW_CRON" == "y" ]]; then
+  FW_CRON_CMD="*/5 * * * * $SH_PATH/firewall-update.sh > /dev/null 2>&1"
+  (crontab -l 2>/dev/null | grep -v -F "$SH_PATH/firewall-update.sh"; echo "$FW_CRON_CMD") | crontab -
+  echo -e "${GREEN}Firewall cronjob installed: $FW_CRON_CMD${NORMAL}"
 fi
 
 echo -e "${GREEN}\nInstallation completed successfully!${NORMAL}"
 echo "Webroot path: $TARGET_DIR"
-echo "Shell script path: $SH_PATH/fail2ban_log2json.sh"
+echo "Shell scripts in: $SH_PATH"
+echo "Firewall script path: $SH_PATH/firewall-update.sh"
 echo
-echo "Remember to adjust your webserver config and secure the web directory properly."
-echo "Happy selfhosting! 🚀"
+echo "Make sure to adjust webserver config and test the blocklist system."
