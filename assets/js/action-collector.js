@@ -10,12 +10,15 @@ function collectAndExecuteActions(ip, jail = '') {
   selectedActions.forEach(action => {
     const scriptUrl = `/includes/actions/action_${action}-ip.php`;
 
+    const params = { ip };
+    if (jail) params.jail = jail;
+
     fetch(scriptUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams({ ip, jail })
+      body: new URLSearchParams(params)
     })
     .then(res => res.text())
     .then(responseText => {
