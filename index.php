@@ -53,7 +53,7 @@
   </table>
 
   <!-- Edit Blocklist Overlay -->
-<div id="blocklistOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="blocklistTitle" aria-describedby="blocklistDesc">
+<div id="blocklistsOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="blocklistTitle" aria-describedby="blocklistDesc">
   <div class="overlay-content">
     <h2 id="blocklistTitle">Edit Blocklist</h2>
     <p id="blocklistDesc" class="sr-only">Hier können Sie die gebannten IPs verwalten und durchsuchen.</p>
