@@ -56,6 +56,8 @@
 <div id="blocklistOverlay" class="overlay hidden">
   <div class="overlay-content">
     <h2>Edit Blocklist</h2>
+    <label for="blocklistSearch">Search IP or Jail:</label>
+    <input type="text" id="blocklistSearch" placeholder="Type to filter..." />
     <button id="closeOverlayBtn" class="close-btn">× Close</button>
     <div id="blocklistContainer">Loading blocklist...</div>
     <button id="reloadBlocklistBtn">Reload Blocklist</button>
