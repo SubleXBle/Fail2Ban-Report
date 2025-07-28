@@ -190,5 +190,5 @@ This project is licensed under the GPL3 License. See `LICENSE` for details.
 
 ---
 
-Made with ❤️ by [SubleXBle](https://github.com/SubleXBle).
+Made with 🥵, 😿 and ❤️ by [SubleXBle](https://github.com/SubleXBle).
 
