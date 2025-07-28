@@ -16,7 +16,7 @@ function unblockIp($ip) {
         ];
     }
 
-    $jsonFile = __DIR__ . 'archive/blocklist.json';
+    $jsonFile = 'archive/blocklist.json';
     $data = [];
 
     // Read existing blocklist
