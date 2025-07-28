@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const openBtn = document.getElementById('openBlocklistBtn');
   const closeBtn = document.getElementById('closeOverlayBtn');
   const reloadBtn = document.getElementById('reloadBlocklistBtn');
-  const reapplyBtn = document.getElementById('reapplyFirewallBtn');
   const container = document.getElementById('blocklistContainer');
   const searchInput = document.getElementById('blocklistSearch');
 
@@ -22,27 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Reload blocklist manually
   reloadBtn.addEventListener('click', loadBlocklist);
-
-  // Reapply blocklist to firewall
-  if (reapplyBtn) {
-    reapplyBtn.addEventListener('click', () => {
-      if (!confirm('Reapply the entire blocklist to the firewall?')) return;
-
-      fetch('/includes/actions/action_reapply-firewall.php', {
-        method: 'POST'
-      })
-      .then(res => res.json())
-      .then(data => {
-        alert(data.message);
-        if (!data.success && data.details) {
-          console.error('Reapply error details:', data.details);
-        }
-      })
-      .catch(err => {
-        alert('Failed to reapply blocklist: ' + err.message);
-      });
-    });
-  }
 
   // Filter blocklist while typing
   searchInput.addEventListener('input', () => {
@@ -75,9 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const filteredData = data.filter(entry => {
+    const activeEntries = data.filter(entry => entry.active !== false); // default to true if field missing
+
+    const filteredData = activeEntries.filter(entry => {
       const term = filter.toLowerCase();
-      return entry.ip.toLowerCase().includes(term) || entry.jail.toLowerCase().includes(term);
+      return (
+        entry.ip.toLowerCase().includes(term) ||
+        (entry.jail && entry.jail.toLowerCase().includes(term))
+      );
     });
 
     if (filteredData.length === 0) {
@@ -91,8 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const div = document.createElement('div');
       div.className = 'blocklist-entry';
 
+      const jailLabel = entry.jail || 'unknown';
+      const timeLabel = entry.timestamp
+        ? new Date(entry.timestamp).toLocaleString()
+        : 'unknown time';
+
       div.innerHTML = `
-        <span>${entry.ip} (Jail: ${entry.jail}) - Blocked at: ${new Date(entry.timestamp).toLocaleString()}</span>
+        <span>${entry.ip} (Jail: ${jailLabel}) – Blocked at: ${timeLabel}</span>
         <button data-ip="${entry.ip}">Unblock</button>
       `;
 
