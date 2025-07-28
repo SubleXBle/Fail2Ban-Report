@@ -66,6 +66,8 @@
     <div id="blocklistContainer">Loading blocklist...</div>
 
     <button id="reloadBlocklistBtn">Reload Blocklist</button>
+    <button id="reapplyFirewallBtn">Reapply Blocklist to Firewall</button>
+
   </div>
 </div>
 
