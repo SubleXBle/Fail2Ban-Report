@@ -23,7 +23,7 @@ Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, mana
 
 ---
 
-## Screenshots
+## 🖥️ Screenshots
 
 ---
 
