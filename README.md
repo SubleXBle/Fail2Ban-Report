@@ -156,6 +156,7 @@ Fail2Ban-Report is designed to be lightweight, modular, and open to future impro
 
     ✅ Allow manual IP blocking directly from the interface via ufw
     ⏳ Optionally enable automatic blocking of suspicious IPs based on defined criteria
+    ⏳ add action for report to other Services (e.g. AbuseIPDB)
     ⏳ add support for nft iptables firewalld
     ⏳ multiple blocking of suspicious IPs at once
 
