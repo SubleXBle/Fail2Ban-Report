@@ -4,52 +4,52 @@ set -euo pipefail
 
 BLOCKLIST_JSON="/path/to/archive/blocklist.json"
 
-# Prüfen ob jq installiert ist
+# Check if jq is installed
 if ! command -v jq &>/dev/null; then
-  echo "ERROR: jq ist nicht installiert." >&2
+  echo "ERROR: jq is not installed." >&2
   exit 1
 fi
 
-# Prüfen ob ufw installiert ist
+# Check if ufw is installed
 if ! command -v ufw &>/dev/null; then
-  echo "ERROR: ufw ist nicht installiert." >&2
+  echo "ERROR: ufw is not installed." >&2
   exit 1
 fi
 
-# Aktuell blockierte IPs extrahieren (nur die von uns gesetzten)
+# Extract currently blocked IPs (only those we set)
 ufw status numbered | grep "DENY IN" | awk '{print $3}' > /tmp/current_ufw_blocklist.txt || true
 
-# Aktive IPs aus JSON lesen
+# Read active IPs from JSON
 active_ips=$(jq -r '.[] | select(.active != false) | .ip' "$BLOCKLIST_JSON")
 
-# Neue IPs blockieren
+# Block new IPs
 for ip in $active_ips; do
   if ! grep -qw "$ip" /tmp/current_ufw_blocklist.txt; then
-    echo "Blockiere $ip"
+    echo "Blocking $ip"
     sudo ufw deny from "$ip"
   fi
 done
 
-# Inaktive IPs freigeben
+# Read inactive IPs from JSON
 inactive_ips=$(jq -r '.[] | select(.active == false) | .ip' "$BLOCKLIST_JSON")
 
-# Für jede inaktive IP prüfen, ob blockiert – und ggf. entfernen
+# Check and remove rules for each inactive IP
 for ip in $inactive_ips; do
-  # Alle Regeln auflisten und suchen
+  # List and find all rules
   mapfile -t rules < <(sudo ufw status numbered | grep "$ip" | grep "DENY IN" | tac)
   for rule in "${rules[@]}"; do
     rule_number=$(echo "$rule" | awk -F'[][]' '{print $2}')
-    echo "Entferne Regel $rule_number für $ip"
+    echo "Removing rule $rule_number for $ip"
     sudo ufw --force delete "$rule_number"
   done
 done
 
-# JSON bereinigen (inaktive Einträge löschen)
+# Clean up JSON (remove inactive entries)
 tmp_file=$(mktemp)
 jq 'map(select(.active != false))' "$BLOCKLIST_JSON" > "$tmp_file" && mv "$tmp_file" "$BLOCKLIST_JSON"
 
-# Nach dem Bereinigen sicherstellen, dass das Webinterface weiter Zugriff hat
+# After cleanup, ensure web interface retains access
 chown www-data:www-data "$BLOCKLIST_JSON"
 chmod 644 "$BLOCKLIST_JSON"
 
-echo "UFW-Blocklist aktualisiert."
+echo "UFW blocklist updated."
