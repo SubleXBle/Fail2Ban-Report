@@ -29,7 +29,7 @@ Fail2Ban Report was built with simplicity, security, and control in mind:
 
 - All data is local — no cloud, no external APIs, no tracking
 - No cookies, no JavaScript required
-- Access control via web server authentication or VPN suggested
+- Access control via web server authentication (`.htaccess`)
 - JSON-based blocklist structure: easy to audit, version, and edit
 - Separation of concerns:
   - Web interface handles display and editing
