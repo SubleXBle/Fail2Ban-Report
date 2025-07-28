@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadBlocklist() {
     container.textContent = 'Loading blocklist...';
-    fetch('/archive/blocklist.json', { cache: 'no-store' })
+    fetch('archive/blocklist.json', { cache: 'no-store' })
       .then(res => {
         if (!res.ok) throw new Error('Failed to load blocklist');
         return res.json();
