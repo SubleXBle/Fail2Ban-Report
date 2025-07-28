@@ -94,7 +94,7 @@ sudo chmod -R 755 /var/www/html/fail2ban-report
 Open the web interface in your browser:
 
 ```
-http://your-server.local/Fail2Ban-Report/
+http://your-domain.tld/Fail2Ban-Report/
 ```
 
 There you can:
