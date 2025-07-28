@@ -48,4 +48,4 @@ done
 tmp_file=$(mktemp)
 jq 'map(select(.active != false))' "$BLOCKLIST_JSON" > "$tmp_file" && mv "$tmp_file" "$BLOCKLIST_JSON"
 
-echo "✅ UFW-Blocklist aktualisiert."
+echo "UFW-Blocklist aktualisiert."
