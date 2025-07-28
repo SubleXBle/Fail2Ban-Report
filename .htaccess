@@ -6,7 +6,7 @@
 Options -Indexes
 
 # Block direct access to sensitive file types
-<FilesMatch "\.(json|css|sh|ini|log|bak|htaccess)$">
+<FilesMatch "\.(json|sh|ini|log|bak|OLD)$">
   Require all denied
 </FilesMatch>
 
@@ -19,6 +19,12 @@ Options -Indexes
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteRule ^archive/.*\.json$ - [F,L]
+</IfModule>
+
+# Protect .php files in includes
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^includes/.*\.php$ - [F,L]
 </IfModule>
 
 
