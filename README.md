@@ -12,7 +12,7 @@ Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, mana
 
 ## 🚀 Features
 
-- 📊 **Live overview** of Fail2Ban jails, ban history and active bans
+- 📊 **Live overview** of Fail2Ban jails, ban history and active bans (depends on how often cronjobs run)
 - 🔒 **Integrated blocklist system** with JSON-based state tracking
 - 🔄 **Automatic firewall updates** (currently via `ufw`, `nftables` planned)
 - 🌐 **Lightweight PHP web interface** (no database or frameworks required)
