@@ -10,7 +10,7 @@
     const availableFiles = <?php echo $filesJson; ?>;
   </script>
   <script src="/assets/js/jsonreader.js" defer></script>
-  <script src="/assets/js/action-collector.js"></script>
+  <script src="/assets/js/action-collector.js" defer></script>
   <script src="/assets/js/actions.js" defer></script>
 </head>
 <body>
