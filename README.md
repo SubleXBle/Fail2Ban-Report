@@ -26,6 +26,8 @@ Fail2Ban Report is a privacy-friendly and self-hosted dashboard to monitor, mana
 ## 🖥️ Screenshots
 
 ![assets/images/Fail2Ban-Report-1.png](assets/images/Fail2Ban-Report-1.png)
+![assets/images/Fail2Ban-Report-1.png](assets/images/Fail2Ban-Report-2.png)
+![assets/images/Fail2Ban-Report-1.png](assets/images/Fail2Ban-Report-3.png)
 
 ---
 
