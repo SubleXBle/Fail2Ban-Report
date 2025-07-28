@@ -19,7 +19,7 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – ri
 ![/assets/images/Fail2Ban.png](/assets/images/Fail2Ban.png)
 
 
-## new File Structure
+## File Structure
 ```
 /
 ├── index.php               # Main web frontend (PHP + HTML)
