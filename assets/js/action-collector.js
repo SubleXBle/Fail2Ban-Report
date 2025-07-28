@@ -3,7 +3,7 @@ function collectAndExecuteActions(ip) {
     .map(input => input.value);
 
   if (selectedActions.length === 0) {
-    alert("Bitte wähle mindestens eine Aktion aus.");
+    alert("Please select at least one action.");
     return;
   }
 
@@ -22,27 +22,26 @@ function collectAndExecuteActions(ip) {
       showNotification(`[${action.toUpperCase()}] ${responseText}`);
     })
     .catch(err => {
-      showNotification(`[${action.toUpperCase()}] Fehler bei IP ${ip}: ${err}`, true);
-      console.error(`Fehler bei Aktion [${action}] für ${ip}:`, err);
+      showNotification(`[${action.toUpperCase()}] Error processing IP ${ip}: ${err}`, true);
+      console.error(`Error during action [${action}] for IP ${ip}:`, err);
     });
   });
 }
 
-// 🔔 Toast-Funktion
+// 🔔 Toast Notification Function
 function showNotification(message, isError = false) {
   const container = document.getElementById('notification-container');
   if (!container) return;
 
   const note = document.createElement('div');
   note.className = 'notification';
-  if (isError) {
-    note.style.backgroundColor = '#722';
-    note.style.color = '#a8d5ba';
-  }
+  note.style.backgroundColor = isError ? '#722' : '#a8d5ba'; // red for errors, soft green for success
+  note.style.color = isError ? '#f8f8f8' : '#2e4d32'; // light text on error, dark text on green
+
   note.innerText = message;
   container.appendChild(note);
 
-  // Remove Element after 5 Seconds
+  // Automatically remove after 5 seconds
   setTimeout(() => {
     note.remove();
   }, 5000);
