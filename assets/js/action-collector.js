@@ -1,4 +1,4 @@
-function collectAndExecuteActions(ip) {
+function collectAndExecuteActions(ip, jail = '') {
   const selectedActions = Array.from(document.querySelectorAll('input[name="actions"]:checked'))
     .map(input => input.value);
 
@@ -10,12 +10,16 @@ function collectAndExecuteActions(ip) {
   selectedActions.forEach(action => {
     const scriptUrl = `/includes/actions/action_${action}-ip.php`;
 
+    // Build POST body with ip and optional jail
+    const postData = { ip };
+    if (jail) postData.jail = jail;
+
     fetch(scriptUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams({ ip })
+      body: new URLSearchParams(postData)
     })
     .then(res => res.text())
     .then(responseText => {
