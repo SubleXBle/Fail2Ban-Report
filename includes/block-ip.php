@@ -32,7 +32,7 @@ function blockIp($ip, $jail = 'unknown', $source = 'manual') {
     $ipEscaped = escapeshellarg($ip);
 
     // Path to IPTABLES (could be different on some systems)
-    $cmd = "/usr/sbin/iptables -A INPUT -s $ipEscaped -j DROP";
+    $cmd = "sudo /usr/sbin/iptables -A INPUT -s $ipEscaped -j DROP 2>&1";
 
     $output = [];
     $exitCode = 0;
@@ -42,7 +42,7 @@ function blockIp($ip, $jail = 'unknown', $source = 'manual') {
     if ($exitCode !== 0) {
         return [
             'success' => false,
-            'message' => "Failed to block IP $ip via iptables."
+            'message' => "Failed to block IP $ip via iptables. Exit code: $exitCode. Output: " . implode("\n", $output)
         ];
     }
 
