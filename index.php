@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Fail2Ban Report</title>
-  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
   <script>
     const availableFiles = <?php echo $filesJson; ?>;
   </script>
