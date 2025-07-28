@@ -54,7 +54,7 @@
 
   <!-- Edit Blocklist Overlay -->
 <div id="blocklistOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="blocklistTitle" aria-describedby="blocklistDesc">  
-<div id="blocklistOverlay" class="overlay hidden">
+<div id="blocklistOverlay">
   <div class="overlay-content">
     <h2>Edit Blocklist</h2>
     <label for="blocklistSearch">Search IP or Jail:</label>
