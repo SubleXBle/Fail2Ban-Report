@@ -48,4 +48,8 @@ done
 tmp_file=$(mktemp)
 jq 'map(select(.active != false))' "$BLOCKLIST_JSON" > "$tmp_file" && mv "$tmp_file" "$BLOCKLIST_JSON"
 
+# Nach dem Bereinigen sicherstellen, dass das Webinterface weiter Zugriff hat
+chown www-data:www-data "$BLOCKLIST_JSON"
+chmod 644 "$BLOCKLIST_JSON"
+
 echo "UFW-Blocklist aktualisiert."
