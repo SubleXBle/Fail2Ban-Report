@@ -38,3 +38,7 @@ Options -Indexes
 # Set UTF-8 as default charset
 # ----------------------------------------------------
 AddDefaultCharset utf-8
+
+# ----------------------------------------------------
+# Set your own Rules to fit your needs down here
+# ----------------------------------------------------
