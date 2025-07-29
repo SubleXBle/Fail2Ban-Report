@@ -15,7 +15,7 @@
 Options -Indexes
 
 # Block direct access to sensitive file types
-<FilesMatch "\.(json|sh|ini|log|bak|OLD)$">
+<FilesMatch "\.(sh|ini|log|bak|OLD)$">
   Require all denied
 </FilesMatch>
 
@@ -24,8 +24,6 @@ Options -Indexes
   Require all denied
 </Files>
 
-# Block access to includes and archive
-RewriteRule ^archive/ - [F,L]
 RewriteRule ^includes/ - [F,L]
 
 # ----------------------------------------------------
