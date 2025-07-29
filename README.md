@@ -58,6 +58,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 
 - ✅ **Date filter** now correctly limits displayed events
 - ✅ **Jail filter** only shows existing jails from logs
+- ✅ **Notification colors fixed:** Success and error notifications now display with correct green/red colors (no more false red success messages)
 - ⏳ **Report action** (planned feature – not yet implemented)
 
 ---
