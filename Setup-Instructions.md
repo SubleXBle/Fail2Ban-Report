@@ -1,95 +1,120 @@
-# ⚙️ Setup Instructions
+# 🔧 Fail2Ban-Report v2 – Manual Setup Instructions
 
-### 1️⃣ Bash Script Setup (`fail2ban_log2json.sh`)
+These instructions explain how to manually install and configure **Fail2Ban-Report v2** on a Linux system.
 
-1. Save the script `fail2ban_log2json.sh` anywhere on your server (e.g. `/usr/local/bin/`).
-2. Make it executable:
-   ```bash
-   chmod +x /path/to/fail2ban_log2json.sh
-   ```
-3. Open the script and adjust the following lines to fit your environment:
-   `LOGFILE="/var/log/fail2ban.log"       # path to your Fail2Ban log`
-   `OUTPUT_JSON_DIR="/var/www/Fail2Ban/archive"  # output directory for .json files (served by webserver)`
-4. Run the script manually or via a daily cronjob:
-   Run script via
-   ```bash
-   ./fail2ban_log2json.sh
-   ```
-   or run it via cronjob:
-   ```
-   crontab -e
-   ```
-   then
-   ```
-   @daily /path/to/fail2ban_log2json.sh
-   ```
-   or any other time that fits your needs (you can try the crontab time generator on [https://suble.net/cronhelper/](https://suble.net/cronhelper/) (⚠️german language)
+---
 
-### 2️⃣ Web Interface Setup (Webspace)
+## ✅ Requirements
 
-1. On your webserver, create a folder for the tool (e.g. Fail2Ban)
-   ```
-   /var/www/html/Fail2Ban/
-   ```
-2. Place the following files inside this folder:
-   + <code>index.php</code>
-   + <code>style.css</code>
-   + <code>.htaccess</code>
+- A Linux system with the following installed:
+  - `fail2ban`
+  - `jq`
+  - `ufw` (only UFW is supported at this time)
+- A PHP-enabled web server (e.g. Apache with PHP 7.4+)
+- The web server user (e.g. `www-data`) must have write access to the `/archive/` directory
 
-3. Inside the same folder, create a subfolder named <code>archive</code>:
-   ```
-   /var/www/html/Fail2Ban/archive/
-   ```
-5. Make sure the webserver (e.g. www-data) has read access to this directory and write access if you want to store JSON files directly there.
-   ```apache2
-   chown -R www-data:www-data /var/www/html/Fail2Ban/*
-   ```
+---
 
-## 🖥️ Usage
-After the first log run is processed, open your browser and go to:
-```
-   https://yourdomain.tld/Fail2Ban/
-```
-You will see a dropdown to choose the date, filter by action, jail, and IP.
+## 📁 Project Structure
 
+Place the project in your desired web directory, for example:
 
-## Protecting Your Fail2Ban Report with .htaccess
+    /var/www/html/Fail2Ban-Report/
 
-To enhance the security of your Fail2Ban report, a `.htaccess` file is provided that:
+The structure should look like this:
 
-- Disables directory listings
-- Blocks direct access to sensitive files such as `.json` and `.css`
-- Sets basic HTTP security headers for safer browsing
+    Fail2Ban-Report/
+    ├── assets/
+    │   ├── css/style.css
+    │   ├── images/*.png
+    │   └── js/*.js
+    ├── includes/
+    │   ├── actions/*.php
+    │   ├── block-ip.php
+    │   ├── unblock-ip.php
+    │   ├── list-files.php
+    │   └── footer.php
+    ├── archive/               ← must be writable by web server
+    ├── index.php
+    ├── .htaccess
+    ├── README.md
+    ├── Setup-Instructions.md
+    └── (Shell scripts stored outside the web root)
 
-### How to Use the `.htaccess` File
+---
 
-1. Save the provided `.htaccess` file in the root directory of your Fail2Ban report (where `index.php` resides).
-2. Ensure your web server allows `.htaccess` overrides (typically via `AllowOverride` in Apache).
-3. The `.htaccess` will automatically protect files in the main directory and subfolders like `/archive/`.
+## 🔐 Permissions
 
-### Important Security Notice
+Make the `/archive/` directory writable for the web server:
 
-While this `.htaccess` provides a basic level of protection, **it is highly recommended to implement additional security measures**, such as:
+    chown -R www-data:www-data /var/www/html/Fail2Ban-Report/archive/
+    chmod -R 755 /var/www/html/Fail2Ban-Report/archive/
 
-- HTTP authentication (Basic Auth) to restrict access to authorized users only
-- IP-based access restrictions to allow only trusted networks or addresses
+---
 
-Fail2Ban reports often contain sensitive security-related data. Adding these layers of protection will help prevent unauthorized access and keep your data safe.
+## ⚙️ Shell Scripts
 
-For example, you can set up Basic Auth with:
+The following two shell scripts **must not** be placed inside the web root.
+Recommended path: `/opt/Fail2Ban-Report/`
 
-```apache
-AuthType Basic
-AuthName "Restricted Area"
-AuthUserFile /path/to/.htpasswd
-Require valid-user
-```
+- `fail2ban_log2json.sh`
+- `firewall-update.sh`
 
-You can use the htpasswd helper for your htpasswd files (choose bcrypt as algorythm as it is better) on [https://suble.net/htpasswd/](https://suble.net/htpasswd/) (⚠️ german language)
+Adjust paths in these scripts if necessary:
+- `fail2ban_log2json.sh` reads the Fail2Ban log and writes JSON files to `/archive/`
+- `firewall-update.sh` reads `blocklist.json` and syncs it with UFW (blocks/unblocks)
 
-or restrict by IP:
+---
 
-```
-Require ip 192.168.1.0/24
-Require ip 203.0.113.5
-```
+## 🕒 Cronjob Configuration
+
+Set up two cronjobs:
+
+1. Convert logs to JSON every 5–15 minutes:
+    
+    */5 * * * * root /opt/Fail2Ban-Report/fail2ban_log2json.sh
+
+2. Sync firewall blocklist with UFW every 5–15 minutes:
+
+    */5 * * * * root /opt/Fail2Ban-Report/firewall-update.sh
+
+> Make sure both scripts are executable (`chmod +x`)
+
+---
+
+## 🌐 Web Interface Configuration
+
+- No PHP configuration is required.
+- All scripts in `includes/` and `includes/actions/` work without manual changes.
+- The web interface displays log information and lets you:
+  - View ban history
+  - Block/unblock IPs manually
+  - Manage the `blocklist.json` interactively
+
+---
+
+## 🔒 Security Notes
+
+The `.htaccess` file includes:
+
+- Protection against direct access to:
+  - `.json`, `.sh`, `.ini`, `.log`, `.bak`, `.OLD`
+- Rewrite rules for `archive/*.json` and `includes/*.php`
+- Strong HTTPS headers
+- (Optional) examples for basic authentication and IP restrictions (commented)
+
+Make sure your Apache server honors `.htaccess`, and you enable `mod_rewrite`.
+
+---
+
+## ✅ Setup Complete
+
+You can now access the tool at:
+
+    http(s)://yourdomain.tld/Fail2Ban-Report/
+
+Monitor your logs, manage bans, and secure your system visually and efficiently.
+
+---
+
+© 2025 – Fail2Ban-Report by Suble
