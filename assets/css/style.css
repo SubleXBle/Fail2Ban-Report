@@ -290,3 +290,20 @@ input[type="checkbox"]:hover {
   color: #d4af37;
 }
 
+.siterel {
+  background-color: #d4af37; /* Goldgelb */
+  color: black;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.siterel:hover,
+.siterel:focus {
+  background-color: #ffd700; /* Helleres Gelb beim Hover */
+  outline: none;
+}
