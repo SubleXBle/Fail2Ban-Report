@@ -33,6 +33,7 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – pe
 - Compatible with hardened environments (strict HTTP headers, no external assets)
 - **Installer script** included for quick setup
 - Easily extensible by its modular by design
+- **Logging of Block and Unblock Actions** by setting LOGGING=true in firewall-update.sh
 
 ---
 
