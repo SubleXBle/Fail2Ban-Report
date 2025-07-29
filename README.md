@@ -5,14 +5,48 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – ri
 
 ## 🛡️ This tool does not replace proper intrusion detection and access control. It is a visualization layer and should be deployed accordingly.
 
-![Fail2Ban.png](Fail2Ban.png)
+#### ⚠️ For safety and clarity, Fail2Ban-Report only modifies firewall rules related to its own IP blocklist (blocklist.json). It never touches or overrides other firewall settings, ensuring compatibility with existing Fail2Ban jails and custom rules.
+
+> This Tool will read the logfile from fail2ban and write ban and Unban Events to a .json file stored on a secured webspace. The Tool will show those Events in a List with an Action Button to perform Actions to the Listed IP Address (e.g. Block IP) The IP will the be written to another .json File (Blocklist) with an "active=true" state, so when the Firewall-Script runs the next time it will Add those IP Adresses on the blocklist.json to the Firewall to block them - so they will also get reapplyed when the Server restarts as soon as the Firewall-Script runs the next time.
+
+> When you Show the Blocklist (Button on Top of Page) you see the IP Addresses that are in the blocklist.json and you can perform an unblock Action. This will set active=false in the blocklist.json and as soon as the firewall-script runs the next time, it will perform an unblock action on this IP Address in the Firewall and remove the IP from the blocklist.json
+
+> So you have the .sh Scripts acting as a backend (gather information from source and perform actions on the system) and the Frontend Layer on your Webspace for visualisation.
+
+> So this Tool gets the Events from Fail2Ban and handles its own blocklist to perform Block and Unblock Actions on UFW
+
+⚠️ Firewall Actions work only with Fail2Ban right now ⚠️
+
+---
 
 ## 📦 Features
 
-- Parses `fail2ban.log` into daily JSON logs
-- Filter by date, action (`Ban` / `Unban`), jail and IP fragment
-- Responsive dark-themed UI
-- Easy to deploy, no database, no frameworks
+- **Overview** of Fail2Ban, ban history and active bans (depends on how often cronjobs run)
+- **Integrated blocklist system** with JSON-based state tracking
+- **Automatic firewall updates** (currently only via `ufw` other Firewall Systems planned for future release)
+- **Lightweight web interface** (no database or frameworks required)
+- Compatible with hardened environments (strict HTTP headers, no external assets)
+- **Installer script** included for quick setup
+- Easily extensible by its modular by design
+- **Logging of Block and Unblock Actions** by setting LOGGING=true in firewall-update.sh
+
+---
+
+
+## 🖥️ Screenshots
+
+![assets/images/Fail2Ban-Report-1.png](assets/images/Fail2Ban-Report-1.png)
+
+Main Window
+
+![assets/images/Fail2Ban-Report-1.png](assets/images/Fail2Ban-Report-3.png)
+
+new: Actions to Perform
+
+![assets/images/Fail2Ban-Report-1.png](assets/images/Fail2Ban-Report-2.png)
+
+new: Banlist manipulation
+
 
 ---
 
