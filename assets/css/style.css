@@ -248,4 +248,8 @@ input[type="checkbox"]:hover {
   padding: 1rem 0;
   font-size: 0.9rem;
 }
+}
+.yellowtext {
+  color: #d4af37;
+}
 
