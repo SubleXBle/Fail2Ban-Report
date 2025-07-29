@@ -5,7 +5,7 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – ri
 
 ## 🛡️ This tool does not replace proper intrusion detection and access control. It is a visualization layer and should be deployed accordingly.
 
-### ❗ Please read the Installation Instructions carefully and set up your Security with the provided .htaccess file ❗
+#### ❗ Please read the Installation Instructions carefully and set up your Security with the provided .htaccess file ❗
 
 #### ⚠️ For safety and clarity, Fail2Ban-Report only modifies firewall rules related to its own IP blocklist (blocklist.json). It never touches or overrides other firewall settings, ensuring compatibility with existing Fail2Ban jails and custom rules.
 
