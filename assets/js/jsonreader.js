@@ -76,6 +76,8 @@
 // when previous selection is not there anymore → back to "All"
 if (previousSelection && !jails.includes(previousSelection)) {
   jailSelect.value = "";
+  renderTable(data, selectedDate);
+  return;
 }
 
 
