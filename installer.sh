@@ -16,58 +16,87 @@ DEFAULT_SH_PATH="/opt/Fail2Ban-Report"
 echo -e "${BLUE}--- Fail2Ban-Report Installer ---${NORMAL}"
 
 # Ask for Webroot path
-read -rp "Enter the path where the Tool-Folder should be installed (default: $DEFAULT_WEBROOT): " WEBROOT
+read -rp "Please enter the installation directory for the web tool (default: $DEFAULT_WEBROOT): " WEBROOT
 WEBROOT=${WEBROOT:-$DEFAULT_WEBROOT}
 TARGET_DIR="${WEBROOT%/}/Fail2Ban-Report"
 
 # Ask for .sh script storage path
-read -rp "Enter path where shell scripts should be stored (default: $DEFAULT_SH_PATH): " SH_PATH
+read -rp "Please enter the directory to store shell scripts (default: $DEFAULT_SH_PATH): " SH_PATH
 SH_PATH=${SH_PATH:-$DEFAULT_SH_PATH}
 
-echo -e "Using webroot installation path: $TARGET_DIR"
-echo -e "Using shell script path: $SH_PATH"
+echo -e "\nUsing webroot installation path: $TARGET_DIR"
+echo -e "Using shell script path: $SH_PATH\n"
 
-# Check for git
+# Check for git with polite option for wget fallback
 echo -e "${BLUE}Checking if git is installed...${NORMAL}"
 if ! command -v git &>/dev/null; then
-  echo -e "${RED}Git not found. Please install git and rerun the installer.${NORMAL}"
-  exit 1
-fi
-
-# Check and install jq if missing
-echo -e "${BLUE}Checking for jq...${NORMAL}"
-if ! command -v jq &>/dev/null; then
-  echo -e "${YELLOW}jq not found. Installing jq...${NORMAL}"
-  if command -v apt &>/dev/null; then
-    sudo apt update && sudo apt install -y jq
-  elif command -v dnf &>/dev/null; then
-    sudo dnf install -y jq
-  elif command -v pacman &>/dev/null; then
-    sudo pacman -Sy jq --noconfirm
+  echo -e "${YELLOW}Git is not installed.${NORMAL}"
+  read -rp "Would you like to download the repository as a ZIP archive using wget instead? (Y/N): " use_wget
+  use_wget=${use_wget,,}
+  if [[ "$use_wget" == "y" ]]; then
+    ZIP_URL="https://github.com/SubleXBle/Fail2Ban-Report/archive/refs/heads/$BRANCH_NAME.zip"
+    ZIP_FILE="/tmp/fail2ban_report.zip"
+    echo -e "${BLUE}Downloading ZIP archive...${NORMAL}"
+    if ! command -v wget &>/dev/null; then
+      echo -e "${RED}wget is not installed. Please install wget or git manually and rerun this installer.${NORMAL}"
+      exit 1
+    fi
+    wget -O "$ZIP_FILE" "$ZIP_URL"
+    echo -e "${BLUE}Extracting ZIP archive...${NORMAL}"
+    if ! command -v unzip &>/dev/null; then
+      echo -e "${RED}unzip is not installed. Please install unzip manually and rerun this installer.${NORMAL}"
+      exit 1
+    fi
+    unzip -o "$ZIP_FILE" -d /tmp/
+    rm -f "$ZIP_FILE"
+    mv "/tmp/Fail2Ban-Report-$BRANCH_NAME" "$TARGET_DIR"
   else
-    echo -e "${RED}Package manager not supported. Please install jq manually.${NORMAL}"
+    echo -e "${RED}Git is required or please choose to download via wget. Exiting.${NORMAL}"
     exit 1
   fi
 else
-  echo -e "${GREEN}jq is installed.${NORMAL}"
+  # git is installed, proceed with clone or pull
+  if [ ! -d "$TARGET_DIR" ]; then
+    echo -e "${YELLOW}Cloning Fail2Ban-Report repository into $TARGET_DIR...${NORMAL}"
+    git clone -b "$BRANCH_NAME" "$REPO_URL" "$TARGET_DIR"
+  else
+    echo -e "${BLUE}Repository already exists. Pulling latest changes...${NORMAL}"
+    cd "$TARGET_DIR" || { echo -e "${RED}Cannot change directory to $TARGET_DIR${NORMAL}"; exit 1; }
+    git pull origin "$BRANCH_NAME"
+  fi
 fi
 
-# Clone or update repo
-if [ ! -d "$TARGET_DIR" ]; then
-  echo -e "${YELLOW}Cloning Fail2Ban-Report repository into $TARGET_DIR...${NORMAL}"
-  git clone -b "$BRANCH_NAME" "$REPO_URL" "$TARGET_DIR"
+# Check and optionally install jq
+echo -e "\n${BLUE}Checking for jq...${NORMAL}"
+if ! command -v jq &>/dev/null; then
+  echo -e "${YELLOW}jq is not installed.${NORMAL}"
+  read -rp "Would you like to install jq now? (Y/N): " install_jq
+  install_jq=${install_jq,,}
+  if [[ "$install_jq" == "y" ]]; then
+    if command -v apt &>/dev/null; then
+      sudo apt update && sudo apt install -y jq
+    elif command -v dnf &>/dev/null; then
+      sudo dnf install -y jq
+    elif command -v pacman &>/dev/null; then
+      sudo pacman -Sy jq --noconfirm
+    else
+      echo -e "${RED}Unsupported package manager. Please install jq manually.${NORMAL}"
+      exit 1
+    fi
+  else
+    echo -e "${RED}jq is required for this tool. Exiting.${NORMAL}"
+    exit 1
+  fi
 else
-  echo -e "${BLUE}Repository already exists. Pulling latest changes...${NORMAL}"
-  cd "$TARGET_DIR" || { echo -e "${RED}Cannot cd to $TARGET_DIR${NORMAL}"; exit 1; }
-  git pull origin "$BRANCH_NAME"
+  echo -e "${GREEN}jq is already installed.${NORMAL}"
 fi
 
 # Ensure shell script path exists
 mkdir -p "$SH_PATH"
 
-# === fail2ban_log2json.sh ===
+# === fail2ban_log2json.sh installation ===
 if [ -f "$TARGET_DIR/fail2ban_log2json.sh" ]; then
-  echo -e "${BLUE}Installing fail2ban_log2json.sh...${NORMAL}"
+  echo -e "\n${BLUE}Installing fail2ban_log2json.sh...${NORMAL}"
   cp "$TARGET_DIR/fail2ban_log2json.sh" "$SH_PATH/"
   chmod +x "$SH_PATH/fail2ban_log2json.sh"
 else
@@ -87,9 +116,9 @@ fi
 mkdir -p "$ARCHIVE_PATH"
 chmod 755 "$ARCHIVE_PATH"
 
-# === firewall-update.sh ===
+# === firewall-update.sh installation ===
 if [ -f "$TARGET_DIR/firewall-update.sh" ]; then
-  echo -e "${BLUE}Installing firewall-update.sh...${NORMAL}"
+  echo -e "\n${BLUE}Installing firewall-update.sh...${NORMAL}"
   cp "$TARGET_DIR/firewall-update.sh" "$SH_PATH/"
   chmod +x "$SH_PATH/firewall-update.sh"
 
@@ -101,54 +130,76 @@ else
 fi
 
 # Set ownership to www-data
-echo -e "${BLUE}Setting ownership of $TARGET_DIR to www-data:www-data...${NORMAL}"
+echo -e "\n${BLUE}Setting ownership of $TARGET_DIR to www-data:www-data...${NORMAL}"
 chown -R www-data:www-data "$TARGET_DIR"
 
-# Remove duplicate script in repo
+# Remove fail2ban_log2json.sh from web directory (cleanup)
 rm -f "$TARGET_DIR/fail2ban_log2json.sh"
 
 # .htaccess Hinweis
-echo -e "${BLUE}\nIMPORTANT: Configure your .htaccess to secure the application.${NORMAL}"
-echo "Example .htaccess is included in the repo."
+echo -e "\n${BLUE}IMPORTANT: Please configure your .htaccess file to secure the application.${NORMAL}"
+echo "An example .htaccess file is included in the repository."
 
-# Ask about fail2ban_log2json cronjob
-read -rp "Install daily cronjob for fail2ban_log2json.sh at 3 AM? (Y/N): " INSTALL_CRON
+# --- Cronjob installation for fail2ban_log2json.sh ---
+read -rp $'\nInstall daily cronjob for fail2ban_log2json.sh at 3 AM? (Y/N): ' INSTALL_CRON
 INSTALL_CRON=${INSTALL_CRON,,}
 if [[ "$INSTALL_CRON" == "y" ]]; then
   CRON_CMD="0 3 * * * $SH_PATH/fail2ban_log2json.sh > /dev/null 2>&1"
   (crontab -l 2>/dev/null | grep -v -F "$SH_PATH/fail2ban_log2json.sh"; echo "$CRON_CMD") | crontab -
   echo -e "${GREEN}Cronjob installed: $CRON_CMD${NORMAL}"
+else
+  echo -e "${BLUE}Skipping cronjob installation for fail2ban_log2json.sh.${NORMAL}"
 fi
 
-# Ask about firewall-update.sh cronjob
-read -rp "Install firewall-update.sh to run every 5 minutes via cron? (Y/N): " INSTALL_FW_CRON
-INSTALL_FW_CRON=${INSTALL_FW_CRON,,}
-if [[ "$INSTALL_FW_CRON" == "y" ]]; then
-  FW_CRON_CMD="*/5 * * * * $SH_PATH/firewall-update.sh > /dev/null 2>&1"
+# --- Cronjob installation for firewall-update.sh with choice ---
+echo -e "\nPlease select how often the firewall-update.sh cronjob should run:"
+echo "1) Every 5 minutes"
+echo "2) Every 15 minutes"
+echo "3) Do not install cronjob"
+
+read -rp "Enter your choice [1-3]: " FW_CRON_CHOICE
+case "$FW_CRON_CHOICE" in
+  1)
+    FW_CRON_SCHEDULE="*/5 * * * *"
+    ;;
+  2)
+    FW_CRON_SCHEDULE="*/15 * * * *"
+    ;;
+  3)
+    FW_CRON_SCHEDULE=""
+    ;;
+  *)
+    echo -e "${YELLOW}Invalid choice. No cronjob will be installed for firewall-update.sh.${NORMAL}"
+    FW_CRON_SCHEDULE=""
+    ;;
+esac
+
+if [ -n "$FW_CRON_SCHEDULE" ]; then
+  FW_CRON_CMD="$FW_CRON_SCHEDULE $SH_PATH/firewall-update.sh > /dev/null 2>&1"
   (crontab -l 2>/dev/null | grep -v -F "$SH_PATH/firewall-update.sh"; echo "$FW_CRON_CMD") | crontab -
   echo -e "${GREEN}Firewall cronjob installed: $FW_CRON_CMD${NORMAL}"
+else
+  echo -e "${BLUE}No firewall cronjob installed.${NORMAL}"
 fi
 
-echo -e "${GREEN}\nInstallation completed successfully!${NORMAL}"
+echo -e "\n${GREEN}Installation completed successfully!${NORMAL}"
 echo "Webroot path: $TARGET_DIR"
 echo "Shell scripts in: $SH_PATH"
 echo "Firewall script path: $SH_PATH/firewall-update.sh"
 echo
-# === Cleanup frontend install directory ===
 
-# Remove all .sh files from frontend path
-echo -e "${BLUE}Cleaning up frontend installation path...${NORMAL}"
+# === Cleanup frontend install directory ===
+echo -e "${BLUE}Cleaning up frontend installation directory...${NORMAL}"
 find "$TARGET_DIR" -type f -name "*.sh" -exec rm -f {} \;
 
-# Remove assets/images/ folder if it exists
 if [ -d "$TARGET_DIR/assets/images" ]; then
   rm -rf "$TARGET_DIR/assets/images"
   echo -e "${GREEN}Removed $TARGET_DIR/assets/images/${NORMAL}"
 fi
 
-# Remove this installer script
+# Remove this installer script itself
 INSTALLER_PATH="$(realpath "$0")"
 echo -e "${YELLOW}Removing installer script: $INSTALLER_PATH${NORMAL}"
 rm -f "$INSTALLER_PATH"
 
-echo "Make sure to adjust webserver config and test the blocklist system."
+echo "Please ensure your webserver configuration is properly adjusted and test the blocklist system."
