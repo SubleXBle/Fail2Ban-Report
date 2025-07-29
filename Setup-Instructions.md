@@ -120,4 +120,3 @@ Monitor your logs, manage bans, and secure your system visually and efficiently.
 
 ---
 
-© 2025 – Fail2Ban-Report by Suble
