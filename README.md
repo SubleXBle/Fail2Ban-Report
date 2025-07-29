@@ -6,7 +6,7 @@ A simple and clean web-based dashboard to turn your daily Fail2Ban logs into sea
 
 ⚠️ **Security Notice**: Fail2Ban-Report modifies only its own blocklist (`blocklist.json`). It never touches existing Fail2Ban jails or unrelated firewall rules.  
 Please read the [Installation Instructions](Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
-> experimental feature : Use the Installer
+> experimental feature : Use the Installer ![Installer Setup Documentation](installer-setup.md)
 
 ---
 
