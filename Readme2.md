@@ -81,7 +81,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - ⏳ Integration with external services (e.g. AbuseIPDB reporting)
 
 ### 🌿 User Interface
-- ⏳ Improved CSS and dark mode styling
+- ⏳ Improve CSS and styling
 
 ---
 
