@@ -26,7 +26,9 @@
         const response = await fetch(jsonDirectory + filename);
         if (!response.ok) throw new Error('Could not load the file');
         const data = await response.json();
-        renderTable(data);
+        const dateMatch = filename.match(/(\d{4})(\d{2})(\d{2})/);
+        const selectedDate = dateMatch ? `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}` : null;
+        renderTable(data, selectedDate);
       } catch (err) {
         alert('Error loading data: ' + err.message);
       }
@@ -38,11 +40,15 @@
       const jailFilter = document.getElementById('jailFilter').value;
       const ipFilter = document.getElementById('ipFilter').value.trim();
 
+      // Show only the selected Date (Format: "2025-07-29")
       const filtered = data.filter(entry => {
-        return (!actionFilter || entry.action === actionFilter) &&
+        const entryDate = entry.timestamp ? entry.timestamp.substring(0, 10) : '';
+        return (!selectedDate || entryDate === selectedDate) &&
+               (!actionFilter || entry.action === actionFilter) &&
                (!jailFilter || entry.jail === jailFilter) &&
                (!ipFilter || entry.ip.includes(ipFilter));
       });
+
 
       // Populate jail filter only once
       const jails = [...new Set(data.map(e => e.jail))].sort();
