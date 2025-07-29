@@ -26,8 +26,6 @@ So this Tool gets the Events from Fail2Ban and handles its own blocklist to perf
 
 ---
 
----
-
 ## 📦 Features
 
 - **Overview** of Fail2Ban, ban history and active bans (depends on how often cronjobs run)
