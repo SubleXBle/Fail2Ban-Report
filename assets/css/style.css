@@ -115,6 +115,7 @@ tr:nth-child(even) {
 }
 
 .overlay-content {
+  position: relative;
   background: #1a1a1a;
   color: #d4af37; /* gold */
   padding: 20px;
