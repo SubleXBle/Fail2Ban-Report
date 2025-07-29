@@ -1,4 +1,4 @@
-# 🔧 Fail2Ban-Report v2 – Manual Setup Instructions
+# 🔧 Fail2Ban-Report Beta 2 – Manual Setup Instructions
 
 These instructions explain how to manually install and configure **Fail2Ban-Report v2** on a Linux system.
 
