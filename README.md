@@ -56,9 +56,11 @@ Fail2Ban Report was built with simplicity, security, and control in mind:
 
 ---
 
-## 🧰 Installation
+#### ⚠️ Installer will prove if certain Software is installed on the system like `jq` (Commandline Json Processor). [https://jqlang.org/](`jq`)
 
-### 🔧 Option 1: Using the Installer (recommended)
+## ⚙️ Installation / Setup Instructions
+
+### 🔧 Option 1: Using the Installer (experimental)
 
 Run the installer:
 
@@ -147,11 +149,12 @@ Fail2Ban-Report is designed to be lightweight, modular, and open to future impro
 
     ✅ Setup script to automate initial installation, including directory structure and permissions
     ✅ Optionally auto-configure a daily cronjob
+    ⏳ Make installer more robust
 
 🔐 Security Features
 
     ✅ Integration of a stronger .htaccess file for basic access control and secure defaults
-    ⏳ Make it even more secure and better
+    ⏳ Make it even more secure and better (this will never get a check)
 
 🔥 Active Defense Integration
 
