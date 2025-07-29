@@ -24,6 +24,7 @@ Options -Indexes
   Require all denied
 </Files>
 
+# Protect include directory
 RewriteRule ^includes/ - [F,L]
 
 # ----------------------------------------------------
