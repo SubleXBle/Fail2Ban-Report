@@ -14,12 +14,11 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – pe
 
 ## 📦 Features
 
-- **Overview** of Fail2Ban jails, ban history and active bans (depends on how often cronjobs run)
+- **Overview** of Fail2Ban, ban history and active bans (depends on how often cronjobs run)
 - **Integrated blocklist system** with JSON-based state tracking
 - **Automatic firewall updates** (currently only via `ufw` other Firewall Systems planned for future release)
 - **Lightweight web interface** (no database or frameworks required)
 - Compatible with hardened environments (strict HTTP headers, no external assets)
-- Fully On-premises — no tracking, no cloud, no dependencies
 - **Installer script** included for quick setup
 - Easily extensible by its modular by design
 
@@ -48,13 +47,12 @@ new: Banlist manipulation
 Fail2Ban Report was built with simplicity, security, and control in mind:
 
 - All data is local — no cloud, no external APIs, no tracking
-- No cookies, no tracking
 - Access control via web server authentication (`.htaccess`)
+  - Security-hardened `.htaccess` and HTTP headers recommended (example included)
 - JSON-based blocklist structure: easy to audit, version, and edit
 - Separation of concerns:
   - Web interface handles display and editing
   - Backend scripts manage interaction with firewall and fail2ban
-- Security-hardened `.htaccess` and HTTP headers recommended (example included)
 
 ---
 
