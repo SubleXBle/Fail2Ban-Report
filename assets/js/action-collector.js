@@ -13,6 +13,7 @@ function collectAndExecuteActions(ip, jail = '') {
 
   if (selectedActions.length === 0) {
     alert("Please select at least one action.");
+    showNotification("Please select at least one action.", "info");
     return;
   }
 
