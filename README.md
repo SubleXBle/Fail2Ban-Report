@@ -18,10 +18,9 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – pe
 
 > So you have the .sh Scripts acting as a backend (gather information from source and perform actions on the system) and the Frontend Layer on your Webspace for visualisation.
 
-So this Tool gets the Events from Fail2Ban and handles its own blocklist to perform Block and Unblock Actions on UFW
+> So this Tool gets the Events from Fail2Ban and handles its own blocklist to perform Block and Unblock Actions on UFW
 
-
-⚠️ Firewall Actions work only with Fail2Ban right now ⚠️
+> ⚠️ Firewall Actions work only with Fail2Ban right now ⚠️
 
 ---
 
