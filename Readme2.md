@@ -16,7 +16,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - Visualize ban/unban events
 - Interact with IPs (e.g. manually block/unblock)
 - Maintain a persistent `blocklist.json`
-- Sync that list with your system firewall (via `ufw`)
+- Sync that list with your system firewall (via `ufw` (other Firewalls than UFW not yet supported))
 
 🧱 The architecture:
 - **Backend Shell Scripts**: Parse logs, write JSON, and update UFW
