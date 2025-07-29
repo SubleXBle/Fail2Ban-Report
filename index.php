@@ -15,9 +15,12 @@
   <script src="assets/js/blocklist-overlay.js" defer></script>
 </head>
 <body>
+  
+ <div class="inline-headlines"> 
   <h1>Fail2Ban Report</h1>
   <h2>Let's catch the bad guys!</h2>
-
+ </div>
+  
   <label for="dateSelect">Select Date:</label>
   <select id="dateSelect"></select>
 
