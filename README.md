@@ -23,7 +23,7 @@ Web-based dashboard to turn your daily Fail2Ban logs into searchable and filtera
 
 ## 📦 Features
 
-- **Overview** of Fail2Ban, ban history and active bans (depends on how often cronjobs run)
+- **Overview** of Fail2Ban, ban history and active bans
 - **Integrated blocklist system** with JSON-based state tracking
 - **Automatic firewall updates** (currently only via `ufw` other Firewall Systems planned for future release)
 - **Lightweight web interface** (no database or frameworks required)
