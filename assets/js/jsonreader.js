@@ -50,24 +50,34 @@
       });
 
 
-      // Populate jail filter only once
-      const jails = [...new Set(data.map(e => e.jail))].sort();
-      const jailSelect = document.getElementById('jailFilter');
-      if (!jailSelect.dataset.populated) {
-        // Empty option for "all"
-        const emptyOption = document.createElement('option');
-        emptyOption.value = "";
-        emptyOption.textContent = "All";
-        jailSelect.appendChild(emptyOption);
+      // Populate jail Filter
 
-        jails.forEach(j => {
-          const o = document.createElement('option');
-          o.value = j;
-          o.textContent = j;
-          jailSelect.appendChild(o);
-        });
-        jailSelect.dataset.populated = true;
-      }
+    // Dynamically populate jail filter from filtered data
+    const jailSelect = document.getElementById('jailFilter');
+    const previousSelection = jailSelect.value; // Save old selection
+    jailSelect.innerHTML = ''; // Reset
+
+    const emptyOption = document.createElement('option');
+    emptyOption.value = "";
+    emptyOption.textContent = "All";
+    jailSelect.appendChild(emptyOption);
+
+    // Extract jails only from *visible data* (nach Datum & Action/IP-Filter)
+    const jails = [...new Set(filtered.map(e => e.jail).filter(Boolean))].sort();
+
+    jails.forEach(j => {
+      const o = document.createElement('option');
+      o.value = j;
+      o.textContent = j;
+      if (j === previousSelection) o.selected = true;
+      jailSelect.appendChild(o);
+    });
+
+// when previous selection is not there anymore → back to "All"
+if (previousSelection && !jails.includes(previousSelection)) {
+  jailSelect.value = "";
+}
+
 
       tbody.innerHTML = '';
       filtered.forEach(entry => {
