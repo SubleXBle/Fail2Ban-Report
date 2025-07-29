@@ -86,17 +86,14 @@ Fail2Ban-Report is designed to be lightweight, modular, and open to future impro
 
 ## 🖥️ Screenshots
 
-Main Window with List that shows you IP Jail Timestamp
 ![assets/images/Fail2Ban-Report-B2.png](assets/images/Fail2Ban-Report-B2.png)
 Main Window with List that shows you IP Jail Timestamp
 
-feedback after ban action
 
 ![assets/images/banip.png](assets/images/banip.png)
 
 feedback after ban action
 
-Blocklist with unblock actions
 ![assets/images/Fail2Ban-Report-BL.png](assets/images/Fail2Ban-Report-BL.png)
 Blocklist with unblock actions
 
