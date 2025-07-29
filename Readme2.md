@@ -37,7 +37,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - 🧩 **Modular design** for easy extension
 - 🪵 Optional logging of block/unblock actions
 
-> 🧰 Works even on small setups (Raspberry Pi, shared webspace, etc.)
+> 🧰 Works even on small setups (Raspberry Pi, etc.)
 
 ---
 
