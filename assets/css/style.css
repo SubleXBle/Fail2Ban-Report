@@ -77,7 +77,7 @@ tr:nth-child(even) {
   flex-direction: column;
   gap: 10px;
 }
-
+/*
 .notification {
   background-color: #222;
   color: #ffd700;
@@ -89,6 +89,7 @@ tr:nth-child(even) {
   opacity: 0.95;
   animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;    
 }
+*/
 .notification.success {
   background-color: #28a745; /* sattes Grün */
   color: #fff;               /* weiße Schrift für Lesbarkeit */
