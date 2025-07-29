@@ -88,9 +88,9 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 
 ## 🖼️ Screenshots
 
-![Main interface with log overview](assets/images/Fail2Ban-Report-B2.png)
-![assets/images/Fail2Ban-Report-BL.png](assets/images/Fail2Ban-Report-BL.png)
-![assets/images/banip.png](assets/images/banip.png)
+- `![assets/images/Fail2Ban-Report-B2.png]` — Main interface with log overview  
+- `assets/images/banip.png` — Result after banning an IP  
+- `assets/images/Fail2Ban-Report-BL.png` — Blocklist interface with unblock actions
 
 ---
 
