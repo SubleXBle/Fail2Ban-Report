@@ -240,3 +240,12 @@ input[type="checkbox"]:hover {
     0 0 15px 4px rgba(212, 175, 55, 0.4);
   outline: none;
 }
+/* Footer */
+.site-footer {
+  background-color: #222;
+  color: #d4af37;
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.9rem;
+}
+
