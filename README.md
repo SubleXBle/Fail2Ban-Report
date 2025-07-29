@@ -158,6 +158,12 @@ This ensures full synchronization between Fail2Ban, firewall, and the web interf
 
 ---
 
+🪳 Bugfixing (a.k.a. cockroach control)
+
+    ✅ Date Filter : will now only show Events from the selected Date
+
+---
+
 ## 🗺️ Roadmap & State of Project
 
 Fail2Ban-Report is designed to be lightweight, modular, and open to future improvements. The following features are currently planned:
