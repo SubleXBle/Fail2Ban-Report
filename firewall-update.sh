@@ -40,7 +40,7 @@ for ip in $inactive_ips; do
   for rule in "${rules[@]}"; do
     rule_number=$(echo "$rule" | awk -F'[][]' '{print $2}')
     echo "Removing rule $rule_number for $ip"
-    sudo ufw --force delete "$rule_number"
+    ufw --force delete "$rule_number"
   done
 done
 
