@@ -142,6 +142,7 @@ This ensures full synchronization between Fail2Ban, firewall, and the web interf
 ## 🗺️ Roadmap & State of Project
 
 Fail2Ban-Report is designed to be lightweight, modular, and open to future improvements. The following features are currently planned:
+
 ⚙️ Setup & Automation
 
     ✅ Setup script to automate initial installation, including directory structure and permissions
