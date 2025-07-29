@@ -15,7 +15,7 @@ Turn your daily Fail2Ban logs into searchable and filterable JSON reports – ri
 
 > So this Tool gets the Events from Fail2Ban and handles its own blocklist to perform Block and Unblock Actions on UFW
 
-⚠️ Firewall Actions work only with Fail2Ban right now ⚠️
+⚠️ Firewall Actions work only with UFW right now ⚠️
 
 ---
 
