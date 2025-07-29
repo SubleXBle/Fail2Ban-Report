@@ -3,10 +3,10 @@
 A simple and clean web-based reporting tool for Fail2Ban events.
 Turn your daily Fail2Ban logs into searchable and filterable JSON reports – perma ban IPs from this List directly and manage its Blocklist. Ban/Unban
 
-> Designed for sysadmins, self-hosters, and security-conscious users who want better insight into Fail2Ban activity and fine-grained control over IP blocking.
+> Designed for sysadmins, self-hosters, and security-conscious users who want better insight into Fail2Ban activity and fine-grained control over IP blocking. ⚠️ Firewall Actions work only with Fail2Ban right now ⚠️
 
 ---
-⚠️ Firewall Actions work only with Fail2Ban right now ⚠️
+
 
 ## 🛡️ This tool does not replace proper intrusion detection and access control. It is a visualization layer and should be deployed accordingly.
 #### ⚠️ For safety and clarity, Fail2Ban-Report only modifies firewall rules related to its own IP blocklist (blocklist.json). It never touches or overrides other firewall settings, ensuring compatibility with existing Fail2Ban jails and custom rules.
