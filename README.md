@@ -86,7 +86,7 @@ Fail2Ban-Report is designed to be lightweight, modular, and open to future impro
 
 ## 🖥️ Screenshots
 
-![Main Window](assets/Fail2Ban-Report-B2.png)
+![assets/Fail2Ban-Report-B2.png](assets/Fail2Ban-Report-B2.png)
 
 ---
 
