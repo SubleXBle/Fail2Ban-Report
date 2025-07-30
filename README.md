@@ -61,7 +61,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - New `.htaccess` for secure deployments
 - AbuseIPDB integration: Check IP reputation directly from the interface (displays report count)
 
-🧪 [as promised there is an highly experimental feature for using fail2ban instead of UFW.](using-Fail2Ban-firewall-update.md) (not recommended by now)
+🧪 [as promised there is an highly experimental feature for using fail2ban instead of UFW.](using-Fail2Ban-firewall-update.md) (⚠️ not recommended by now)
 
 ---
 
