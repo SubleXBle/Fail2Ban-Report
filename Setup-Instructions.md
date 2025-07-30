@@ -120,3 +120,68 @@ Monitor your logs, manage bans, and secure your system visually and efficiently.
 
 ---
 
+## 🌐 Optional: AbuseIPDB Integration
+
+Fail2Ban-Report supports an optional IP reputation check via [AbuseIPDB](https://www.abuseipdb.com/), a public threat intelligence platform.
+
+### 🔎 What It Does
+
+- Displays the number of reports an IP address has received on AbuseIPDB
+- Helps assess the trustworthiness of an IP before unblocking it
+- Sends reports **only on manual user request** — no automation
+
+### 🧰 Requirements
+
+- A free account at [AbuseIPDB.com](https://www.abuseipdb.com/)
+- A personal API key (available in your [AbuseIPDB dashboard](https://www.abuseipdb.com/account/api))
+
+### 🛠 Configuration
+
+1. Create the following file **outside the web root**, e.g. at:
+
+    ```
+    /opt/Fail2Ban-Report/fail2ban-report.config
+    ```
+
+2. Insert the following content, replacing the placeholder with your actual API key:
+
+    ```ini
+    [abuseipdb]
+    api_key = YOUR_API_KEY_HERE
+    ```
+
+3. Make sure the file is **readable by the web server user** (e.g. `www-data`):
+
+    ```bash
+    chown www-data:www-data /opt/Fail2Ban-Report/fail2ban-report.config
+    chmod 640 /opt/Fail2Ban-Report/fail2ban-report.config
+    ```
+
+4. Done — if the file exists and contains a valid API key, the reputation check will be available when viewing or reporting IPs in the web interface.
+
+### ⚠️ Changing the Config Location or Name
+
+If you choose to place the `.config` file elsewhere or use a different filename:
+
+- Open the file:
+
+    ```
+    includes/actions/reports/abuseipdb.php
+    ```
+
+- Find the following line (early in the script):
+
+    ```php
+    $configPath = '/opt/Fail2Ban-Report/fail2ban-report.config';
+    ```
+
+- Modify it to match your custom location or filename.
+
+> The file must be outside the web-accessible path for security reasons.
+
+### 💡 Notes
+
+- This feature is **optional** — Fail2Ban-Report works without it.
+- API requests are made **server-side only**, your API key is never exposed to the browser.
+- AbuseIPDB’s free tier allows **1,000 requests per day**.
+
