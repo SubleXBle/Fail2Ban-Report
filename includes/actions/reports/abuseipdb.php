@@ -1,5 +1,4 @@
 <?php
-// abuseipdb.php
 
 $config = parse_ini_file('/opt/Fail2Ban-Report/fail2ban-report.config');
 $apiKey = trim($config['abuseipdb_key'] ?? '');
@@ -7,23 +6,15 @@ $apiKey = trim($config['abuseipdb_key'] ?? '');
 if (!$apiKey) {
     echo json_encode([
         'success' => false,
-        'message' => 'AbuseIPDB API key not set.',
+        'message' => 'AbuseIPDB API key is not set.',
         'type' => 'error'
     ]);
     return;
 }
 
-$ipToCheck = $ip ?? null;
+$ipToCheck = $ip;
 
-if (!$ipToCheck) {
-    echo json_encode([
-        'success' => false,
-        'message' => 'No IP specified for AbuseIPDB check.',
-        'type' => 'error'
-    ]);
-    return;
-}
-
+// Prepare and send API request
 $curl = curl_init();
 curl_setopt_array($curl, [
     CURLOPT_URL => "https://api.abuseipdb.com/api/v2/check?ipAddress=$ipToCheck",
@@ -31,26 +22,18 @@ curl_setopt_array($curl, [
     CURLOPT_HTTPHEADER => [
         "Key: $apiKey",
         "Accept: application/json"
-    ],
+    ]
 ]);
 
 $response = curl_exec($curl);
 curl_close($curl);
 
+// Process response
 if ($response) {
     $json = json_decode($response, true);
-    $count = $json['data']['totalReports'] ?? null;
+    $count = $json['data']['totalReports'] ?? 0;
 
-    if ($count === null) {
-        echo json_encode([
-            'success' => false,
-            'message' => 'AbuseIPDB: Unexpected API response.',
-            'type' => 'error'
-        ]);
-        return;
-    }
-
-    $msg = "AbuseIPDB: $ipToCheck wurde $count mal gefunden";
+    $msg = "AbuseIPDB: $ipToCheck was reported $count time(s).";
 
     echo json_encode([
         'success' => true,
@@ -60,7 +43,7 @@ if ($response) {
 } else {
     echo json_encode([
         'success' => false,
-        'message' => 'AbuseIPDB request failed.',
+        'message' => 'Failed to connect to AbuseIPDB.',
         'type' => 'error'
     ]);
 }
