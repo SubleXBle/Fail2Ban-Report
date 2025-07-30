@@ -36,9 +36,9 @@ function collectAndExecuteActions(ip, jail = '') {
   let type;
 
   if (action === 'report') {
-    type = 'info';  // blau für report
+    type = 'info';
   } else {
-    type = data.success ? "success" : "error";  // grün oder rot sonst
+    type = data.success ? "success" : "error"; 
   }
 
   showNotification(prefix + message, type);
@@ -63,7 +63,7 @@ function showNotification(message, type = "info") {
   if (!container) return;
 
   const note = document.createElement('div');
-  note.className = 'notification ' + type; // CSS Klassen wie notification success/error/info
+  note.className = 'notification ' + type; // CSS notification success/error/info
 
   note.innerText = message;
   container.appendChild(note);
