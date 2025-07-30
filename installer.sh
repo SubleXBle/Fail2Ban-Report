@@ -129,6 +129,47 @@ else
   echo -e "${RED}firewall-update.sh not found in repo.${NORMAL}"
 fi
 
+# === AbuseIPDB config setup ===
+CONFIG_PATH="$SH_PATH/fail2ban-report.config"
+
+echo -e "\n${BLUE}Optional: Enable AbuseIPDB reputation reporting${NORMAL}"
+echo "This feature lets you check IP reputation from the web interface using AbuseIPDB."
+echo "To enable this, you'll need a (free) API key from https://www.abuseipdb.com/"
+echo "If you don't have a key now, you can leave it blank and add it later manually."
+
+read -rp "Would you like to enable AbuseIPDB support? (Y/N): " ENABLE_ABUSE
+ENABLE_ABUSE=${ENABLE_ABUSE,,}
+
+if [[ "$ENABLE_ABUSE" == "y" ]]; then
+  read -rp "Please enter your AbuseIPDB API key (or leave blank to add later): " API_KEY
+  API_KEY=${API_KEY:-""}
+
+  echo -e "${YELLOW}Creating AbuseIPDB-enabled config...${NORMAL}"
+  cat > "$CONFIG_PATH" <<EOF
+[reports]
+report=true
+report_types=abuseipdb   # you can set more than one report
+[AbuseIPDB API Key]
+abuseipdb_key=$API_KEY
+EOF
+
+  if [[ -z "$API_KEY" ]]; then
+    echo -e "${YELLOW}Warning: No API key entered. You need to add your AbuseIPDB API key manually in $CONFIG_PATH to enable reporting.${NORMAL}"
+  fi
+else
+  echo -e "${YELLOW}Creating config with AbuseIPDB disabled...${NORMAL}"
+  cat > "$CONFIG_PATH" <<EOF
+[reports]
+report=false
+report_types=
+[AbuseIPDB API Key]
+abuseipdb_key=
+EOF
+fi
+
+chmod 600 "$CONFIG_PATH"
+echo -e "${GREEN}Config file created at $CONFIG_PATH${NORMAL}"
+
 # Set ownership to www-data
 echo -e "\n${BLUE}Setting ownership of $TARGET_DIR to www-data:www-data...${NORMAL}"
 chown -R www-data:www-data "$TARGET_DIR"
