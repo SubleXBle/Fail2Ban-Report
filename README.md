@@ -51,7 +51,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 
 ---
 
-## 🆕 What's New in V2
+## 🆕 What's New in V 0.2.1
 
 - Modular folder structure (split backend/frontend)
 - Action buttons: Block/Unblock IPs directly
