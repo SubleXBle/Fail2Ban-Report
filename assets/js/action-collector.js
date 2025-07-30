@@ -31,11 +31,19 @@ function collectAndExecuteActions(ip, jail = '') {
     })
     .then(res => res.json())
     .then(data => {
-      const prefix = `[${action.toUpperCase()}] `;
-      const message = data.message || 'No message returned.';
-      const type = data.success ? "success" : "error";
-      showNotification(prefix + message, type);
-    })
+  const prefix = `[${action.toUpperCase()}] `;
+  const message = data.message || 'No message returned.';
+  let type;
+
+  if (action === 'report') {
+    type = 'info';  // blau für report
+  } else {
+    type = data.success ? "success" : "error";  // grün oder rot sonst
+  }
+
+  showNotification(prefix + message, type);
+})
+
     .catch(err => {
       const errorMsg = `[${action.toUpperCase()}] Error processing IP ${ip}: ${err}`;
       showNotification(errorMsg, "error");
