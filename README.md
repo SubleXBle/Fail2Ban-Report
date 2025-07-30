@@ -4,7 +4,16 @@ A simple and clean web-based dashboard to turn your daily Fail2Ban logs into sea
 
 🛡️ **Note**: This tool is a visualization and management layer — it does **not** replace proper intrusion detection or access control. Deploy it behind IP restrictions or HTTP authentication.
 
-⚠️ **Security Notice**: Fail2Ban-Report modifies only its own blocklist (`blocklist.json`). It never touches existing Fail2Ban jails or unrelated firewall rules.  
+🔐 Security Notice
+
+> **Current Status:**  
+Fail2Ban-Report currently manages bans and unbans via **UFW** as a safe **intermediate solution**.  
+It does **not yet** directly modify Fail2Ban jails or existing fail2ban configurations.
+
+> **Future Direction:**  
+The goal is to support **direct management of Fail2Ban jails** in upcoming versions — including user-controlled bans and unbans per jail.  
+To ensure full control and auditability, all manual ban actions are already tracked in a structured `blocklist.json`, which will later serve as the trusted source for persistent and reviewable ban state.
+ 
 Please read the [Installation Instructions](Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
 > experimental feature : Use the Installer ![Installer Setup Documentation](installer-setup.md)
 
