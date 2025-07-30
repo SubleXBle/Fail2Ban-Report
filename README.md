@@ -68,9 +68,9 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 ## 🛣️ Roadmap
 
 ### 🔧 Setup & Automation
-- 🧩 Automated installer script 
+- ✅ Automated installer script 
 - ✅ Optional cron setup for log parsing and firewall sync
-- ⏳ More robust installer
+- 🧩 More robust installer
 - ⏳ Secure-by-default deployments
 
 ### 🔐 Security
