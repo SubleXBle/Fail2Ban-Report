@@ -8,7 +8,7 @@ This feature is intended for advanced users who want deeper integration with Fai
 
 ### ⚠️ Important Notes
 
-- This is an **experimental feature** and may change in future releases.
+- This is an **experimental feature** and will change in future releases.
 - You need to **rename the script manually** and configure a **custom Fail2Ban jail**.
 - Make sure paths (e.g. `blocklist.json`) are consistent with your setup.
 - Do **not use standard jails** like `sshd` or `apache-auth` – use a **dedicated jail** only.
