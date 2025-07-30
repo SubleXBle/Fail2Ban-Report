@@ -59,7 +59,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 > - Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
 
 - ✅ **Date filter** now correctly limits displayed events
-- ✅ **Jail filter** only shows existing jails from logs
+- ✅ **Jail filter** now correctly shows only the jails present in the displayed event list.
 - ✅ **Notification colors fixed:** Success and error notifications now display with correct green/red colors (no more false red success messages)
 
 ---
