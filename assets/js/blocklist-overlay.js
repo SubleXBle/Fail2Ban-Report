@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   openBtn.addEventListener('click', () => {
-    console.log("Overlay öffnen...");
+    console.log("Open overlay...");
     overlay.classList.remove('hidden');
     loadBlocklist();
   });
