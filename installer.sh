@@ -232,6 +232,8 @@ echo
 # === Cleanup frontend install directory ===
 echo -e "${BLUE}Cleaning up frontend installation directory...${NORMAL}"
 find "$TARGET_DIR" -type f -name "*.sh" -exec rm -f {} \;
+find "$TARGET_DIR" -type f -name "*.md" -exec rm -f {} \;
+find "$TARGET_DIR" -type f -name "*.config" -exec rm -f {} \;
 
 if [ -d "$TARGET_DIR/assets/images" ]; then
   rm -rf "$TARGET_DIR/assets/images"
