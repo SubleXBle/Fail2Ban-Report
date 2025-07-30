@@ -1,63 +1,66 @@
 <?php
+// abuseipdb.php
 
-$ip = $_POST['ip'] ?? null;
 $config = parse_ini_file('/opt/Fail2Ban-Report/fail2ban-report.config');
+$apiKey = trim($config['abuseipdb_key'] ?? '');
 
-if (!$config['report'] || !$config['report_types'] || !$ip) {
+if (!$apiKey) {
     echo json_encode([
         'success' => false,
-        'message' => 'Reporting not enabled or invalid IP.',
-        'type' => 'info',
+        'message' => 'AbuseIPDB API key not set.',
+        'type' => 'error'
     ]);
-    exit;
+    return;
 }
 
-$services = explode(',', $config['report_types']);
-$results = [];
+$ipToCheck = $ip ?? null;
 
-foreach ($services as $service) {
-    $service = trim($service);
-    $script = __DIR__ . "/reports/$service.php";
-
-    if (file_exists($script)) {
-        ob_start();
-        include $script;
-        $response = ob_get_clean();
-
-        $decoded = json_decode($response, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $results[$service] = [
-                'success' => false,
-                'message' => "Invalid JSON response from $service: " . json_last_error_msg(),
-                'raw_response' => $response
-            ];
-        } else {
-            $results[$service] = $decoded;
-        }
-
-    } else {
-        $results[$service] = [
-            'success' => false,
-            'message' => "$service report script not available",
-            'type' => 'error'
-        ];
-    }
+if (!$ipToCheck) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'No IP specified for AbuseIPDB check.',
+        'type' => 'error'
+    ]);
+    return;
 }
 
-// Kombiniere alle Messages zu einer einzigen Meldung
-$messages = [];
-foreach ($results as $service => $result) {
-    if (!empty($result['message'])) {
-        $messages[] = $result['message'];
-    }
-}
-
-$combinedMessage = implode(" | ", $messages);
-
-echo json_encode([
-    'success' => true,
-    'message' => $combinedMessage ?: 'Reports collected.',
-    'data' => $results,
-    'type' => 'info',
+$curl = curl_init();
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://api.abuseipdb.com/api/v2/check?ipAddress=$ipToCheck",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HTTPHEADER => [
+        "Key: $apiKey",
+        "Accept: application/json"
+    ],
 ]);
+
+$response = curl_exec($curl);
+curl_close($curl);
+
+if ($response) {
+    $json = json_decode($response, true);
+    $count = $json['data']['totalReports'] ?? null;
+
+    if ($count === null) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'AbuseIPDB: Unexpected API response.',
+            'type' => 'error'
+        ]);
+        return;
+    }
+
+    $msg = "AbuseIPDB: $ipToCheck wurde $count mal gefunden";
+
+    echo json_encode([
+        'success' => true,
+        'message' => $msg,
+        'type' => ($count >= 10) ? 'error' : (($count > 0) ? 'info' : 'success')
+    ]);
+} else {
+    echo json_encode([
+        'success' => false,
+        'message' => 'AbuseIPDB request failed.',
+        'type' => 'error'
+    ]);
+}
