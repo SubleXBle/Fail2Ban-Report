@@ -36,6 +36,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - 🛠️ **Installer script** to automate setup and permissions
 - 🧩 **Modular design** for easy extension
 - 🪵 Optional logging of block/unblock actions
+- 🕵️ **IP reputation check via AbuseIPDB** (manual lookup from web interface)
 
 > 🧰 Works even on small setups (Raspberry Pi, etc.)
 
@@ -49,6 +50,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - `firewall-update.sh`: new script to apply block/unblock actions via `ufw`
 - Action checkboxes to select multiple IP actions at once
 - New `.htaccess` for secure deployments
+- AbuseIPDB integration: Check IP reputation directly from the interface (displays report count)
 
 ---
 
@@ -77,7 +79,8 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - ⏳ Further improvements (ongoing goal)
 
 ### 🔥 Active Defense
-- ✅ Manual IP blocking via UI
+- ✅ Manual IP blocking via UI in UFW 
+- ✅ IP reputation lookup via AbuseIPDB
 - ⏳ Support for nftables, firewalld
 - ⏳ Bulk blocking of multiple IPs
 - ⏳ Optional automatic blocking based on patterns or thresholds
