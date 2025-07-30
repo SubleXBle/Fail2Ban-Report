@@ -1,7 +1,9 @@
 <?php include ('includes/list-files.php'); ?>
 <?php // index.php Version 0.2.1 ?>
 <?php include 'includes/header.php'; ?>
-  
+
+<!--  <button class="siterel" onclick="location.reload()" title="! Reload Site !">↻</button> -->
+
   <label for="dateSelect">Select Date:</label>
   <select id="dateSelect"></select>
 
@@ -50,12 +52,12 @@
 
     <div id="blocklistContainer">Loading blocklist...</div>
 
-    <button id="reloadBlocklistBtn">⟳ Reload Blocklist</button>
+    <button id="reloadBlocklistBtn">Reload Blocklist</button>
 
   </div>
 </div>
-
 <?php include 'includes/footer.php'; ?>
+
 
 </body>
 </html>
