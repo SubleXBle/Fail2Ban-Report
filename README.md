@@ -90,6 +90,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - ✅ Manual IP blocking via UI in UFW 
 - ✅ IP reputation lookup via AbuseIPDB
 - ⏳ Support for nftables, firewalld
+- ⏳ full integration with fail2ban jails for block/unblock actions
 - ⏳ Bulk blocking of multiple IPs
 - ⏳ Optional automatic blocking based on patterns or thresholds
 - ⏳ Integration with external services (e.g. AbuseIPDB reporting)
