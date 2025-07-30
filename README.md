@@ -57,7 +57,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - Action buttons: Block/Unblock IPs directly
 - Blocklist viewer: shows all manually blocked IPs
 - `firewall-update.sh`: new script to apply block/unblock actions via `ufw`
-- Action checkboxes to select multiple IP actions at once
+- Action checkboxes to select multiple actions/IP at once
 - New `.htaccess` for secure deployments
 - AbuseIPDB integration: Check IP reputation directly from the interface (displays report count)
 
