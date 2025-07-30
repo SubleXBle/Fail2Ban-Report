@@ -1,147 +1,132 @@
 # Fail2Ban-Report
 
-A simple and clean web-based reporting tool for Fail2Ban events.  
-Turn your daily Fail2Ban logs into searchable and filterable JSON reports – right on your webspace.
+A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
 
-## 🛡️ This tool does not replace proper intrusion detection and access control. It is a visualization layer and should be deployed accordingly.
+🛡️ **Note**: This tool is a visualization and management layer — it does **not** replace proper intrusion detection or access control. Deploy it behind IP restrictions or HTTP authentication.
 
-![Fail2Ban.png](Fail2Ban.png)
+🔐 Security Notice
+
+> **Current Status:**  
+Fail2Ban-Report currently manages bans and unbans via **UFW** as a safe **intermediate solution**.  
+It does **not yet** directly modify Fail2Ban jails or existing fail2ban configurations.
+
+> **Future Direction:**  
+The goal is to support **direct management of Fail2Ban jails** in upcoming versions — including user-controlled bans and unbans per jail.  
+To ensure full control and auditability, all manual ban actions are already tracked in a structured `blocklist.json`, which will later serve as the trusted source for persistent and reviewable ban state.
+ 
+Please read the [Installation Instructions](Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
+> still a little experimental feature : Use the Installer ![Installer Setup Documentation](installer-setup.md) It would be great if you tell me if the installer worked for your needs.
+
+---
+
+## 📚 What It Does
+
+Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports viewable via a web dashboard. It adds optional tools to:
+
+- Visualize ban/unban events
+- Interact with IPs (e.g. manually block/unblock)
+- Maintain a persistent `blocklist.json`
+- Sync that list with your system firewall (via `ufw` (other Firewalls than UFW or direct communication with fail2ban jails **not yet** supported))
+
+🧱 The architecture:
+- **Backend Shell Scripts**: Parse logs, write JSON, and update UFW accordingly to `blocklist.json`
+- **Frontend Web Interface**: Visualizes data and offers action buttons
+- **JSON Blocklist**: Stores manually blocked IPs (`active=true`)
+
+---
 
 ## 📦 Features
 
-- Parses `fail2ban.log` into daily JSON logs
-- Filter by date, action (`Ban` / `Unban`), jail and IP fragment
-- Responsive dark-themed UI
-- Easy to deploy, no database, no frameworks
+- 🔍 **Searchable + filterable** log reports (date, jail, IP)
+- 🔧 **Integrated JSON blocklist** with action buttons
+- 🧱 **Firewall sync** using UFW (planned: nftables, firewalld)
+- ⚡ **Lightweight setup** — no DB, no frameworks
+- 🔐 **Compatible with hardened environments** (no external assets, strict headers)
+- 🛠️ **Installer script** to automate setup and permissions
+- 🧩 **Modular design** for easy extension
+- 🪵 Optional logging of block/unblock actions (set true/false and logpath in `firewall-update.sh`)
+- 🕵️ **Optional Feature :** IP reputation check via AbuseIPDB (manual lookup from web interface)
+
+> 🧰 Works even on small setups (Raspberry Pi, etc.)
 
 ---
 
-## ⚙️ Setup Instructions
+## 🆕 What's New in V2
 
-### 1️⃣ Bash Script Setup (`fail2ban_log2json.sh`)
+- Modular folder structure (split backend/frontend)
+- Action buttons: Block/Unblock IPs directly
+- Blocklist viewer: shows all manually blocked IPs
+- `firewall-update.sh`: new script to apply block/unblock actions via `ufw`
+- Action checkboxes to select multiple IP actions at once
+- New `.htaccess` for secure deployments
+- AbuseIPDB integration: Check IP reputation directly from the interface (displays report count)
 
-1. Save the script `fail2ban_log2json.sh` anywhere on your server (e.g. `/usr/local/bin/`).
-2. Make it executable:
-   ```bash
-   chmod +x /path/to/fail2ban_log2json.sh
-   ```
-3. Open the script and adjust the following lines to fit your environment:
-   `LOGFILE="/var/log/fail2ban.log"       # path to your Fail2Ban log`
-   `OUTPUT_JSON_DIR="/var/www/Fail2Ban/archive"  # output directory for .json files (served by webserver)`
-4. Run the script manually or via a daily cronjob:
-   Run script via
-   ```bash
-   ./fail2ban_log2json.sh
-   ```
-   or run it via cronjob:
-   ```
-   crontab -e
-   ```
-   then
-   ```
-   @daily /path/to/fail2ban_log2json.sh
-   ```
-   or any other time that fits your needs (you can try the crontab time generator on [https://suble.net/cronhelper/](https://suble.net/cronhelper/) (⚠️german language)
+🧪 [as promised there is an highly experimental feature for using fail2ban instead of UFW.](using-Fail2Ban-firewall-update.md) (⚠️ not recommended)
 
-### 2️⃣ Web Interface Setup (Webspace)
+---
 
-1. On your webserver, create a folder for the tool (e.g. Fail2Ban)
-   ```
-   /var/www/html/Fail2Ban/
-   ```
-2. Place the following files inside this folder:
-   + <code>index.php</code>
-   + <code>style.css</code>
-   + <code>.htaccess</code>
+## 🪳 Bugfixes
 
-3. Inside the same folder, create a subfolder named <code>archive</code>:
-   ```
-   /var/www/html/Fail2Ban/archive/
-   ```
-5. Make sure the webserver (e.g. www-data) has read access to this directory and write access if you want to store JSON files directly there.
-   ```apache2
-   chown -R www-data:www-data /var/www/html/Fail2Ban/*
-   ```
+> - Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
 
-## 🖥️ Usage
-After the first log run is processed, open your browser and go to:
-```
-   https://yourdomain.tld/Fail2Ban/
-```
-You will see a dropdown to choose the date, filter by action, jail, and IP.
+- ✅ **Date filter** now correctly limits displayed events
+- ✅ **Jail filter** now correctly shows only the jails present in the displayed event list.
 
-## 📝 Notes
-+ Stylesheet have been moved to style.css for easy customization.
-+ The JSON output is plain and lightweight. You can post-process or archive old data easily.
-+ This tool requires no database and can run even on very minimal webspace setups. (e.g. RaspberryPi)
+---
 
-## Protecting Your Fail2Ban Report with .htaccess
+## 🛣️ Roadmap
 
-To enhance the security of your Fail2Ban report, a `.htaccess` file is provided that:
+### 🔧 Setup & Automation
+- ✅ Automated installer script 
+- ✅ Optional cron setup for log parsing and firewall sync
+- 🧩 More robust installer
+- ⏳ Secure-by-default deployments
 
-- Disables directory listings
-- Blocks direct access to sensitive files such as `.json` and `.css`
-- Sets basic HTTP security headers for safer browsing
+### 🔐 Security
+- ✅ Hardened `.htaccess` with best practices
+- 🧩 add security layer between json and js to harden `includes/` and `archive/` better
+- ⏳ Further improvements (ongoing goal)
 
-### How to Use the `.htaccess` File
+### 🔥 Active Defense
+- ✅ Manual IP blocking via UI in UFW 
+- ✅ IP reputation lookup via AbuseIPDB
+- 🧩 Support for nftables, firewalld
+- 🧩 full integration with fail2ban jails for block/unblock actions
+- ⏳ Bulk blocking of multiple IPs
+- ⏳ Optional automatic blocking based on patterns or thresholds
+- ⏳ Integration with external services (e.g. AbuseIPDB reporting)
 
-1. Save the provided `.htaccess` file in the root directory of your Fail2Ban report (where `index.php` resides).
-2. Ensure your web server allows `.htaccess` overrides (typically via `AllowOverride` in Apache).
-3. The `.htaccess` will automatically protect files in the main directory and subfolders like `/archive/`.
+### 🌿 User Interface
+- ⏳ Improve CSS and styling
 
-### Important Security Notice
+### 👀 Outlook
+- 🔭 next version will focus on security and stability
 
-While this `.htaccess` provides a basic level of protection, **it is highly recommended to implement additional security measures**, such as:
+---
 
-- HTTP authentication (Basic Auth) to restrict access to authorized users only
-- IP-based access restrictions to allow only trusted networks or addresses
+## 🖼️ Screenshots
 
-Fail2Ban reports often contain sensitive security-related data. Adding these layers of protection will help prevent unauthorized access and keep your data safe.
+![Main interface with log overview](assets/images/Fail2Ban-Report-B2.png)  
+![Blocklist interface with unblock actions](assets/images/Fail2Ban-Report-BL.png)
+![Result after banning an IP](assets/images/banip.png)
+![Result after "report" an IP](assets/images/reportip.png)
 
-For example, you can set up Basic Auth with:
+---
 
-```apache
-AuthType Basic
-AuthName "Restricted Area"
-AuthUserFile /path/to/.htpasswd
-Require valid-user
-```
+## 🤝 Contributing
 
-You can use the htpasswd helper for your htpasswd files (choose bcrypt as algorythm as it is better) on [https://suble.net/htpasswd/](https://suble.net/htpasswd/) (⚠️ german language)
+Pull requests, feature ideas and bug reports are very welcome!
 
-or restrict by IP:
+- Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
+- Want to contribute? → Fork and submit a pull request
+- Have an idea? → Start a discussion or reach out directly
 
-```
-Require ip 192.168.1.0/24
-Require ip 203.0.113.5
-```
+> 💡 “Wouldn’t it be cool if it could also do XYZ?”  
+> Absolutely — I’m happy to hear your ideas.
+
+---
 
 ## 📄 License
-This project is released under the GPLv3 License. Feel free to modify and share.
 
----
-
-## 🗺️ Roadmap
-
-**Fail2Ban-Report** is designed to be lightweight, modular, and open to future improvements. The following features are currently planned:
-
-### ⚙️ Setup & Automation
-- Setup script to automate initial installation, including directory structure and permissions
-- Optionally auto-configure a daily cronjob
-
-### 🔐 Security Features
-- Integration of a stronger `.htaccess` file for basic access control and secure defaults
-
-### 🔥 Active Defense Integration
-- Allow manual IP blocking directly from the interface via `iptables` or `ufw`
-- Optionally enable automatic blocking of suspicious IPs based on defined criteria
-
-## 🧩 Open to Contributions
-I'm happy to hear from users and contributors!  
-Whether it's:
-- feature requests,  
-- improvement ideas,  
-- or even pull requests —  
-Feel free to reach out or contribute directly.
-
-If you use this tool and think "Hey, wouldn't it be cool if it could also do XYZ?" — I'm all ears!
+This project is licensed under the **GPLv3**.  
+Feel free to use, modify and share — but please respect the license terms.

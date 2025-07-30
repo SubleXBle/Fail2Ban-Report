@@ -1,30 +1,8 @@
-<?php
-// index.php
+<?php include ('includes/list-files.php'); ?>
+<?php // Version 0.2.1 ?>
+<?php include 'includes/header.php'; ?>
 
-// Directory with JSON files
-$jsonDir = __DIR__ . '/archive/';
-
-// List all matching JSON files
-$files = array_values(array_filter(scandir($jsonDir), function($f) {
-    return preg_match('/^fail2ban-events-\d{8}\.json$/', $f);
-}));
-
-// Sort files descending (newest first)
-rsort($files);
-
-// Output as JSON for JS
-$filesJson = json_encode($files);
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Fail2Ban Report</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <h1>Fail2Ban Report</h1>
-  <h2>Let's catch the bad guys!</h2>
+<!--  <button class="siterel" onclick="location.reload()" title="! Reload Site !">↻</button> -->
 
   <label for="dateSelect">Select Date:</label>
   <select id="dateSelect"></select>
@@ -42,6 +20,13 @@ $filesJson = json_encode($files);
   <label for="ipFilter">IP contains:</label>
   <input type="text" id="ipFilter" placeholder="e.g. 192.168" />
 
+  <label><input type="checkbox" name="actions" value="ban"> Ban IP</label>
+  <label><input type="checkbox" name="actions" value="report"> Report</label>
+
+  <button id="openBlocklistBtn">Edit Blocklist</button>
+
+  <div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
   <table id="resultTable">
     <thead>
       <tr>
@@ -54,93 +39,25 @@ $filesJson = json_encode($files);
     <tbody></tbody>
   </table>
 
-  <script>
-    // Files from PHP
-    const availableFiles = <?php echo $filesJson; ?>;
-    const jsonDirectory = './archive/';
+  <!-- Edit Blocklist Overlay -->
+<div id="blocklistOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="blocklistTitle" aria-describedby="blocklistDesc">
+  <div class="overlay-content">
+    <h2 id="blocklistTitle">Edit Blocklist</h2>
+    <p id="blocklistDesc" class="sr-only">Hier können Sie die gebannten IPs verwalten und durchsuchen.</p>
 
-    function formatDateFromFilename(filename) {
-      const dateStr = filename.match(/(\d{4})(\d{2})(\d{2})/);
-      if (!dateStr) return filename;
-      const date = new Date(`${dateStr[1]}-${dateStr[2]}-${dateStr[3]}`);
-      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    }
+    <label for="blocklistSearch">Search IP or Jail:</label>
+    <input type="text" id="blocklistSearch" placeholder="Type to filter..." />
 
-    async function populateDateDropdown() {
-      const select = document.getElementById('dateSelect');
-      select.innerHTML = '';
-      availableFiles.forEach(file => {
-        const option = document.createElement('option');
-        option.value = file;
-        option.textContent = formatDateFromFilename(file);
-        select.appendChild(option);
-      });
-      if (availableFiles.length) loadAndRender(availableFiles[0]);
-    }
+    <button id="closeOverlayBtn" class="close-btn" aria-label="Close Blocklist Overlay">× Close</button>
 
-    async function loadAndRender(filename) {
-      try {
-        const response = await fetch(jsonDirectory + filename);
-        if (!response.ok) throw new Error('Could not load the file');
-        const data = await response.json();
-        renderTable(data);
-      } catch (err) {
-        alert('Error loading data: ' + err.message);
-      }
-    }
+    <div id="blocklistContainer">Loading blocklist...</div>
 
-    function renderTable(data) {
-      const tbody = document.querySelector('#resultTable tbody');
-      const actionFilter = document.getElementById('actionFilter').value;
-      const jailFilter = document.getElementById('jailFilter').value;
-      const ipFilter = document.getElementById('ipFilter').value.trim();
+    <button id="reloadBlocklistBtn">Reload Blocklist</button>
 
-      const filtered = data.filter(entry => {
-        return (!actionFilter || entry.action === actionFilter) &&
-               (!jailFilter || entry.jail === jailFilter) &&
-               (!ipFilter || entry.ip.includes(ipFilter));
-      });
+  </div>
+</div>
+<?php include 'includes/footer.php'; ?>
 
-      // Populate jail filter only once
-      const jails = [...new Set(data.map(e => e.jail))].sort();
-      const jailSelect = document.getElementById('jailFilter');
-      if (!jailSelect.dataset.populated) {
-        // Empty option for "all"
-        const emptyOption = document.createElement('option');
-        emptyOption.value = "";
-        emptyOption.textContent = "All";
-        jailSelect.appendChild(emptyOption);
 
-        jails.forEach(j => {
-          const o = document.createElement('option');
-          o.value = j;
-          o.textContent = j;
-          jailSelect.appendChild(o);
-        });
-        jailSelect.dataset.populated = true;
-      }
-
-      tbody.innerHTML = '';
-      filtered.forEach(entry => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${entry.timestamp}</td>
-          <td>${entry.action}</td>
-          <td>${entry.ip}</td>
-          <td>${entry.jail}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    // Event listeners
-    document.getElementById('dateSelect').addEventListener('change', e => loadAndRender(e.target.value));
-    document.getElementById('actionFilter').addEventListener('change', () => loadAndRender(document.getElementById('dateSelect').value));
-    document.getElementById('jailFilter').addEventListener('change', () => loadAndRender(document.getElementById('dateSelect').value));
-    document.getElementById('ipFilter').addEventListener('input', () => loadAndRender(document.getElementById('dateSelect').value));
-
-    // Initialize
-    populateDateDropdown();
-  </script>
 </body>
 </html>
