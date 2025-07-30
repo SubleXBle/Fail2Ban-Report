@@ -22,6 +22,7 @@ This feature is intended for advanced users who want deeper integration with Fai
    Rename the experimental script so it becomes active:
 
    ```bash
+   mv /opt/Fail2Ban-Report/firewall-update.sh /opt/Fail2Ban-Report/firewall-update-ufw.sh
    mv /opt/Fail2Ban-Report/firewall-update-f2b.sh /opt/Fail2Ban-Report/firewall-update.sh
    ```
 
