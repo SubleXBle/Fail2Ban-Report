@@ -99,8 +99,8 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 ### 🌿 User Interface
 - ⏳ Improve CSS and styling
 
-### 👀 Outlook
-- 🔭 next version will focus on security and stability
+## 👀 Outlook
+- 🔭 next version will focus on security and stability by establishing better seperation between frontend and backend.
 
 ---
 
