@@ -43,7 +43,7 @@
 <div id="blocklistOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="blocklistTitle" aria-describedby="blocklistDesc">
   <div class="overlay-content">
     <h2 id="blocklistTitle">Edit Blocklist</h2>
-    <p id="blocklistDesc" class="sr-only">Hier können Sie die gebannten IPs verwalten und durchsuchen.</p>
+    <p id="blocklistDesc" class="sr-only">Here you can manage your blocklist.</p>
 
     <label for="blocklistSearch">Search IP or Jail:</label>
     <input type="text" id="blocklistSearch" placeholder="Type to filter..." />
