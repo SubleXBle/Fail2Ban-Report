@@ -1,7 +1,7 @@
 # changelog
 
 ## [Unreleased]
-- Changes made vor V 0.2.2
+- Changes made for V 0.2.2
 
 ## [0.2.2] - 2025-08-01
 ### Added
