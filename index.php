@@ -29,13 +29,14 @@
 
   <table id="resultTable">
     <thead>
-      <tr>
-        <th>Time</th>
-        <th>Action</th>
-        <th>IP</th>
-        <th>Jail</th>
-      </tr>
-    </thead>
+       <tr>
+         <th data-sort="timestamp" data-label="Date">Date</th>
+         <th data-sort="action" data-label="Action">Action</th>
+         <th>IP</th>
+         <th data-sort="jail" data-label="Jail">Jail</th>
+         <th></th>
+       </tr>
+     </thead>
     <tbody></tbody>
   </table>
 
