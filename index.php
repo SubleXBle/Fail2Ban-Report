@@ -2,7 +2,7 @@
 <?php // Version 0.2.2 ?>
 <?php include 'includes/header.php'; ?>
 
-<button class="siterel" onclick="location.reload()" title="! reset & reload !">↻</button>
+<button class="siterel" onclick="location.href=location.pathname" title="! reset and reload !">↻</button>
 
   <label for="dateSelect">Select Date:</label>
   <select id="dateSelect"></select>
