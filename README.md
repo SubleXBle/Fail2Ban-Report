@@ -51,6 +51,12 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 
 ---
 
+## 👥 Discussions
+
+> If you want to join the conversation or have questions or ideas, visit the 💬 [Discussions page](https://github.com/SubleXBle/Fail2Ban-Report/discussions).
+
+---
+
 ## 🆕 What's New in V 0.2.1
 
 - Modular folder structure (split backend/frontend)
@@ -99,8 +105,8 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 ### 🌿 User Interface
 - ⏳ Improve CSS and styling
 
-### 👀 Outlook
-- 🔭 next version will focus on security and stability
+## 👀 Outlook
+- 🔭 next version will focus on security and stability by establishing better seperation between frontend and backend.
 
 ---
 
@@ -119,7 +125,7 @@ Pull requests, feature ideas and bug reports are very welcome!
 
 - Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
 - Want to contribute? → Fork and submit a pull request
-- Have an idea? → Start a discussion or reach out directly
+- Have an idea? → Start a discussion or reach out directly : visit the 💬 [Discussions page](https://github.com/SubleXBle/Fail2Ban-Report/discussions)
 
 > 💡 “Wouldn’t it be cool if it could also do XYZ?”  
 > Absolutely — I’m happy to hear your ideas.
