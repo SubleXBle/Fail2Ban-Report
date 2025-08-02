@@ -70,6 +70,15 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 
 ---
 
+## 📄 Changelog
+
+Details about all new features, improvements, and changed files can be found in the [Changelog](changelog.md).
+
+This is especially useful if you want to manually patch or update individual files.
+
+
+---
+
 ## 🪳 Bugfixes
 
 > - Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
