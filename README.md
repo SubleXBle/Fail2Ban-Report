@@ -63,7 +63,7 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 - sorting of date/time, action and jail added
 - reset & reload Button to easy reset filters and sorting within the ui
 - date filter and reset button added for blocklist-overlay
-- 
+- The number of days shown in 'Select Date' can now be limited through the config file
 
 🧪 [as promised there is an highly experimental feature for using fail2ban instead of UFW.](using-Fail2Ban-firewall-update.md) (⚠️ not recommended)
 
