@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const reloadBtn = document.getElementById('reloadBlocklistBtn');
   const container = document.getElementById('blocklistContainer');
   const searchInput = document.getElementById('blocklistSearch');
+  const dateInput = document.getElementById('blocklistDateFilter');
+  const resetBtn = document.getElementById('blocklistResetBtn');
 
   let blocklistData = [];
 
@@ -30,6 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBlocklist(blocklistData, filterValue);
   });
 
+  dateInput?.addEventListener('input', () => {
+    renderBlocklist(blocklistData, searchInput?.value.trim() || '');
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    if (dateInput) dateInput.value = '';
+    renderBlocklist(blocklistData);
+  });
+
   function loadBlocklist() {
     container.textContent = 'Loading blocklist...';
     fetch('archive/blocklist.json', { cache: 'no-store' })
@@ -53,12 +65,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const activeEntries = data.filter(entry => entry.active !== false);
+    const term = filter.toLowerCase();
+    const selectedDate = dateInput?.value;
+
     const filteredData = activeEntries.filter(entry => {
-      const term = filter.toLowerCase();
-      return (
-        entry.ip.toLowerCase().includes(term) ||
-        (entry.jail && entry.jail.toLowerCase().includes(term))
-      );
+      const ipMatch = entry.ip.toLowerCase().includes(term);
+      const jailMatch = entry.jail && entry.jail.toLowerCase().includes(term);
+
+      let dateMatch = true;
+      if (selectedDate && entry.timestamp) {
+        const entryDate = new Date(entry.timestamp).toISOString().split('T')[0];
+        dateMatch = entryDate === selectedDate;
+      }
+
+      return (ipMatch || jailMatch) && dateMatch;
     });
 
     if (filteredData.length === 0) {
@@ -88,22 +108,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function unblockIp(ip) {
-/*  if (!confirm(`Unblock IP ${ip}?`)) return; */
+    // if (!confirm(`Unblock IP ${ip}?`)) return;
 
-  fetch('includes/actions/action_unban-ip.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ ip })
-  })
-    .then(res => res.json())
-    .then(data => {
-      showNotification(data.message, !data.success);
-
-      if (data.success) loadBlocklist();
+    fetch('includes/actions/action_unban-ip.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ ip })
     })
-    .catch(err => {
-      showNotification('Error unblocking IP: ' + err.message, true);
-    });
-}
+      .then(res => res.json())
+      .then(data => {
+        showNotification(data.message, !data.success);
 
+        if (data.success) loadBlocklist();
+      })
+      .catch(err => {
+        showNotification('Error unblocking IP: ' + err.message, true);
+      });
+  }
 });
