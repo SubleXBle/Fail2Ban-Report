@@ -46,8 +46,12 @@
     <h2 id="blocklistTitle">Edit Blocklist</h2>
     <p id="blocklistDesc" class="sr-only">Here you can manage your blocklist.</p>
 
-    <label for="blocklistSearch">Search IP or Jail:</label>
-    <input type="text" id="blocklistSearch" placeholder="Type to filter..." />
+    <div id="blocklistFilters" style="margin-bottom: 1em;">
+      <input type="date" id="blocklistDateFilter" />
+      <button id="blocklistResetBtn" class="button-reset"  type="button">Reset</button>
+      <input type="text" id="blocklistSearch" placeholder="Search IP or jail" />
+    </div>
+
 
     <button id="closeOverlayBtn" class="close-btn" aria-label="Close Blocklist Overlay">× Close</button>
 
