@@ -12,6 +12,8 @@ BRANCH_NAME="latest"
 
 DEFAULT_WEBROOT="/var/www/html"
 DEFAULT_SH_PATH="/opt/Fail2Ban-Report"
+DEFAULT_CONFIG_PATH="$DEFAULT_SH_PATH/fail2ban-report.config"
+PHP_CONFIG_PATH="$DEFAULT_SH_PATH/includes/config.php"
 
 echo -e "${BLUE}--- Fail2Ban-Report Installer ---${NORMAL}"
 
@@ -24,8 +26,13 @@ TARGET_DIR="${WEBROOT%/}/Fail2Ban-Report"
 read -rp "Please enter the directory to store shell scripts (default: $DEFAULT_SH_PATH): " SH_PATH
 SH_PATH=${SH_PATH:-$DEFAULT_SH_PATH}
 
+# Ask for config file path (optional)
+read -rp "Please enter the path for the config file (default: $DEFAULT_CONFIG_PATH): " CONFIG_PATH
+CONFIG_PATH=${CONFIG_PATH:-$DEFAULT_CONFIG_PATH}
+
 echo -e "\nUsing webroot installation path: $TARGET_DIR"
-echo -e "Using shell script path: $SH_PATH\n"
+echo -e "Using shell script path: $SH_PATH"
+echo -e "Using config file path: $CONFIG_PATH\n"
 
 # Check for git with polite option for wget fallback
 echo -e "${BLUE}Checking if git is installed...${NORMAL}"
@@ -129,10 +136,18 @@ else
   echo -e "${RED}firewall-update.sh not found in repo.${NORMAL}"
 fi
 
-# === AbuseIPDB config setup ===
-CONFIG_PATH="$SH_PATH/fail2ban-report.config"
+# === Create PHP config include with config path constant ===
+echo -e "\n${BLUE}Creating PHP config include file for config path...${NORMAL}"
+mkdir -p "$(dirname "$PHP_CONFIG_PATH")"
+cat > "$PHP_CONFIG_PATH" <<EOF
+<?php
+define('FAIL2BAN_CONFIG_PATH', '$CONFIG_PATH');
+EOF
+chmod 644 "$PHP_CONFIG_PATH"
+echo -e "${GREEN}Created $PHP_CONFIG_PATH with config path constant.${NORMAL}"
 
-echo -e "\n${BLUE}Optional: Enable AbuseIPDB reputation reporting${NORMAL}"
+# === AbuseIPDB and max_display_days config setup ===
+echo -e "\n${BLUE}Configuring reporting and display settings...${NORMAL}"
 echo "This feature lets you check IP reputation from the web interface using AbuseIPDB."
 echo "To enable this, you'll need a (free) API key from https://www.abuseipdb.com/"
 echo "If you don't have a key now, you can leave it blank and add it later manually."
@@ -140,30 +155,41 @@ echo "If you don't have a key now, you can leave it blank and add it later manua
 read -rp "Would you like to enable AbuseIPDB support? (Y/N): " ENABLE_ABUSE
 ENABLE_ABUSE=${ENABLE_ABUSE,,}
 
+read -rp "How many days of daily reports should be shown in the main list? (default: 7): " MAX_DAYS
+MAX_DAYS=${MAX_DAYS:-7}
+
 if [[ "$ENABLE_ABUSE" == "y" ]]; then
   read -rp "Please enter your AbuseIPDB API key (or leave blank to add later): " API_KEY
   API_KEY=${API_KEY:-""}
 
-  echo -e "${YELLOW}Creating AbuseIPDB-enabled config...${NORMAL}"
+  echo -e "${YELLOW}Creating AbuseIPDB-enabled config file...${NORMAL}"
   cat > "$CONFIG_PATH" <<EOF
 [reports]
 report=true
-report_types=abuseipdb   # you can set more than one report
+report_types=abuseipdb
+
 [AbuseIPDB API Key]
 abuseipdb_key=$API_KEY
+
+[Fail2Ban-Daily-List-Settings]
+max_display_days=$MAX_DAYS
 EOF
 
   if [[ -z "$API_KEY" ]]; then
-    echo -e "${YELLOW}Warning: No API key entered. You need to add your AbuseIPDB API key manually in $CONFIG_PATH to enable reporting.${NORMAL}"
+    echo -e "${YELLOW}Warning: No API key entered. Add your AbuseIPDB API key manually in $CONFIG_PATH to enable reporting.${NORMAL}"
   fi
 else
-  echo -e "${YELLOW}Creating config with AbuseIPDB disabled...${NORMAL}"
+  echo -e "${YELLOW}Creating config file with AbuseIPDB disabled...${NORMAL}"
   cat > "$CONFIG_PATH" <<EOF
 [reports]
 report=false
 report_types=
+
 [AbuseIPDB API Key]
 abuseipdb_key=
+
+[Fail2Ban-Daily-List-Settings]
+max_display_days=$MAX_DAYS
 EOF
 fi
 
