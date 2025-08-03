@@ -2,6 +2,10 @@
 
 > Improved security by ensuring all JSON data is accessed only via PHP proxies, preventing direct client-side access.
 
+> Shell scripts (.sh) currently still read and write the .json files directly since these files are still inside the web directory — but this will change soon.
+For version 0.3.1, we focus on a clear frontend/backend separation by proxying all JSON access through PHP.
+Moving the archive/ directory out of the web root to increase security is planned for the next major step in version 0.4.1.
+
 ## Changes made for V 0.3.1
 
 ### ✨ New Features
