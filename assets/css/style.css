@@ -1,53 +1,94 @@
-/* Dokument Styles */
+/* === Document Styles === */
 body {
-      background-color: #111;
-      color: #eee;
-      font-family: sans-serif;
-      padding: 20px;
-    }
+  background-color: #111;
+  color: #eee;
+  font-family: sans-serif;
+  padding: 20px;
+}
+
 h1 {
-    color:#d4af37;
-   }
+  color: #d4af37;
+}
+
 h2 {
-    color:#999999;
-   }
+  color: #999999;
+}
+
+/* === Headline Section === */
 .inline-headlines {
   display: flex;
-  align-items: baseline;
-  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 0px solid #444;
 }
+
+.inline-headlines h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.inline-headlines h2 {
+  font-size: 1.2rem;
+  font-weight: normal;
+  margin: 0;
+  color: #aaa;
+}
+
+/* === Stats & Version Info === */
+#fail2ban-stats,
+#headerversion {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+  color: #aaa;
+  line-height: 1.4;
+  padding-left: 1rem;
+  border-left: 0px solid #333;
+}
+
+/* === Form Elements === */
 select, input {
-      margin: 10px 5px;
-      padding: 5px;
-      background-color: #222;
-      color: #ffd700;
-      border: 1px solid #444;
-      border-radius: 5px;
-    }
-/* Table Styles for Output */
+  margin: 10px 5px;
+  padding: 5px;
+  background-color: #222;
+  color: #ffd700;
+  border: 1px solid #444;
+  border-radius: 5px;
+}
+
+/* === Table Output === */
 table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
 th, td {
-      border: 1px solid #333;
-      padding: 8px;
-      text-align: left;
-    }
+  border: 1px solid #333;
+  padding: 8px;
+  text-align: left;
+}
+
 th {
-      background-color: #222;
-      color: #ffd700;
-    }
+  background-color: #222;
+  color: #ffd700;
+}
+
 tr:nth-child(even) {
-      background-color: #1a1a1a;
-    }
-/* Styles for Action Buttons */
+  background-color: #1a1a1a;
+}
+
+/* === Action Buttons === */
 .action-btn {
-  background-color: #b8860b; /* dark Gold */
+  background-color: #b8860b; /* dark gold */
   color: #111;
   border: none;
-  padding: 8px 16px;
+  padding: 5px 8px;
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
@@ -57,7 +98,7 @@ tr:nth-child(even) {
 
 .action-btn:hover,
 .action-btn:focus {
-  background-color: #ffd700; /* light Gold when Hover */
+  background-color: #ffd700; /* bright gold on hover */
   color: #000;
   outline: none;
   box-shadow: 0 0 10px #ffd700;
@@ -67,7 +108,8 @@ tr:nth-child(even) {
   background-color: #aa7a00;
   box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
 }
-/* Notifications for Actions */
+
+/* === Notification Area === */
 #notification-container {
   position: fixed;
   top: 20px;
@@ -77,7 +119,7 @@ tr:nth-child(even) {
   flex-direction: column;
   gap: 10px;
 }
-/*
+
 .notification {
   background-color: #222;
   color: #ffd700;
@@ -87,44 +129,29 @@ tr:nth-child(even) {
   font-family: monospace;
   font-size: 14px;
   opacity: 0.95;
-  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;    
+  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
 }
-*/
+
+/* Success notification */
 .notification.success {
-  background-color: #28a745; /* sattes Grün */
-  color: #fff;               /* weiße Schrift für Lesbarkeit */
-  padding: 10px 15px;
-  border-radius: 5px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  font-family: monospace;
-  font-size: 14px;
-  opacity: 0.95;
-  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
+  background-color: #28a745; /* solid green */
+  color: #fff;
+  /* inherits remaining styles */
 }
+
+/* Error notification */
 .notification.error {
-  background-color: #e74c3c; /* sattes Rot */
+  background-color: #e74c3c; /* strong red */
   color: #fff;
-  padding: 10px 15px;
-  border-radius: 5px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  font-family: monospace;
-  font-size: 14px;
-  opacity: 0.95;
-  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
 }
 
+/* Info notification */
 .notification.info {
-  background-color: #3498db; /* klassisches Blau */
+  background-color: #3498db; /* classic blue */
   color: #fff;
-  padding: 10px 15px;
-  border-radius: 5px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  font-family: monospace;
-  font-size: 14px;
-  opacity: 0.95;
-  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
 }
 
+/* === Notification Animations === */
 @keyframes fadein {
   from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 0.95; transform: translateY(0); }
@@ -134,7 +161,7 @@ tr:nth-child(even) {
   to { opacity: 0; transform: translateY(-10px); }
 }
 
-/* Overlay for Blocklist */
+/* === Overlay for Blocklist === */
 .overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -145,10 +172,12 @@ tr:nth-child(even) {
   z-index: 10000;
 }
 
+/* Hidden overlay */
 .overlay.hidden {
   display: none;
 }
 
+/* Overlay content box */
 .overlay-content {
   position: relative;
   background: #1a1a1a;
@@ -162,6 +191,7 @@ tr:nth-child(even) {
   overflow-y: auto;
 }
 
+/* Close button in overlay */
 .close-btn {
   position: absolute;
   top: 10px;
@@ -183,6 +213,7 @@ tr:nth-child(even) {
   outline: none;
 }
 
+/* Blocklist entry row */
 .blocklist-entry {
   display: flex;
   justify-content: space-between;
@@ -203,9 +234,10 @@ tr:nth-child(even) {
   background: #a33;
 }
 
+/* Reload Blocklist Button */
 #reloadBlocklistBtn {
-  background-color: #28a745; /* schönes sattes Grün */
-  color: white;              /* weiße Schrift für guten Kontrast */
+  background-color: #28a745; /* vibrant green */
+  color: white;
   border: none;
   padding: 8px 16px;
   font-weight: 600;
@@ -218,14 +250,14 @@ tr:nth-child(even) {
 
 #reloadBlocklistBtn:hover,
 #reloadBlocklistBtn:focus {
-  background-color: #218838; /* dunkleres Grün beim Hover */
+  background-color: #218838; /* darker green on hover */
   box-shadow:
     0 0 8px 2px rgba(40, 167, 69, 0.8),
     0 0 15px 4px rgba(40, 167, 69, 0.5);
   outline: none;
 }
 
-
+/* Search Field */
 #blocklistSearch {
   width: 100%;
   padding: 8px 10px;
@@ -236,9 +268,12 @@ tr:nth-child(even) {
   color: #d4af37;
   font-size: 1rem;
 }
+
 #blocklistSearch::placeholder {
   color: #aa9a52;
 }
+
+/* Visually Hidden (e.g. for screen readers) */
 .sr-only {
   position: absolute !important;
   width: 1px; height: 1px;
@@ -247,12 +282,14 @@ tr:nth-child(even) {
   clip: rect(0,0,0,0);
   border: 0;
 }
-/* Checkboxes  */
-/* Hide original Checkbox */
+
+/* === Custom Checkboxes === */
+
+/* Hide default checkbox */
 input[type="checkbox"] {
-  appearance: none; /* Firefox und moderne Browser */
-  -webkit-appearance: none; /* Safari/Chrome */
-  -moz-appearance: none; /* Firefox */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   width: 20px;
   height: 20px;
   border: 2px solid #d4af37;
@@ -265,14 +302,14 @@ input[type="checkbox"] {
   transition: background 0.3s, border-color 0.3s;
 }
 
-/* Style für Checked */
+/* Style when checked */
 input[type="checkbox"]:checked {
   background-color: #d4af37;
   border-color: #d4af37;
   box-shadow: 0 0 5px #d4af37aa;
 }
 
-/* Black Check */
+/* Black checkmark */
 input[type="checkbox"]:checked::after {
   content: "";
   position: absolute;
@@ -285,19 +322,19 @@ input[type="checkbox"]:checked::after {
   transform: rotate(45deg);
 }
 
-/* Hover  */
+/* Hover effect */
 input[type="checkbox"]:hover {
   border-color: #d4af37;
 }
 
-/* Blocklist Button */
+/* === Blocklist Toggle Button === */
 #openBlocklistBtn {
   background-color: #d4af37;
   color: black;
   border: none;
-  padding: 10px 20px;
+  padding: 5px 8px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 100;
   border-radius: 6px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(212, 175, 55, 0.5);
@@ -312,7 +349,8 @@ input[type="checkbox"]:hover {
     0 0 15px 4px rgba(212, 175, 55, 0.4);
   outline: none;
 }
-/* Footer */
+
+/* === Footer === */
 .site-footer {
   background-color: #222;
   color: #d4af37;
@@ -320,17 +358,19 @@ input[type="checkbox"]:hover {
   padding: 1rem 0;
   font-size: 0.9rem;
 }
-}
+
+/* === Yellow Text Utility === */
 .yellowtext {
   color: #d4af37;
 }
 
+/* === Button for Navigation / Related Actions === */
 .siterel {
-  background-color: #d4af37; /* Goldgelb */
+  background-color: #d4af37;
   color: black;
   border: none;
   padding: 8px 12px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -339,12 +379,13 @@ input[type="checkbox"]:hover {
 
 .siterel:hover,
 .siterel:focus {
-  background-color: #ffd700; /* Helleres Gelb beim Hover */
+  background-color: #ffd700;
   outline: none;
 }
-/* Reset Button Style */
+
+/* === Reset Button in Blocklist Overlay === */
 .button-reset {
-  background-color: #f4cd3c; 
+  background-color: #f9da5f;
   color: #000;
   border: 1px solid #000;
   padding: 0.35em 0.75em;
@@ -355,5 +396,5 @@ input[type="checkbox"]:hover {
 }
 
 .button-reset:hover {
-  background-color: #f9da5f; 
+  background-color: #f4cd3c; /* slightly darker on hover */
 }
