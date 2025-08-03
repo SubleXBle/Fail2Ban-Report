@@ -6,6 +6,7 @@
   - The Bash script `fail2ban_log2json.sh` will now take only events from actual date to creates a separate JSON file per day (still overwriting)
     → `archive/fail2ban-events-YYYYMMDD.json`  => as it was allready - so fully compatible with this version
   - Benefit: Smaller, cleaner files and no cross-day mixing
+  - this forms a foundation for later Statistics
  
 - **Statistics Header in the UI**
   - `includes/header.php` header updated with:
