@@ -59,7 +59,23 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 ---
 
 ## 🆕 What's New in V 0.3.1
-- 
+
+- **Protected access to JSON files**
+  - Direct access to `/archive/*.json` is now blocked via `.htaccess`
+  - Frontend scripts no longer request raw `.json` files directly
+- **New secure PHP endpoints**
+  - `includes/get-json.php` and `includes/get-blocklist.php` act as controlled proxies to serve JSON data
+  - Only PHP scripts with proper logic now expose required JSON content
+- **Hardened frontend behavior**
+  - JavaScript files (`jsonreader.js`, `blocklist-overlay.js`) fetch data only via the new PHP proxies
+- **New Ministats in Header**
+  - Shows today's **ban/unban statistics** in the page header:
+  - 🚫 Bans  
+  - 🟢 Unbans  
+  - 📊 Total events
+  - Adds quick insight into current Fail2Ban activity
+
+
 
 🧪 [as promised there is an highly experimental feature for using fail2ban instead of UFW.](using-Fail2Ban-firewall-update.md) (⚠️ not recommended)
 
