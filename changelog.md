@@ -1,5 +1,7 @@
 # changelog
 
+> Improved security by ensuring all JSON data is accessed only via PHP proxies, preventing direct client-side access.
+
 ## Changes made for V 0.3.1
 
 ### ✨ New Features
