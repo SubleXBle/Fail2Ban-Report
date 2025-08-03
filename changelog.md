@@ -8,7 +8,7 @@
   - Benefit: Smaller, cleaner files and no cross-day mixing
  
 - **Statistics Header in the UI**
-  - `index.php` header updated with:
+  - `includes/header.php` header updated with:
     - JS variable `statsFile` for today's JSON
     - New HTML block `#fail2ban-stats` inside header section
   - Stats are displayed neatly beside the page title (flex layout)
