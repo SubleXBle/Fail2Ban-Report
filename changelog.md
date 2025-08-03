@@ -16,7 +16,7 @@
     - New HTML block `#fail2ban-stats` inside header section
   - Stats are displayed neatly beside the page title (flex layout)
 
-### 🔐 Security Improvement: Secure JSON Access
+### 🔐 Security Improvement: Secure JSON Access for display of Data
 
 - **Proxy Access via PHP Script**
   - Added `includes/get-json.php` as a secure proxy to serve JSON files
