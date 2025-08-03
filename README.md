@@ -128,7 +128,7 @@ This is especially useful if you want to manually patch or update individual fil
 - ⏳ Improve CSS and styling
 
 ## 👀 Outlook
-- 🔭 next version will focus on security and stability by establishing better seperation between frontend and backend.
+- 🔭 next major version will focus on security by mooving archive/ out of webdirectory.
 
 ---
 
