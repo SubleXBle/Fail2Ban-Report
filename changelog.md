@@ -25,6 +25,19 @@
 - **Updated Frontend JSON Loading**
   - `assets/js/jsonreader.js` now fetches JSON data through `includes/get-json.php?file=...`
   - No more direct file URL requests to `/archive/`
+ 
+- **New PHP Proxy Endpoint**
+  - Added `includes/get-blocklist.php` as a secure server-side proxy to serve `blocklist.json` data
+  - This prevents direct client-side access to the raw JSON file in `/archive/`
+
+- **Updated JS Blocklist Overlay**
+  - Modified `assets/js/blocklist-overlay.js` to fetch blocklist data exclusively via the new PHP endpoint (`includes/get-blocklist.php`)
+  - Removed all direct `.json` file fetches from the JS code
+  - UI behavior and filtering remain unchanged, ensuring seamless user experience
+
+- **Security Improvement**
+  - By decoupling the JS from direct `.json` access, the blocklist data is better protected from unauthorized or direct URL access
+
 
 
 ### 🛠 Modified or Added Files
@@ -50,6 +63,11 @@
 - `assets/js/jsonreader.js`  
   → Modified to fetch JSON data through the PHP proxy instead of direct file access
 
+- `includes/get-blocklist.php`
+→ New PHP proxy endpoint to securely serve the blocklist JSON data
+
+- `assets/js/blocklist-overlay.js`
+→ Modified to fetch blocklist data via the PHP proxy (get-blocklist.php) instead of accessing the JSON file directly
 
 ---
 
