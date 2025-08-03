@@ -32,6 +32,6 @@
   </div>
 
   <div id="headerversion">
-    <div>Version : 0.3.1</div>
+    <div><span title="Beta 3.1">Version : 0.3.1</span></div>
   </div>
 </div>
