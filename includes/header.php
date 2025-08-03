@@ -7,14 +7,30 @@
   <script>
     const availableFiles = <?php echo $filesJson; ?>;
   </script>
+  <script>
+    const statsFile = 'fail2ban-events-<?php echo date("Ymd"); ?>.json';
+  </script>
   <script src="assets/js/jsonreader.js" defer></script>
   <script src="assets/js/action-collector.js" defer></script>
   <script src="assets/js/action.js" defer></script>
   <script src="assets/js/blocklist-overlay.js" defer></script>
+  <script src="assets/js/fail2ban-logstats.js" defer></script>
 </head>
 <body>
-  
- <div class="inline-headlines"> 
-  <h1>Fail2Ban-Report</h1>
-  <h2>Let's catch the bad guys!</h2>
- </div>
+
+<div class="inline-headlines">
+  <div>
+    <h1>Fail2Ban-Report</h1>
+    <h2>Let's catch the bad guys!</h2>
+  </div>
+
+  <div id="fail2ban-stats">
+    <div>🚫 Bans: <span id="fail2ban-bans">--</span></div>
+    <div>🟢 Unbans: <span id="fail2ban-unbans">--</span></div>
+    <div>📊 Total: <span id="fail2ban-total">--</span></div>
+  </div>
+
+  <div id="headerversion">
+    <div>Version : 0.3.1</div>
+  </div>
+</div>
