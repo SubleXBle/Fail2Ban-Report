@@ -10,11 +10,12 @@
   - Benefit: Smaller, cleaner files and no cross-day mixing
   - Enables future statistical analysis
  
-- **Statistics Header in the UI**
+- **Ministats in Header**
   - `includes/header.php` header updated with:
     - JS variable `statsFile` for today's JSON
     - New HTML block `#fail2ban-stats` inside header section
   - Stats are displayed neatly beside the page title (flex layout)
+  - Stats only show the current dates stats
 
 ### 🔐 Security Improvement: Secure JSON Access for display of Data
 
