@@ -25,6 +25,7 @@
   </div>
 
   <div id="fail2ban-stats">
+    <div>F2B Blocks/Unblocks Today:</div>
     <div>🚫 Bans: <span id="fail2ban-bans">--</span></div>
     <div>🟢 Unbans: <span id="fail2ban-unbans">--</span></div>
     <div>📊 Total: <span id="fail2ban-total">--</span></div>
