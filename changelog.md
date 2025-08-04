@@ -26,6 +26,9 @@ Moving the archive/ directory out of the web root to increase security is planne
 - **Favicon**
   - `assets/css/favicon-32x32.png` added to make browsers happy
 
+- **Mobile Friendly**
+  - site is now more mobile friendy by adding `<meta name="viewport" content="width=device-width, initial-scale=0.8">`
+
 ### 🔐 Security Improvement: Secure JSON Access for display of Data
 
 - **Proxy Access via PHP Script**
