@@ -39,7 +39,7 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
 ## 📦 Features
 
 - 🔍 **Searchable + filterable** log reports (date, jail, IP)
-- 🔧 **Integrated JSON blocklist** with action buttons
+- 🔧 **Integrated JSON blocklist** for persistent Block-Overview
 - 🧱 **Firewall sync** using UFW (planned: nftables, firewalld)
 - ⚡ **Lightweight setup** — no DB, no frameworks
 - 🔐 **Compatible with hardened environments** (no external assets, strict headers)
