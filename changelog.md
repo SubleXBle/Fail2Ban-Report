@@ -22,6 +22,9 @@ Moving the archive/ directory out of the web root to increase security is planne
     - New HTML block `#fail2ban-stats` inside header section
   - Stats are displayed neatly beside the page title (flex layout)
   - Stats only show the current dates stats
+ 
+- **Favicon**
+  - `assets/css/favicon-32x32.png` added to make browsers happy
 
 ### 🔐 Security Improvement: Secure JSON Access for display of Data
 
