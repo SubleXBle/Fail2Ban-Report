@@ -29,7 +29,7 @@ Moving the archive/ directory out of the web root to increase security is planne
 - **Mobile Friendly**
   - site is now more mobile friendy by adding `<meta name="viewport" content="width=device-width, initial-scale=0.8">`
 
-
+---
 
 ### 🔐 Security Improvement: Secure JSON Access for display of Data
 
