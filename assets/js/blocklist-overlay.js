@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadBlocklist() {
     container.textContent = 'Loading blocklist...';
-    fetch('archive/blocklist.json', { cache: 'no-store' })
+    fetch('includes/get-blocklist.php', { cache: 'no-store' })
       .then(res => {
         if (!res.ok) throw new Error('Failed to load blocklist');
         return res.json();

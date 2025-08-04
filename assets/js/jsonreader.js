@@ -1,5 +1,5 @@
 // const availableFiles = <?php echo $filesJson; ?>;
-const jsonDirectory = './archive/';
+const jsonProxyEndpoint = 'includes/get-json.php?file=';
 let currentSort = { column: 'timestamp', direction: 'desc' }; // default newest first
 let allData = [];        // cached data of current JSON file
 let currentFilename = ''; // current loaded filename
@@ -28,7 +28,7 @@ async function populateDateDropdown() {
 
 async function loadDataAndRender(filename) {
   try {
-    const response = await fetch(jsonDirectory + filename);
+    const response = await fetch(jsonProxyEndpoint + encodeURIComponent(filename));
     if (!response.ok) throw new Error('Could not load the file');
     allData = await response.json();
     currentFilename = filename;
@@ -45,7 +45,6 @@ function renderTable() {
   const jailFilter = document.getElementById('jailFilter').value;
   const ipFilter = document.getElementById('ipFilter').value.trim();
 
-  // Filter data
   const filtered = allData.filter(entry => {
     const entryDate = entry.timestamp ? entry.timestamp.substring(0, 10) : '';
     return (!selectedDate || entryDate === selectedDate) &&
@@ -54,7 +53,6 @@ function renderTable() {
            (!ipFilter || entry.ip.includes(ipFilter));
   });
 
-  // Populate jail filter dropdown dynamically
   const jailSelect = document.getElementById('jailFilter');
   const previousSelection = jailSelect.value;
   jailSelect.innerHTML = '';
@@ -76,14 +74,12 @@ function renderTable() {
     return;
   }
 
-  // Sort data
   const sorted = [...filtered].sort((a, b) => {
     const { column, direction } = currentSort;
     let valA = a[column] || '';
     let valB = b[column] || '';
 
     if (column === 'timestamp') {
-      // Replace space with 'T' and comma with '.' for ISO 8601 compliance
       valA = Date.parse(valA.replace(' ', 'T').replace(',', '.'));
       valB = Date.parse(valB.replace(' ', 'T').replace(',', '.'));
     } else {
@@ -96,14 +92,12 @@ function renderTable() {
     return 0;
   });
 
-  // Update sorting arrows in header
   document.querySelectorAll('#resultTable thead th[data-sort]').forEach(th => {
     const col = th.getAttribute('data-sort');
     const arrow = col === currentSort.column ? (currentSort.direction === 'asc' ? ' ⮝' : ' ⮟') : '';
     th.textContent = th.getAttribute('data-label') + arrow;
   });
 
-  // Render rows
   tbody.innerHTML = '';
   sorted.forEach(entry => {
     const row = document.createElement('tr');

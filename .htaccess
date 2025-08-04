@@ -15,7 +15,7 @@
 Options -Indexes
 
 # Block direct access to sensitive file types
-<FilesMatch "\.(sh|ini|log)$">
+<FilesMatch "\.(sh|ini|log|json)$">
   Require all denied
 </FilesMatch>
 
@@ -24,6 +24,10 @@ Options -Indexes
   Require all denied
 </Files>
 
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^archive/ - [F,L]
+</IfModule>
 
 # ----------------------------------------------------
 # BASIC HTTPS HEADERS

@@ -5,23 +5,26 @@ LOGFILE="/var/log/fail2ban.log"  # This is the Fail2Ban log file - change if you
 OUTPUT_JSON_DIR="/var/www/Fail2Ban/archive"  # Folder on your webserver - adjust as needed
 
 # === Preparation ===
-TODAY=$(date +"%Y%m%d")
-OUTPUT_JSON_FILE="$OUTPUT_JSON_DIR/fail2ban-events-$TODAY.json"
+TODAY=$(date +"%Y-%m-%d")                     # Current date in the format "YYYY-MM-DD"
+OUTPUT_JSON_FILE="$OUTPUT_JSON_DIR/fail2ban-events-$(date +"%Y%m%d").json"
 
 mkdir -p "$OUTPUT_JSON_DIR"
 
 # === Processing ===
 echo "[" > "$OUTPUT_JSON_FILE"
 
-grep -E "Ban |Unban " "$LOGFILE" | awk '
+grep -E "Ban |Unban " "$LOGFILE" | awk -v today="$TODAY" '
 {
     timestamp = $1 " " $2;
 
-    # Get action (Ban or Unban)
+    # Only process entries from today
+    if (index(timestamp, today) != 1) {
+        next;
+    }
+
     action = $(NF-1);
     ip = $NF;
 
-    # Extract all square brackets content
     text = $0;
     c = 0;
     delete arr;
@@ -34,7 +37,6 @@ grep -E "Ban |Unban " "$LOGFILE" | awk '
 
     jail = "unknown";
     for(i=1; i<=c; i++) {
-        # First entry that is not a numeric code
         if (arr[i] !~ /^[0-9]+$/) {
             jail = arr[i];
             break;
@@ -45,12 +47,12 @@ grep -E "Ban |Unban " "$LOGFILE" | awk '
 }
 ' >> "$OUTPUT_JSON_FILE"
 
-# Remove last comma (if any entries)
+# Remove the trailing comma, if present
 if [ -s "$OUTPUT_JSON_FILE" ]; then
     sed -i '$ s/},/}/' "$OUTPUT_JSON_FILE"
 fi
 
 echo "]" >> "$OUTPUT_JSON_FILE"
 
-# === Result display ===
+# === Final message ===
 echo "✅ JSON created: $OUTPUT_JSON_FILE"

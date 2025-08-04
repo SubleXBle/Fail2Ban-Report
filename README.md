@@ -1,4 +1,5 @@
 # Fail2Ban-Report
+> Beta 3.1 | Version 0.3.1
 
 A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
 
@@ -20,25 +21,25 @@ Please read the [Installation Instructions](Setup-Instructions.md) carefully and
 ---
 
 ## 📚 What It Does
+Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewable via a web dashboard. It provides optional tools to:
 
-Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports viewable via a web dashboard. It adds optional tools to:
+- Visualize ban and unban events
+- Interact with IPs (e.g., manually block or unblock)
+- Maintain a persistent blocklist.json
+- Sync that list with your system firewall using ufw (support for other firewalls or direct communication with Fail2Ban jails is not yet implemented)
 
-- Visualize ban/unban events
-- Interact with IPs (e.g. manually block/unblock)
-- Maintain a persistent `blocklist.json`
-- Sync that list with your system firewall (via `ufw` (other Firewalls than UFW or direct communication with fail2ban jails **not yet** supported))
+## 🧱 Architecture overview:
 
-🧱 The architecture:
-- **Backend Shell Scripts**: Parse logs, write JSON, and update UFW accordingly to `blocklist.json`
-- **Frontend Web Interface**: Visualizes data and offers action buttons
-- **JSON Blocklist**: Stores manually blocked IPs (`active=true`)
+- Backend Shell Scripts: Parse logs, generate JSON files, and update UFW rules based on blocklist.json
+- Frontend Web Interface: Visualizes data and offers action controls
+- JSON Blocklist: Stores manually blocked IPs marked with active=true
 
 ---
 
 ## 📦 Features
 
 - 🔍 **Searchable + filterable** log reports (date, jail, IP)
-- 🔧 **Integrated JSON blocklist** with action buttons
+- 🔧 **Integrated JSON blocklist** for persistent Block-Overview
 - 🧱 **Firewall sync** using UFW (planned: nftables, firewalld)
 - ⚡ **Lightweight setup** — no DB, no frameworks
 - 🔐 **Compatible with hardened environments** (no external assets, strict headers)
@@ -57,16 +58,25 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 
 ---
 
-## 🆕 What's New in V 0.2.3 (🔥 HotFix)
-- Hotfix for `includes/list-files.php`
-  - Fix file date filtering to include today's JSON logs and ensure latest files are listed correctly.
+## 🆕 What's New in V 0.3.1
 
-### New in V 0.2.2
-- Default sorting changed to descending (newest first)
-- Sorting by date/time, action, and jail added in the main list
-- Reset & reload button to easily clear filters and sorting
-- Date filter and reset button added to the blocklist overlay
-- The number of days shown in "Select Date" can now be limited via the config file (default 7 days)
+- **Protected access to JSON files**
+  - Direct access to `/archive/*.json` is now blocked via `.htaccess`
+  - Frontend scripts no longer request raw `.json` files directly
+- **New secure PHP endpoints**
+  - `includes/get-json.php` and `includes/get-blocklist.php` act as controlled proxies to serve JSON data
+  - Only PHP scripts will now expose required JSON content
+- **Hardened frontend behavior**
+  - JavaScript files (`jsonreader.js`, `blocklist-overlay.js`) fetch data only via the new PHP proxies
+- **New Ministats in Header**
+  - Shows today's **ban/unban statistics** in the page header:
+  - 🚫 Bans  
+  - 🟢 Unbans  
+  - 📊 Total events
+  - Adds quick insight into current Fail2Ban activity
+- **Mobile-Friendly**
+  - Site is now more mobile friendly
+  - added favicon (🕵️) to make browsers happy
 
 
 🧪 [as promised there is an highly experimental feature for using fail2ban instead of UFW.](using-Fail2Ban-firewall-update.md) (⚠️ not recommended)
@@ -103,7 +113,8 @@ This is especially useful if you want to manually patch or update individual fil
 
 ### 🔐 Security
 - ✅ Hardened `.htaccess` with best practices
-- 🧩 add security layer between json and js to harden `includes/` and `archive/` better
+- ✅ add security layer between json and js
+- 🧩 moove `archive/` out of webdirectory
 - ⏳ Further improvements (ongoing goal)
 
 ### 🔥 Active Defense
@@ -119,13 +130,13 @@ This is especially useful if you want to manually patch or update individual fil
 - ⏳ Improve CSS and styling
 
 ## 👀 Outlook
-- 🔭 next version will focus on security and stability by establishing better seperation between frontend and backend.
+- 🔭 next major version will focus on security by mooving archive/ out of webdirectory.
 
 ---
 
 ## 🖼️ Screenshots
 
-![Main interface with log overview](assets/images/Main-List.png)  
+![Main interface with log overview](assets/images/Main-List-031.png)  
 ![Blocklist interface with unblock actions](assets/images/Blocklist-Overlay.png)
 ![Result after banning an IP](assets/images/banip.png)
 ![Result after "report" an IP](assets/images/reportip.png)
