@@ -28,7 +28,7 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
 - Maintain a persistent blocklist.json
 - Sync that list with your system firewall using ufw (support for other firewalls or direct communication with Fail2Ban jails is not yet implemented)
 
-##🧱 Architecture overview:
+## 🧱 Architecture overview:
 
 - Backend Shell Scripts: Parse logs, generate JSON files, and update UFW rules based on blocklist.json
 - Frontend Web Interface: Visualizes data and offers action controls
