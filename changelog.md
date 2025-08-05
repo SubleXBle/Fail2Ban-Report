@@ -1,5 +1,9 @@
 # changelog
 
+### [0.3.1] – 2025-08-05
+- Fixed: Relative path error in `action_unban-ip.php` when accessing `blocklist.json`.  
+  → Hotfixed @ 13:10 CEST directly in main.
+
 > Improved security by ensuring all JSON data is accessed only via PHP proxies, preventing direct client-side access.
 
 > Shell scripts (.sh) currently still read and write the .json files directly since these files are still inside the web directory — but this will change soon.
