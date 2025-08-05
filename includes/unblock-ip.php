@@ -16,7 +16,7 @@ function unblockIp($ip) {
         ];
     }
 
-    $jsonFile = 'archive/blocklist.json';
+    $jsonFile = __DIR__ . '/../archive/blocklist.json'; // Fixed on 05.08.2025 : 13:00 MEZ
     $data = [];
 
     // Read existing blocklist
