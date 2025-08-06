@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # --- Configuration ---
-BLOCKLIST_DIR="/var/www/vhosts/suble.org/xbkupx/Fail2Ban-Report/archive"
+BLOCKLIST_DIR="/var/www/Fail2Ban-Report/archive"
 LOGFILE="/opt/Fail2Ban-Report/fail2ban_blocklist.log"
 LOGGING=false  # Set to true to enable logging
 
