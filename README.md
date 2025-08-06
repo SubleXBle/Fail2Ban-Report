@@ -202,6 +202,13 @@ This is especially useful if you want to manually patch or update individual fil
 
 ---
 
+## 🖥️ Demo
+👀 Want to try out the look & feel?
+There's a simple demo version available here – no backend, no real data:
+👉 https://suble.net/ 🔗
+
+---
+
 ## 🤝 Contributing
 
 Pull requests, feature ideas and bug reports are very welcome!
