@@ -1,10 +1,8 @@
 <?php
 header('Content-Type: application/json');
 
-// Base directory for JSON files
 $archiveDirectory = dirname(__DIR__) . '/archive/';
 
-// Determine the latest JSON file in the archive directory
 $files = array_filter(scandir($archiveDirectory), function($file) {
     return preg_match('/^fail2ban-events-\d{8}\.json$/', $file);
 });
@@ -17,63 +15,76 @@ if (!$files) {
         'unban_unique_ips' => 0,
         'total_events' => 0,
         'total_unique_ips' => 0,
+        'aggregated' => [],
         'error' => 'No log files found.'
     ]);
     exit;
 }
 
-// Sort descending by filename (newest first)
-rsort($files);
+rsort($files); // newest first
 
-$logFilename = $files[0];
-$logFilePath = $archiveDirectory . '/' . $logFilename;
+// Heute = neueste Datei
+$todayFile = $files[0];
 
-if (!is_readable($logFilePath)) {
-    http_response_code(404);
-    echo json_encode(['error' => 'File not found or not readable.']);
-    exit;
-}
+// Aggregationsziel: [‘yesterday’ => 1, ‘last_7_days’ => 7, ‘last_30_days’ => 30]
+$aggregationRanges = [
+    'yesterday' => 1,
+    'last_7_days' => 7,
+    'last_30_days' => 30,
+];
 
-$jsonContent = file_get_contents($logFilePath);
-if ($jsonContent === false) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Error reading the file.']);
-    exit;
-}
+// Funktion zur Verarbeitung von Einträgen
+function processEntries($entries): array {
+    $banTotal = 0;
+    $unbanTotal = 0;
+    $banIPs = [];
+    $unbanIPs = [];
 
-$logEntries = json_decode($jsonContent, true);
-if (!is_array($logEntries)) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Invalid JSON format.']);
-    exit;
-}
+    foreach ($entries as $entry) {
+        if (!isset($entry['action'], $entry['ip'])) continue;
 
-// Initialize counters and sets
-$banTotal = 0;
-$unbanTotal = 0;
-$banIPsSet = [];
-$unbanIPsSet = [];
-
-foreach ($logEntries as $entry) {
-    if (!isset($entry['action'], $entry['ip'])) continue;
-
-    if ($entry['action'] === 'Ban') {
-        $banTotal++;
-        $banIPsSet[$entry['ip']] = true;
-    } elseif ($entry['action'] === 'Unban') {
-        $unbanTotal++;
-        $unbanIPsSet[$entry['ip']] = true;
+        if ($entry['action'] === 'Ban') {
+            $banTotal++;
+            $banIPs[$entry['ip']] = true;
+        } elseif ($entry['action'] === 'Unban') {
+            $unbanTotal++;
+            $unbanIPs[$entry['ip']] = true;
+        }
     }
+
+    return [
+        'ban_count' => $banTotal,
+        'ban_unique_ips' => count($banIPs),
+        'unban_count' => $unbanTotal,
+        'unban_unique_ips' => count($unbanIPs),
+        'total_events' => $banTotal + $unbanTotal,
+        'total_unique_ips' => count(array_unique(array_merge(array_keys($banIPs), array_keys($unbanIPs))))
+    ];
 }
 
-$totalEvents = $banTotal + $unbanTotal;
-$totalUniqueIPs = count(array_unique(array_merge(array_keys($banIPsSet), array_keys($unbanIPsSet))));
+// Zuerst: heutige Datei verarbeiten
+$todayPath = $archiveDirectory . '/' . $todayFile;
+$todayEntries = json_decode(file_get_contents($todayPath), true);
+$todayStats = processEntries($todayEntries);
 
-echo json_encode([
-    'ban_count' => $banTotal,
-    'ban_unique_ips' => count($banIPsSet),
-    'unban_count' => $unbanTotal,
-    'unban_unique_ips' => count($unbanIPsSet),
-    'total_events' => $totalEvents,
-    'total_unique_ips' => $totalUniqueIPs,
-]);
+// Dann aggregierte Werte berechnen
+$aggregatedStats = [];
+foreach ($aggregationRanges as $label => $count) {
+    $aggregatedEntries = [];
+
+    // n Dateien überspringen wenn nicht genug vorhanden
+    for ($i = 1; $i <= $count && isset($files[$i]); $i++) {
+        $filePath = $archiveDirectory . '/' . $files[$i];
+        $content = json_decode(file_get_contents($filePath), true);
+        if (is_array($content)) {
+            $aggregatedEntries = array_merge($aggregatedEntries, $content);
+        }
+    }
+
+    $aggregatedStats[$label] = processEntries($aggregatedEntries);
+}
+
+// Finales JSON-Resultat
+echo json_encode(array_merge($todayStats, [
+    'aggregated' => $aggregatedStats
+]));
