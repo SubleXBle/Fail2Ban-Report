@@ -1,26 +1,23 @@
-/* === Document Styles === */
+/* Dokument Styles */
 body {
-  background-color: #111;
-  color: #eee;
-  font-family: sans-serif;
-  padding: 20px;
-}
-
+      background-color: #111;
+      color: #eee;
+      font-family: sans-serif;
+      padding: 20px;
+    }
 h1 {
-  color: #d4af37;
-}
-
+    color:#d4af37;
+   }
 h2 {
-  color: #999999;
-}
-
-/* === Headline Section === */
+    color:#999999;
+   }
+/* Headlines */
 .inline-headlines {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: 0.2rem;
   padding-bottom: 1rem;
   border-bottom: 0px solid #444;
 }
@@ -37,8 +34,18 @@ h2 {
   color: #aaa;
 }
 
-/* === Stats & Version Info === */
-#fail2ban-stats,
+#fail2ban-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+  color: #aaa;
+  line-height: 1.4;
+  padding-left: 1rem;
+  border-left: 0px solid #333;
+}
+
 #headerversion {
   display: flex;
   flex-direction: column;
@@ -51,41 +58,36 @@ h2 {
   border-left: 0px solid #333;
 }
 
-/* === Form Elements === */
+/* Forms */
 select, input {
-  margin: 10px 5px;
-  padding: 5px;
-  background-color: #222;
-  color: #ffd700;
-  border: 1px solid #444;
-  border-radius: 5px;
-}
-
-/* === Table Output === */
+      margin: 10px 5px;
+      padding: 5px;
+      background-color: #222;
+      color: #ffd700;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+/* Table Styles for Output */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
 th, td {
-  border: 1px solid #333;
-  padding: 8px;
-  text-align: left;
-}
-
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: left;
+    }
 th {
-  background-color: #222;
-  color: #ffd700;
-}
-
+      background-color: #222;
+      color: #ffd700;
+    }
 tr:nth-child(even) {
-  background-color: #1a1a1a;
-}
-
-/* === Action Buttons === */
+      background-color: #1a1a1a;
+    }
+/* Styles for Action Buttons */
 .action-btn {
-  background-color: #b8860b; /* dark gold */
+  background-color: #b8860b; /* dark Gold */
   color: #111;
   border: none;
   padding: 5px 8px;
@@ -98,7 +100,7 @@ tr:nth-child(even) {
 
 .action-btn:hover,
 .action-btn:focus {
-  background-color: #ffd700; /* bright gold on hover */
+  background-color: #ffd700; /* light Gold when Hover */
   color: #000;
   outline: none;
   box-shadow: 0 0 10px #ffd700;
@@ -108,8 +110,7 @@ tr:nth-child(even) {
   background-color: #aa7a00;
   box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
 }
-
-/* === Notification Area === */
+/* Notifications for Actions */
 #notification-container {
   position: fixed;
   top: 20px;
@@ -119,7 +120,6 @@ tr:nth-child(even) {
   flex-direction: column;
   gap: 10px;
 }
-
 .notification {
   background-color: #222;
   color: #ffd700;
@@ -131,27 +131,41 @@ tr:nth-child(even) {
   opacity: 0.95;
   animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
 }
-
-/* Success notification */
 .notification.success {
-  background-color: #28a745; /* solid green */
+  background-color: #28a745; /* green */
   color: #fff;
-  /* inherits remaining styles */
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  font-family: monospace;
+  font-size: 14px;
+  opacity: 0.95;
+  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
 }
-
-/* Error notification */
 .notification.error {
-  background-color: #e74c3c; /* strong red */
+  background-color: #e74c3c; /* red */
   color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  font-family: monospace;
+  font-size: 14px;
+  opacity: 0.95;
+  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
 }
 
-/* Info notification */
 .notification.info {
   background-color: #3498db; /* classic blue */
   color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  font-family: monospace;
+  font-size: 14px;
+  opacity: 0.95;
+  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
 }
 
-/* === Notification Animations === */
 @keyframes fadein {
   from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 0.95; transform: translateY(0); }
@@ -161,7 +175,7 @@ tr:nth-child(even) {
   to { opacity: 0; transform: translateY(-10px); }
 }
 
-/* === Overlay for Blocklist === */
+/* Overlay for Blocklist */
 .overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -172,12 +186,10 @@ tr:nth-child(even) {
   z-index: 10000;
 }
 
-/* Hidden overlay */
 .overlay.hidden {
   display: none;
 }
 
-/* Overlay content box */
 .overlay-content {
   position: relative;
   background: #1a1a1a;
@@ -191,7 +203,6 @@ tr:nth-child(even) {
   overflow-y: auto;
 }
 
-/* Close button in overlay */
 .close-btn {
   position: absolute;
   top: 10px;
@@ -213,7 +224,6 @@ tr:nth-child(even) {
   outline: none;
 }
 
-/* Blocklist entry row */
 .blocklist-entry {
   display: flex;
   justify-content: space-between;
@@ -234,9 +244,8 @@ tr:nth-child(even) {
   background: #a33;
 }
 
-/* Reload Blocklist Button */
 #reloadBlocklistBtn {
-  background-color: #28a745; /* vibrant green */
+  background-color: #28a745;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -250,14 +259,14 @@ tr:nth-child(even) {
 
 #reloadBlocklistBtn:hover,
 #reloadBlocklistBtn:focus {
-  background-color: #218838; /* darker green on hover */
+  background-color: #218838; /* dark green on Hover */
   box-shadow:
     0 0 8px 2px rgba(40, 167, 69, 0.8),
     0 0 15px 4px rgba(40, 167, 69, 0.5);
   outline: none;
 }
 
-/* Search Field */
+
 #blocklistSearch {
   width: 100%;
   padding: 8px 10px;
@@ -268,12 +277,9 @@ tr:nth-child(even) {
   color: #d4af37;
   font-size: 1rem;
 }
-
 #blocklistSearch::placeholder {
   color: #aa9a52;
 }
-
-/* Visually Hidden (e.g. for screen readers) */
 .sr-only {
   position: absolute !important;
   width: 1px; height: 1px;
@@ -282,34 +288,32 @@ tr:nth-child(even) {
   clip: rect(0,0,0,0);
   border: 0;
 }
-
-/* === Custom Checkboxes === */
-
-/* Hide default checkbox */
+/* Checkboxes  */
+/* Hide original Checkbox */
 input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  appearance: none; /* Firefox and modern Browsers */
+  -webkit-appearance: none; /* Safari/Chrome */
+  -moz-appearance: none; /* Firefox */
   width: 20px;
   height: 20px;
   border: 2px solid #d4af37;
   border-radius: 4px;
   vertical-align: middle;
-  margin-right: 8px;
+  margin-right: 5px;
   cursor: pointer;
   position: relative;
   background: black;
   transition: background 0.3s, border-color 0.3s;
 }
 
-/* Style when checked */
+/* Style for Checked */
 input[type="checkbox"]:checked {
   background-color: #d4af37;
   border-color: #d4af37;
   box-shadow: 0 0 5px #d4af37aa;
 }
 
-/* Black checkmark */
+/* Black Check */
 input[type="checkbox"]:checked::after {
   content: "";
   position: absolute;
@@ -322,18 +326,18 @@ input[type="checkbox"]:checked::after {
   transform: rotate(45deg);
 }
 
-/* Hover effect */
+/* Hover  */
 input[type="checkbox"]:hover {
   border-color: #d4af37;
 }
 
-/* === Blocklist Toggle Button === */
+/* Blocklist Button */
 #openBlocklistBtn {
   background-color: #d4af37;
   color: black;
   border: none;
   padding: 5px 8px;
-  font-size: 1rem;
+  font-size: 1.0rem;
   font-weight: 100;
   border-radius: 6px;
   cursor: pointer;
@@ -349,8 +353,7 @@ input[type="checkbox"]:hover {
     0 0 15px 4px rgba(212, 175, 55, 0.4);
   outline: none;
 }
-
-/* === Footer === */
+/* Footer */
 .site-footer {
   background-color: #222;
   color: #d4af37;
@@ -358,19 +361,17 @@ input[type="checkbox"]:hover {
   padding: 1rem 0;
   font-size: 0.9rem;
 }
-
-/* === Yellow Text Utility === */
+}
 .yellowtext {
   color: #d4af37;
 }
 
-/* === Button for Navigation / Related Actions === */
 .siterel {
   background-color: #d4af37;
   color: black;
   border: none;
   padding: 8px 12px;
-  font-size: 1rem;
+  font-size: 1.0rem;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -383,7 +384,8 @@ input[type="checkbox"]:hover {
   outline: none;
 }
 
-/* === Reset Button in Blocklist Overlay === */
+/* Reset Button Style for Blocklist-Overlay  */
+
 .button-reset {
   background-color: #f9da5f;
   color: #000;
@@ -396,5 +398,114 @@ input[type="checkbox"]:hover {
 }
 
 .button-reset:hover {
-  background-color: #f4cd3c; /* slightly darker on hover */
+  background-color: #f4cd3c; /* little darker on Hover */
+}
+
+/* Jailfilter in Blocklist */
+
+/* Jail Filter Button */
+#blocklistJailFilterBtn {
+  background-color: #333;
+  color: #d4af37;
+  border: 1px solid #555;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+#blocklistJailFilterBtn:hover,
+#blocklistJailFilterBtn:focus {
+  background-color: #444;
+  outline: none;
+}
+
+/* Jail Filter Overlay */
+#blocklistJailFilterOverlay {
+  position: absolute;
+  background-color: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  max-height: 200px;
+  width: 180px;
+  overflow-y: auto;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4); /* golden shaddow */
+  z-index: 1100;
+  font-size: 0.9rem;
+  color: #eee;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Checkbox Labels for Overlay */
+#blocklistJailFilterContainer label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 6px;
+  user-select: none;
+}
+
+/* Checkboxes */
+#blocklistJailFilterContainer input[type="checkbox"] {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #d4af37;
+}
+
+/* Scrollbar Styling (modern Browser) */
+#blocklistJailFilterOverlay::-webkit-scrollbar {
+  width: 8px;
+}
+
+#blocklistJailFilterOverlay::-webkit-scrollbar-track {
+  background: #111;
+}
+
+#blocklistJailFilterOverlay::-webkit-scrollbar-thumb {
+  background-color: #d4af37;
+  border-radius: 4px;
+}
+
+/* Hide Overlay */
+.hidden {
+  display: none;
+}
+
+/* Blocklist Stats */
+
+#blocklist-stats-container {
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  gap: 0.1rem 0.5rem; /* vertical and hoizontal spacer */
+  max-width: 600px; /* max-witdth for blocklists */
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+  color: #aaa;
+  line-height: 1.4;
+  padding-left: 1rem;
+  border-left: 0px solid #333;
+}
+
+#blocklist-stats-container div {
+  white-space: nowrap; /* dont break text */
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
+  color: #aaa;
+}
+
+.headhead {
+  font-family: Arial, sans-serif;
+  color: #d4af37;
+  font-size: 0.9rem;
+}
+.headstat {
+  font-family: Arial, sans-serif;
+  color: #aaa;
+  font-size: 0.9rem;
 }
