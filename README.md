@@ -76,11 +76,7 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
   - 🔒 Active bans
   - ⏳ Pending entries
 - 🔄 Auto-refresh every **60 seconds**.
-- 🧮 Layout adapts to **varying jail name lengths** — cleaner and more readable UI.
-
-### ⚙️ Performance & UX
-- 🚀 Optimized update intervals (**default: 10–60 seconds**).
-- 🧘‍♂️ Minimal server and browser load — ideal for low-traffic admin use.
+- 🧮 Layout adapts to **varying jail name lengths**.
 
 ---
 
