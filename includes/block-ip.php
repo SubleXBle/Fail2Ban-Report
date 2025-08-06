@@ -2,7 +2,7 @@
 // includes/block-ip.php
 
 /**
- * Blocks an IP address by adding it to blocklist.json (no iptables calls).
+ * Blocks an IP address by adding it to a jail-specific blocklist JSON file.
  *
  * @param string $ip        The IP address to block.
  * @param string $jail      The fail2ban jail or context (optional).
@@ -18,7 +18,15 @@ function blockIp($ip, $jail = 'unknown', $source = 'manual') {
         ];
     }
 
-    $jsonFile = dirname(__DIR__, 1) . '/archive/blocklist.json';
+    // Sanitize jail name to safe filename part
+    $jail = strtolower(preg_replace('/[^a-z0-9_-]/', '', $jail));
+    if ($jail === '') {
+        $jail = 'unknown';
+    }
+
+    // Determine blocklist file path by jail name
+    $jsonFile = dirname(__DIR__, 1) . "/archive/{$jail}.blocklist.json";
+
     $data = [];
 
     // Read existing blocklist
@@ -40,17 +48,17 @@ function blockIp($ip, $jail = 'unknown', $source = 'manual') {
                 if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
                     return [
                         'success' => false,
-                        'message' => "Failed to write to blocklist.json."
+                        'message' => "Failed to write to $jail.blocklist.json."
                     ];
                 }
                 return [
                     'success' => true,
-                    'message' => "IP $ip was reactivated in blocklist.json."
+                    'message' => "IP $ip was reactivated in {$jail}.blocklist.json."
                 ];
             }
             return [
                 'success' => true,
-                'message' => "IP $ip is already active in blocklist.json."
+                'message' => "IP $ip is already active in {$jail}.blocklist.json."
             ];
         }
     }
@@ -75,12 +83,12 @@ function blockIp($ip, $jail = 'unknown', $source = 'manual') {
     if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
         return [
             'success' => false,
-            'message' => "Failed to write to blocklist.json."
+            'message' => "Failed to write to $jail.blocklist.json."
         ];
     }
 
     return [
         'success' => true,
-        'message' => "IP $ip was successfully added to blocklist.json."
+        'message' => "IP $ip was successfully added to {$jail}.blocklist.json."
     ];
 }
