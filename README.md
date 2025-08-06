@@ -70,7 +70,6 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
   - 🕓 **Yesterday**
   - 📈 **Last 7 Days**
   - 📊 **Last 30 Days**
-- 🗂️ Based on your existing daily `fail2ban-events-YYYYMMDD.json` files — no setup needed.
 
 ### 🧩 Per-Jail Blocklist Display
 - 🧾 Each jail now displays its own **blocklist section** with:
