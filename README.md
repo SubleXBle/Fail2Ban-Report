@@ -128,8 +128,7 @@ If you're upgrading from an existing installation:
 
 - `assets/css/style.css`  
   → added the new stuff (i know it is still a mess)
-
----
+  
 
 #### 🆕 New Files (JS)
 
