@@ -141,8 +141,6 @@ If you're upgrading from an existing installation:
 ---
 
 
----
-
 ## 📄 Changelog
 
 Details about all new features, improvements, and changed files can be found in the [Changelog](changelog.md).
