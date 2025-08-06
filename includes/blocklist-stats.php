@@ -1,6 +1,6 @@
 <?php
 // Set correct path to your blocklist directory
-$blocklistDir = '/var/www/vhosts/suble.org/xbkupx/Fail2Ban-Report/archive/';
+$blocklistDir = dirname(__DIR__) . '/archive/';
 $stats = [];
 
 foreach (glob($blocklistDir . '*.blocklist.json') as $filepath) {
