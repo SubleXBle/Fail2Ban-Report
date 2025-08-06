@@ -21,7 +21,7 @@
   <input type="text" id="ipFilter" placeholder="e.g. 192.168" />
 
   <label><span title="Check to Block IPs with the Action! Button to it's blocklist"><input type="checkbox" name="actions" value="ban"><small>Ban IP</span></small></label>
-  <label><span title="AbuseIPDB Information on how often an IP was reported"><input type="checkbox" name="actions" value="report"><small>Info</span></small></label>
+  <label><span title="AbuseIPDB Information on how often an IP was reported"><input type="checkbox" name="actions" value="report"><small>Info </span></small></label>
 
   <button id="openBlocklistBtn">Edit Blocklist</button>
 
