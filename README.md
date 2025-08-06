@@ -64,7 +64,7 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
 - 🔁 Blocking an IP address now stores it in a **jail-specific blocklist** (`blocklist["jailname"][]`) instead of one global list.
 - 🔍 Improves clarity and allows easier tracking of blocked IPs **per jail** as it is a step for better fail2ban integration.
 
-### 📊 Extended Statistics
+### 📊 New Statistics
 - 📅 The Fail2Ban stats panel now includes:
   - ✅ **Today’s** bans & unbans (as before)
   - 🕓 **Yesterday**
