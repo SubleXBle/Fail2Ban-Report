@@ -35,14 +35,17 @@ function collectAndExecuteActions(ip, jail = '') {
   const message = data.message || 'No message returned.';
   let type;
 
-  if (action === 'report') {
-    type = 'info';
+  // check fo type
+  if (data.type) {
+    type = data.type; // from backend
   } else {
-    type = data.success ? "success" : "error"; 
+    // fallback:
+    type = data.success ? 'success' : 'error';
   }
 
   showNotification(prefix + message, type);
 })
+
 
     .catch(err => {
       const errorMsg = `[${action.toUpperCase()}] Error processing IP ${ip}: ${err}`;
@@ -63,7 +66,7 @@ function showNotification(message, type = "info") {
   if (!container) return;
 
   const note = document.createElement('div');
-  note.className = 'notification ' + type; // CSS notification success/error/info
+  note.className = 'notification ' + type; // CSS Klassen wie notification success/error/info
 
   note.innerText = message;
   container.appendChild(note);
