@@ -1,7 +1,10 @@
 # changelog
 
 ## Changes made for V 0.3.2 (improvements)
-> This QoL Update brings several improvements - blocklists will now be seperated by jail and a lot of new helpful stats in the header and new filter in blocklist overview for jails
+> This update brings several improvements — blocklists are now separated by jail, marking another step towards better Fail2Ban integration.  
+> Additionally, many new helpful statistics have been added to the header, along with a new jail filter in the blocklist overview.  
+> As expected from a reporting tool, stats are essential, so i added some basic stats.
+
 
 - **Blocklist per Jail Implementation**
   - The blocklist JSON files are now created and managed individually per Fail2Ban jail instead of using a single global `blocklist.json`.
