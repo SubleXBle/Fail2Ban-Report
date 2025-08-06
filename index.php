@@ -1,8 +1,7 @@
 <?php include ('includes/list-files.php'); ?>
-<?php // Version 0.2.2 ?>
 <?php include 'includes/header.php'; ?>
 
-<button class="siterel" onclick="location.href=location.pathname" title="! reset and reload !">↻</button>
+  <button class="siterel" onclick="location.href=location.pathname" title="! reset and reload !">↻</button>
 
   <label for="dateSelect">Select Date:</label>
   <select id="dateSelect"></select>
@@ -28,7 +27,7 @@
   <div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
   <table id="resultTable">
-    <thead>
+     <thead>
        <tr>
          <th data-sort="timestamp" data-label="Date">Date</th>
          <th data-sort="action" data-label="Action">Action</th>
@@ -44,9 +43,23 @@
 <div id="blocklistOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="blocklistTitle" aria-describedby="blocklistDesc">
   <div class="overlay-content">
     <h2 id="blocklistTitle">Edit Blocklist</h2>
-    <p id="blocklistDesc" class="sr-only">Here you can manage your blocklist.</p>
+    <p id="blocklistDesc" class="sr-only">Hier können Sie die gebannten IPs verwalten und durchsuchen.</p>
+
 
     <div id="blocklistFilters" style="margin-bottom: 1em;">
+
+
+      <button id="blocklistJailFilterBtn" title="Filter by Jail ▾">Filter by Jail ▾</button>
+
+      <div id="blocklistJailFilterOverlay" class="hidden" style="position:absolute; background:#222; border:1px solid #444; padding:10px; max-height:200px; overflow-y:auto; z-index:1100;">
+       <div id="blocklistJailFilterContainer">
+      <!-- Checkboxes here -->
+       </div>
+      </div>
+
+
+
+
       <input type="date" id="blocklistDateFilter" />
       <button id="blocklistResetBtn" class="button-reset"  type="button">Reset</button>
       <input type="text" id="blocklistSearch" placeholder="Search IP or jail" />
