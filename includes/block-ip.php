@@ -74,7 +74,8 @@ function blockIp($ip, $jail = 'unknown', $source = 'manual') {
         'reason' => '',
         'active' => true,
         'lastModified' => date('c'),
-        'tags' => []
+        'tags' => [],
+        'pending' => true
     ];
 
     $data[] = $entry;
