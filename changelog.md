@@ -1,5 +1,19 @@
 # changelog
 
+## Changes made for V 0.3.3 (QoL Update)
+
+- **Warning System and Pending Status Indicators**
+  - `config.ini`: Added new `[Warnings]` section to configure thresholds for warning and critical levels (Events per minute per jail).
+  - `includes/warnings.php`: New backend script that scans the latest event log for jails exceeding defined thresholds.
+  - `assets/js/warnings.js`: New JavaScript file to fetch warning data and render status indicators in the header.
+  - `includes/header.php`: Updated to include warning and critical indicators (colored dots and summary).
+  - `assets/css/style.css`: Added "Warning Dots" section to style the new header indicators.
+  - `includes/block-ip.php`: Now writes a `pending: true` flag when an IP is manually blocked.
+  - `includes/unblock-ip.php`: Sets `pending: true` when an IP is manually unblocked.
+  - `firewall-update.sh`: Automatically sets `pending: false` for processed entries during block/unblock operations.
+  - `assets/js/blocklist-stats.js`: Updated to display pending entries for both block and unblock actions.
+
+
 ## Changes made for V 0.3.2 (improvements)
 > This update brings several improvements — blocklists are now separated by jail, marking another step towards better Fail2Ban integration.  
 > Additionally, many new helpful statistics have been added to the header, along with a new jail filter in the blocklist overview.  
