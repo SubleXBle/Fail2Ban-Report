@@ -190,19 +190,6 @@ There's a simple demo version available here – no backend, no real data:
 
 ---
 
-## 🤝 Contributing
-
-Pull requests, feature ideas and bug reports are very welcome!
-
-- Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
-- Want to contribute? → Fork and submit a pull request
-- Have an idea? → Start a discussion or reach out directly : visit the 💬 [Discussions page](https://github.com/SubleXBle/Fail2Ban-Report/discussions)
-
-> 💡 “Wouldn’t it be cool if it could also do XYZ?”  
-> Absolutely — I’m happy to hear your ideas.
-
----
-
 ## ✅ What It Is
 - A **read-only + action-enabled** web dashboard for Fail2Ban events  
 - A tool to **visualize** bans/unbans and **manually** manage blocked IPs  
@@ -218,6 +205,20 @@ Pull requests, feature ideas and bug reports are very welcome!
 - ❌ A heavy analytics platform — it’s lightweight and log-driven by design  
 
 ---
+
+## 🤝 Contributing
+
+Pull requests, feature ideas and bug reports are very welcome!
+
+- Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
+- Want to contribute? → Fork and submit a pull request
+- Have an idea? → Start a discussion or reach out directly : visit the 💬 [Discussions page](https://github.com/SubleXBle/Fail2Ban-Report/discussions)
+
+> 💡 “Wouldn’t it be cool if it could also do XYZ?”  
+> Absolutely — I’m happy to hear your ideas.
+
+---
+
 
 ## 📄 License
 
