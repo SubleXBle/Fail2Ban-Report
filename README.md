@@ -155,7 +155,7 @@ This is especially useful if you want to manually patch or update individual fil
 
 ## 🖼️ Screenshots
 
-![Main interface with log overview](assets/images/Main-List-032.png)  
+![Main interface with log overview](assets/images/Main-List-033.png)  
 ![Blocklist interface with unblock actions](assets/images/Block-List-032.png)
 ![Result after banning an IP](assets/images/Message-Toast-032.png)
 
