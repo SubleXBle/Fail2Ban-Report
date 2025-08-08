@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   fetchWarnings();
-  setInterval(fetchWarnings, 10000); // Reload every 10 seconds
+  setInterval(fetchWarnings, 10000); // alle 10 Sekunden neu laden
 
   function fetchWarnings() {
     fetch("includes/warnings.php")
@@ -40,18 +40,18 @@ document.addEventListener("DOMContentLoaded", function () {
       dot.classList.remove("disabled");
 
       if (jailNames.length === 1) {
-        // Only one Jail, make it short
+        // Nur ein Jail, kurze Zeile
         const j = jailStats[jailNames[0]];
         label.textContent = `${jailNames[0]} | ${j.events} | ${j.unique_ips}`;
       } else if (jailNames.length > 1) {
-        // more Jails, list em
+        // Mehrere Jails, Liste mit Zeilen
         const lines = jailNames.map(jail => {
           const j = jailStats[jail];
           return `${jail} | ${j.events} | ${j.unique_ips}`;
         });
         label.innerHTML = lines.join('<br>');
       } else {
-        // no jail name .. 
+        // Kein Jail-Name (Falle)
         label.textContent = `${totalIPs}/${totalEvents} ${capitalize(type)}${totalIPs !== 1 ? "s" : ""}`;
       }
     } else {
