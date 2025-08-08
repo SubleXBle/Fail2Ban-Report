@@ -60,19 +60,19 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
 
 ## 🆕 What's New in V 0.3.3 (QoL Update)
 ### ⚠️ Warning System and Pending Status Indicators
-- 🚨 New [Warnings] section in config.ini to configure warning & critical thresholds (events per minute per jail).
-- 👀 Real-time warning & critical status indicators (colored dots) in the header for quick overview.
+- 🚨 New [Warnings] section in .config to configure warning & critical thresholds (events per minute per jail) in format warning:critical (e.g: 20:50).
+- 👀 warning & critical status indicators (colored dots) in the header for quick overview.
 - ⏳ Manual block/unblock actions now mark IPs as pending until processed by firewall-update.
 - 📊 Pending entries are now visible in blocklist stats for better tracking.
 
 ### ✔️ Multi-Selection UI and Bulk Actions for Ban & Report
 - ✅ Switched from per-row action buttons to checkbox multi-selection for IPs.
-- 📋 New dedicated “Ban” and “Report” buttons for bulk processing.
+- 📋 New dedicated “Ban” and “Info” buttons for bulk processing.
 - 🔄 Frontend updated to handle and display results for multiple IP actions simultaneously.
 - 🔔 New notification system for success/info/error messages on each action.
 
 ### 🛠 Backend Improvements & New IP Reporting
-- 🔄 Backend APIs now accept arrays of IPs for ban and report actions, with detailed aggregated feedback.
+- 🔄 Backend now accept arrays of IPs for ban and report actions, with detailed aggregated feedback.
 - 🆕 Added IPInfo API integration alongside AbuseIPDB for richer geolocation and network info.
 - ⏲️ Built-in delay between report requests to avoid API rate limits.
 - ⚙️ Improved error handling and user feedback for multi-IP operations.
