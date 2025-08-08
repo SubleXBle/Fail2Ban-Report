@@ -81,7 +81,7 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
 
 ### ⚠️ Upgrade Notice
 
-If you're upgrading from an existing installation:
+If you're upgrading from an existing installation : pre 0.3.2 and also from 0.3.2
 
 - ⚠️ **The new blocklist format is not compatible with the old `blocklist.json`.**
 - 🧹 To ensure a clean transition and avoid orphaned firewall entries, follow these steps:
@@ -95,42 +95,6 @@ If you're upgrading from an existing installation:
 - 🛠️ _Optional_ : Run the `installer.sh` again to get a fresh setup.
 
 > This ensures no leftover blocks remain in your firewall from the previous system.
-
-
-### 🔄 Updated and Added Files in v0.3.2
-
-#### 🗂️ Backend (PHP / Shell)
-
-- `includes/block-ip.php`  
-  → Refactored to support jail-specific blocklists
-
-- `includes/unblock-ip.php`  
-  → Now handles unblocking from jail-based lists
-
-- `includes/list-files.php`  
-  → Modified to read multiple jail-specific blocklists
-
-- `includes/footer.php`  
-  → Includes references to new JS files
-
-- `includes/fail2ban-logstats.php`  
-  → Extended to calculate aggregate statistics (Today, Yesterday, Last 7/30 Days)
-
-- `firewall-update.sh`  
-  → Now processes `blocklist.json` with jail-based structure:  
-  `{ "sshd": [...], "apache-auth": [...] }`
-
-- `assets/css/style.css`  
-  → added the new stuff (i know it is still a mess)
-  
-
-#### 🆕 New Files (JS)
-
-- `assets/js/blocklist-stats.js`  
-  → Displays per-jail "Active" and "Pending" IP statistics
-
-- `assets/js/fail2ban-logstats.js`  
-  → Displays time-based event statistics
 
 ---
 
