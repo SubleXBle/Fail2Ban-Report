@@ -2,94 +2,132 @@
 // includes/block-ip.php
 
 /**
- * Blocks an IP address by adding it to a jail-specific blocklist JSON file.
+ * Blocks one or multiple IP addresses by adding them to their jail-specific blocklist JSON files.
  *
- * @param string $ip        The IP address to block.
- * @param string $jail      The fail2ban jail or context (optional).
- * @param string $source    Who triggered the block (e.g. 'manual', 'report', etc.)
- * @return array            Result array with 'success' and 'message'.
+ * @param string|array $ips        IP address or array of IP addresses to block.
+ * @param string $jail             Fail2Ban jail/context name (optional).
+ * @param string $source           Who triggered the block (e.g. 'manual', 'report', etc.)
+ * @return array                   Result array or array of results with 'success', 'message' and 'type'.
  */
-function blockIp($ip, $jail = 'unknown', $source = 'manual') {
-    // Validate IP address
-    if (!filter_var($ip, FILTER_VALIDATE_IP)) {
-        return [
-            'success' => false,
-            'message' => "Invalid IP address format: $ip"
-        ];
+function blockIp($ips, $jail = 'unknown', $source = 'manual') {
+    $results = [];
+
+    if (!is_array($ips)) {
+        $ips = [$ips];
     }
 
-    // Sanitize jail name to safe filename part
-    $jail = strtolower(preg_replace('/[^a-z0-9_-]/', '', $jail));
-    if ($jail === '') {
-        $jail = 'unknown';
-    }
+    foreach ($ips as $ip) {
+        $ip = trim($ip);
 
-    // Determine blocklist file path by jail name
-    $jsonFile = dirname(__DIR__, 1) . "/archive/{$jail}.blocklist.json";
-
-    $data = [];
-
-    // Read existing blocklist
-    if (file_exists($jsonFile)) {
-        $existing = file_get_contents($jsonFile);
-        $data = json_decode($existing, true);
-        if (!is_array($data)) {
-            $data = []; // fallback on corruption
+        // Validate IP address format
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            $results[] = [
+                'ip' => $ip,
+                'success' => false,
+                'message' => "Invalid IP address: $ip",
+                'type' => 'error'
+            ];
+            continue;
         }
-    }
 
-    // Check for existing IP, reactivate if found but inactive
-    foreach ($data as &$item) {
-        if ($item['ip'] === $ip) {
-            if (!isset($item['active']) || $item['active'] === false) {
-                $item['active'] = true;
-                $item['lastModified'] = date('c');
-                // Save updated blocklist
-                if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
-                    return [
-                        'success' => false,
-                        'message' => "Failed to write to $jail.blocklist.json."
-                    ];
-                }
-                return [
-                    'success' => true,
-                    'message' => "IP $ip was reactivated in {$jail}.blocklist.json."
-                ];
+        // Sanitize jail name
+        $safeJail = strtolower(preg_replace('/[^a-z0-9_-]/', '', $jail));
+        if ($safeJail === '') {
+            $safeJail = 'unknown';
+        }
+
+        $jsonFile = dirname(__DIR__, 1) . "/archive/{$safeJail}.blocklist.json";
+
+        $data = [];
+
+        if (file_exists($jsonFile)) {
+            $existing = file_get_contents($jsonFile);
+            $data = json_decode($existing, true);
+            if (!is_array($data)) {
+                $data = []; // fallback bei Dateibeschädigung
             }
-            return [
+        }
+
+        // Prüfen, ob IP schon vorhanden und aktiv
+        $found = false;
+        foreach ($data as &$item) {
+            if ($item['ip'] === $ip) {
+                $found = true;
+                if (!isset($item['active']) || $item['active'] === false) {
+                    $item['active'] = true;
+                    $item['lastModified'] = date('c');
+                    if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
+                        $results[] = [
+                            'ip' => $ip,
+                            'success' => false,
+                            'message' => "Failed to write to {$safeJail}.blocklist.json.",
+                            'type' => 'error'
+                        ];
+                        continue 2;
+                    }
+                    $results[] = [
+                        'ip' => $ip,
+                        'success' => true,
+                        'message' => "IP $ip was reactivated in {$safeJail}.blocklist.json.",
+                        'type' => 'success'
+                    ];
+                    continue 2;
+                } else {
+                    $results[] = [
+                        'ip' => $ip,
+                        'success' => true,
+                        'message' => "IP $ip is already active in {$safeJail}.blocklist.json.",
+                        'type' => 'info'
+                    ];
+                    continue 2;
+                }
+            }
+        }
+        unset($item);
+
+        // Neu hinzufügen
+        if (!$found) {
+            $entry = [
+                'ip' => $ip,
+                'jail' => $safeJail,
+                'source' => $source,
+                'timestamp' => date('c'),
+                'expires' => null,
+                'reason' => '',
+                'active' => true,
+                'lastModified' => date('c'),
+                'tags' => [],
+                'pending' => true
+            ];
+            $data[] = $entry;
+
+            if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
+                $results[] = [
+                    'ip' => $ip,
+                    'success' => false,
+                    'message' => "Failed to write to {$safeJail}.blocklist.json.",
+                    'type' => 'error'
+                ];
+                continue;
+            }
+            $results[] = [
+                'ip' => $ip,
                 'success' => true,
-                'message' => "IP $ip is already active in {$jail}.blocklist.json."
+                'message' => "IP $ip was successfully added to {$safeJail}.blocklist.json.",
+                'type' => 'success'
             ];
         }
     }
-    unset($item);
 
-    // New block entry with optional fields for future use
-    $entry = [
-        'ip' => $ip,
-        'jail' => $jail,
-        'source' => $source,
-        'timestamp' => date('c'), // ISO 8601 format
-        'expires' => null,
-        'reason' => '',
-        'active' => true,
-        'lastModified' => date('c'),
-        'tags' => [],
-        'pending' => true
-    ];
-
-    $data[] = $entry;
-
-    // Save updated blocklist
-    if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
-        return [
-            'success' => false,
-            'message' => "Failed to write to $jail.blocklist.json."
-        ];
+    // Bei nur einem Ergebnis flach zurückgeben
+    if (count($results) === 1) {
+        return $results[0];
     }
 
     return [
         'success' => true,
-        'message' => "IP $ip was successfully added to {$jail}.blocklist.json."
+        'message' => count($results) . ' IP(s) processed.',
+        'details' => $results,
+        'type' => 'success'
     ];
 }
