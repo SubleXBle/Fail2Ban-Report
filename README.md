@@ -7,13 +7,13 @@ A simple and clean web-based dashboard to turn your daily Fail2Ban logs into sea
 
 🔐 Security Notice
 
-> **Current Status:**  
-Fail2Ban-Report currently manages bans and unbans via **UFW** as a safe **intermediate solution**.  
-It does **not yet** directly modify Fail2Ban jails or existing fail2ban configurations.
+**Current Status:**  
+Fail2Ban-Report currently manages bans and unbans through **UFW**, serving as a safe **intermediate solution**.  
+It does **not** directly modify Fail2Ban jails or change existing fail2ban configurations.
 
-> **Future Direction:**  
-The goal is to support **direct management of Fail2Ban jails** in upcoming versions — including user-controlled bans and unbans per jail.  
-To ensure full control and auditability, all manual ban actions are already tracked in a structured `*.blocklist.json`, which will later serve as the trusted source for persistent and reviewable ban state.
+**Future Direction:**  
+A potential long-term enhancement could include **direct interaction with Fail2Ban jails** — for example, user-controlled bans and unbans per jail.  
+The existing structured `*.blocklist.json` format is already designed to support this, ensuring that any future manual ban management can remain "persistent", reviewable, and fully auditable.
  
 Please read the [Installation Instructions](Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
 > still a little experimental feature : Use the Installer ![Installer Setup Documentation](installer-setup.md) It would be great if you tell me if the installer worked for your needs.
@@ -154,9 +154,10 @@ This is especially useful if you want to manually patch or update individual fil
 ### 🔥 Active Defense
 - ✅ Manual IP blocking via UI in UFW 
 - ✅ IP reputation lookup via AbuseIPDB
+- ✅ Bulk blocking of multiple IPs
+- ✅ Shows warnings/critical states threshold for Bans/Minute/Jail (setable in config)
 - 🧩 Support for nftables, firewalld
 - 🧩 full integration with fail2ban jails for block/unblock actions
-- ⏳ Bulk blocking of multiple IPs
 - ⏳ Optional automatic blocking based on patterns or thresholds
 - ⏳ Integration with external services (e.g. AbuseIPDB reporting)
 
@@ -195,6 +196,22 @@ Pull requests, feature ideas and bug reports are very welcome!
 
 > 💡 “Wouldn’t it be cool if it could also do XYZ?”  
 > Absolutely — I’m happy to hear your ideas.
+
+---
+
+## ✅ What It Is
+- A **read-only + action-enabled** web dashboard for Fail2Ban events  
+- A tool to **visualize** bans/unbans and **manually** manage blocked IPs  
+- A **log parser + JSON generator** that works alongside your existing Fail2Ban setup  
+- A way to **sync a persistent blocklist** with your firewall (currently **UFW only**)  
+- Designed for **sysadmins** who want quick insights without SSH-ing into the server  
+
+## ❌ What It Is Not
+- ❌ A replacement for **Fail2Ban** itself (it depends on Fail2Ban)  
+- ❌ A real-time IDS/IPS (data updates depend on log parsing intervals)  
+- ❌ A universal firewall manager (no native support for iptables/nftables, etc. — yet)  
+- ❌ A tool for **automatic** jail management (manual actions only for now)  
+- ❌ A heavy analytics platform — it’s lightweight and log-driven by design  
 
 ---
 
