@@ -198,11 +198,6 @@ Pull requests, feature ideas and bug reports are very welcome!
 
 ---
 
-## 🧪 Experimental
-- 🧪 [there is an highly experimental feature for using fail2ban instead of UFW.](using-Fail2Ban-firewall-update.md) (⚠️ not recommended)
-
----
-
 ## 📄 License
 
 This project is licensed under the **GPLv3**.  
