@@ -1,5 +1,80 @@
 # changelog
 
+## Changes made for V 0.3.3 (QoL Update)
+
+- **Warning System and Pending Status Indicators**
+  - `config.ini`: Added new `[Warnings]` section to configure thresholds for warning and critical levels (Events per minute per jail).
+  - `includes/warnings.php`: New backend script that scans the latest event log for jails exceeding defined thresholds.
+  - `assets/js/warnings.js`: New JavaScript file to fetch warning data and render status indicators in the header.
+  - `includes/header.php`: Updated to include warning and critical indicators (colored dots and summary).
+  - `assets/css/style.css`: Added "Warning Dots" section to style the new header indicators.
+  - `includes/block-ip.php`: Now writes a `pending: true` flag when an IP is manually blocked.
+  - `includes/unblock-ip.php`: Sets `pending: true` when an IP is manually unblocked.
+  - `firewall-update.sh`: Automatically sets `pending: false` for processed entries during block/unblock operations.
+  - `assets/js/blocklist-stats.js`: Updated to display pending entries for both block and unblock actions.
+
+
+### Changelog: Multi-Selection UI and Backend Handling for Ban and Report Actions
+
+### User Interface & Frontend Logic
+- **`assets/js/jsonreader.js`**  
+  - Changed from action buttons per row to checkboxes for multi-selection of IPs.  
+  - Updated rendering logic to support checkbox inputs and bulk selection filtering.
+
+- **`assets/js/action.js`**  
+  - Listens on new "Ban" and "Report" buttons instead of old "Action!" buttons.  
+  - Collects selected checkbox data and passes arrays of IPs and jails to action collector.
+
+- **`index.php`**  
+  - Replaced old checkboxes/buttons with dedicated "Ban" and "Report" buttons for bulk actions.
+
+- **`assets/js/action-collector.js`**  
+  - Refactored to accept arrays of IPs and corresponding jails for ban or report actions.  
+  - Sends POST requests with multiple IPs to backend PHP endpoints.  
+  - Displays notifications for each action with success/info/error styling.
+
+- **`assets/js/notifications.js`** *(new)*  
+  - Dedicated notification handling for displaying colored messages (success/info/error).  
+  - Extracted from previous action.js notification code.
+
+- **`includes/header.php`**  
+  - Included `notifications.js` for notification display support.
+
+### Backend Logic and API
+- **`includes/actions/action_ban-ip.php`**  
+  - Modified to accept arrays of IPs in POST data.  
+  - Calls `blockIp()` for each IP separately, aggregates results.  
+  - Returns combined messages with per-IP success, info, or error details.
+
+- **`includes/block-ip.php`**  
+  - Updated `blockIp()` function to accept either single IP or array of IPs.  
+  - Reads and writes jail-specific blocklist JSON files (e.g. `ssh.blocklist.json`).  
+  - Returns detailed results including a new `type` field (`success`, `info`, `error`) for better UI feedback.  
+  - Differentiates already blocked IPs (info) vs newly blocked IPs (success).
+
+
+- **`includes/actions/action_report-ip.php`**  
+  - Refactored to support multi-IP reports while sending individual requests internally for each IP and each report service.  
+  - Added API-friendly delay (`usleep(500000)`) between requests to avoid rate limits.  
+  - Improved aggregation of results and messages with detailed per-IP, per-service data and overall success determination.  
+  - Outputs combined JSON response with structured `results` array for frontend consumption.
+
+- **`includes/actions/reports/abuseipdb.php`**  
+  - No structural changes, but behavior benefits from backend delay to reduce API call frequency.  
+  - Provides detailed report counts and dynamic message types (success, info, error) based on abuse report counts.
+
+- **`includes/actions/reports/ipinfo.php`**  
+  - New report integration for IPInfo API, fetching geolocation and network metadata for queried IPs.  
+  - Returns informative messages including hostname, location (city, region, country), organization, and other IP details.  
+  - Handles API errors and missing keys gracefully, providing clear error messages in JSON format.  
+  - Used alongside AbuseIPDB for richer combined IP intelligence reports.  
+
+
+- Improved error handling and message formatting for multi-IP operations.
+
+---
+
+
 ## Changes made for V 0.3.2 (improvements)
 > This update brings several improvements — blocklists are now separated by jail, marking another step towards better Fail2Ban integration.  
 > Additionally, many new helpful statistics have been added to the header, along with a new jail filter in the blocklist overview.  

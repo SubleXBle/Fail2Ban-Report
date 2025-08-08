@@ -1,22 +1,25 @@
-// public/js/action-collector.js
-
 /**
- * Collects selected actions for an IP and sends requests to backend PHP action handlers.
- * Assumes each action corresponds to an action_{name}-ip.php endpoint in includes/actions/.
+ * Collects selected IPs and sends the chosen action request(s) to backend PHP action handlers.
  *
- * @param {string} ip - The IP address to act upon.
- * @param {string} jail - Optional jail/context name.
+ * @param {string|string[]} ips - Single IP or array of IPs.
+ * @param {string} action - Action, e.g. 'ban' or 'report'.
+ * @param {string|string[]} [jails] - Optional jail or array of jails matching ips.
  */
-function collectAndExecuteActions(ip, jail = '') {
-  const selectedActions = Array.from(document.querySelectorAll('input[name="actions"]:checked'))
-    .map(input => input.value);
+function collectAndExecuteActions(ips, action, jails = []) {
+  if (!Array.isArray(ips)) {
+    ips = [ips];
+  }
+  if (!Array.isArray(jails)) {
+    jails = [jails];
+  }
 
-  if (selectedActions.length === 0) {
-    showNotification("Please select at least one action.", "info");
+  if (ips.length === 0) {
+    showNotification("Please select at least one IP.", "info");
     return;
   }
 
-  selectedActions.forEach(action => {
+  ips.forEach((ip, index) => {
+    const jail = jails[index] || '';
     const scriptUrl = `includes/actions/action_${action}-ip.php`;
 
     const params = { ip };
@@ -24,55 +27,22 @@ function collectAndExecuteActions(ip, jail = '') {
 
     fetch(scriptUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams(params)
     })
     .then(res => res.json())
     .then(data => {
-  const prefix = `[${action.toUpperCase()}] `;
-  const message = data.message || 'No message returned.';
-  let type;
-
-  // check fo type
-  if (data.type) {
-    type = data.type; // from backend
-  } else {
-    // fallback:
-    type = data.success ? 'success' : 'error';
-  }
-
-  showNotification(prefix + message, type);
-})
-
-
+      const prefix = `[${action.toUpperCase()}] `;
+      const message = data.message || 'No message returned.';
+      const type = data.type || (data.success ? 'success' : 'error');
+      // when Notification - display 10 Seconds
+      const duration = (action === 'report') ? 10000 : 5000;
+      showNotification(prefix + message, type, duration);
+    })
     .catch(err => {
       const errorMsg = `[${action.toUpperCase()}] Error processing IP ${ip}: ${err}`;
       showNotification(errorMsg, "error");
       console.error(errorMsg);
     });
   });
-}
-
-/**
- * Shows a toast-style notification in the page.
- *
- * @param {string} message - The text to show in the notification.
- * @param {string} type - One of "success", "error", or "info" (defaults to "info").
- */
-function showNotification(message, type = "info") {
-  const container = document.getElementById('notification-container');
-  if (!container) return;
-
-  const note = document.createElement('div');
-  note.className = 'notification ' + type; // CSS Klassen wie notification success/error/info
-
-  note.innerText = message;
-  container.appendChild(note);
-
-  // Remove notification after 5 seconds
-  setTimeout(() => {
-    note.remove();
-  }, 5000);
 }

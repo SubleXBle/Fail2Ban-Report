@@ -1,7 +1,7 @@
 <?php include ('includes/list-files.php'); ?>
 <?php include 'includes/header.php'; ?>
 
-  <button class="siterel" onclick="location.href=location.pathname" title="! reset and reload !">↻</button>
+  <button class="button-reset" onclick="location.href=location.pathname" title="! reset and reload !">↻</button>
 
   <label for="dateSelect">Select Date:</label>
   <select id="dateSelect"></select>
@@ -19,8 +19,8 @@
   <label for="ipFilter">IP contains:</label>
   <input type="text" id="ipFilter" placeholder="e.g. 192.168" />
 
-  <label><span title="Check to Block IPs with the Action! Button to it's blocklist"><input type="checkbox" name="actions" value="ban"><small>Ban IP</span></small></label>
-  <label><span title="AbuseIPDB Information on how often an IP was reported"><input type="checkbox" name="actions" value="report"><small>Info </span></small></label>
+  <button class="button-reset" id="banSelectedBtn">Ban</button>
+  <button class="button-reset" id="reportSelectedBtn">Info</button>
 
   <button id="openBlocklistBtn">Edit Blocklist</button>
 

@@ -58,6 +58,7 @@ function unblockIp($ip, $jail) {
             }
 
             $item['active'] = false;
+            $item['pending'] = true;
             $item['lastModified'] = date('c');
             $found = true;
             break;

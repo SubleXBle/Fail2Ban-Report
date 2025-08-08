@@ -1,4 +1,4 @@
-/* Dokument Styles */
+/* Document Styles */
 body {
       background-color: #111;
       color: #eee;
@@ -87,7 +87,7 @@ tr:nth-child(even) {
     }
 /* Styles for Action Buttons */
 .action-btn {
-  background-color: #b8860b; /* dark Gold */
+  background-color: #b8860b; /* dark gold */
   color: #111;
   border: none;
   padding: 5px 8px;
@@ -100,7 +100,7 @@ tr:nth-child(even) {
 
 .action-btn:hover,
 .action-btn:focus {
-  background-color: #ffd700; /* light Gold when Hover */
+  background-color: #ffd700; /* light gold on hover */
   color: #000;
   outline: none;
   box-shadow: 0 0 10px #ffd700;
@@ -218,8 +218,8 @@ tr:nth-child(even) {
   transition: color 0.3s ease;
 }
 
-.close-btn:hover,
-.close-btn:focus {
+close-btn:hover,
+close-btn:focus {
   color: #ffd54f;
   outline: none;
 }
@@ -259,7 +259,7 @@ tr:nth-child(even) {
 
 #reloadBlocklistBtn:hover,
 #reloadBlocklistBtn:focus {
-  background-color: #218838; /* dark green on Hover */
+  background-color: #218838; /* dark green on hover */
   box-shadow:
     0 0 8px 2px rgba(40, 167, 69, 0.8),
     0 0 15px 4px rgba(40, 167, 69, 0.5);
@@ -289,9 +289,9 @@ tr:nth-child(even) {
   border: 0;
 }
 /* Checkboxes  */
-/* Hide original Checkbox */
+/* Hide original checkbox */
 input[type="checkbox"] {
-  appearance: none; /* Firefox and modern Browsers */
+  appearance: none; /* Firefox and modern browsers */
   -webkit-appearance: none; /* Safari/Chrome */
   -moz-appearance: none; /* Firefox */
   width: 20px;
@@ -306,14 +306,14 @@ input[type="checkbox"] {
   transition: background 0.3s, border-color 0.3s;
 }
 
-/* Style for Checked */
+/* Style for checked state */
 input[type="checkbox"]:checked {
   background-color: #d4af37;
   border-color: #d4af37;
   box-shadow: 0 0 5px #d4af37aa;
 }
 
-/* Black Check */
+/* Black check mark */
 input[type="checkbox"]:checked::after {
   content: "";
   position: absolute;
@@ -326,12 +326,12 @@ input[type="checkbox"]:checked::after {
   transform: rotate(45deg);
 }
 
-/* Hover  */
+/* Hover state */
 input[type="checkbox"]:hover {
   border-color: #d4af37;
 }
 
-/* Blocklist Button */
+/* Blocklist button */
 #openBlocklistBtn {
   background-color: #d4af37;
   color: black;
@@ -384,7 +384,7 @@ input[type="checkbox"]:hover {
   outline: none;
 }
 
-/* Reset Button Style for Blocklist-Overlay  */
+/* Reset button style for blocklist overlay  */
 
 .button-reset {
   background-color: #f9da5f;
@@ -398,12 +398,12 @@ input[type="checkbox"]:hover {
 }
 
 .button-reset:hover {
-  background-color: #f4cd3c; /* little darker on Hover */
+  background-color: #f4cd3c; /* slightly darker on hover */
 }
 
-/* Jailfilter in Blocklist */
+/* Jail filter in blocklist */
 
-/* Jail Filter Button */
+/* Jail filter button */
 #blocklistJailFilterBtn {
   background-color: #333;
   color: #d4af37;
@@ -422,7 +422,7 @@ input[type="checkbox"]:hover {
   outline: none;
 }
 
-/* Jail Filter Overlay */
+/* Jail filter overlay */
 #blocklistJailFilterOverlay {
   position: absolute;
   background-color: #222;
@@ -432,14 +432,14 @@ input[type="checkbox"]:hover {
   max-height: 200px;
   width: 180px;
   overflow-y: auto;
-  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4); /* golden shaddow */
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4); /* golden shadow */
   z-index: 1100;
   font-size: 0.9rem;
   color: #eee;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Checkbox Labels for Overlay */
+/* Checkbox labels for overlay */
 #blocklistJailFilterContainer label {
   display: flex;
   align-items: center;
@@ -457,7 +457,7 @@ input[type="checkbox"]:hover {
   accent-color: #d4af37;
 }
 
-/* Scrollbar Styling (modern Browser) */
+/* Scrollbar styling (modern browsers) */
 #blocklistJailFilterOverlay::-webkit-scrollbar {
   width: 8px;
 }
@@ -471,19 +471,19 @@ input[type="checkbox"]:hover {
   border-radius: 4px;
 }
 
-/* Hide Overlay */
+/* Hide overlay */
 .hidden {
   display: none;
 }
 
-/* Blocklist Stats */
+/* Blocklist stats */
 
 #blocklist-stats-container {
   display: grid;
   grid-template-rows: repeat(3, auto);
   grid-auto-flow: column;
-  gap: 0.1rem 0.5rem; /* vertical and hoizontal spacer */
-  max-width: 600px; /* max-witdth for blocklists */
+  gap: 0.1rem 0.5rem; /* vertical and horizontal spacer */
+  max-width: 600px; /* max-width for blocklists */
   font-size: 0.9rem;
   font-family: Arial, sans-serif;
   color: #aaa;
@@ -493,7 +493,7 @@ input[type="checkbox"]:hover {
 }
 
 #blocklist-stats-container div {
-  white-space: nowrap; /* dont break text */
+  white-space: nowrap; /* do not break text */
   font-size: 0.9rem;
   font-family: Arial, sans-serif;
   color: #aaa;
@@ -508,4 +508,52 @@ input[type="checkbox"]:hover {
   font-family: Arial, sans-serif;
   color: #aaa;
   font-size: 0.9rem;
+}
+
+/* Warning Dots */
+/* Container for the Fail2Ban status indicators */
+.fail2ban-status {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 0.95em;  /* adjust font size here */
+  /* color: #333;   Optional: set text color here */
+}
+
+/* Dot (emoji) representation */
+.status-dot {
+  opacity: 1;
+  filter: grayscale(0%);
+  transition: all 0.3s ease;
+  /* color: inherit;   Dot color inherits from container or can be set here */
+}
+
+/* When no warning/critical present */
+.status-dot.disabled {
+  opacity: 0.3;
+  filter: grayscale(100%);
+  /* color: #999;   Optional: set gray tone for disabled dots here */
+}
+
+/* Text next to the dot */
+.status-label {
+  margin-left: 4px;
+  vertical-align: middle;
+  white-space: pre-line;
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+/* Individual status line (Warn / Crit) */
+#fail2ban-warning-status,
+#fail2ban-critical-status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+/* Main container */
+#fail2ban-alerts-container {
+  display: flex;
+  flex-direction: column;
 }

@@ -63,13 +63,36 @@ if ! command -v git &>/dev/null; then
   fi
 else
   # git is installed, proceed with clone or pull
-  if [ ! -d "$TARGET_DIR" ]; then
+
+  if [ -d "$TARGET_DIR" ]; then
+    if [ -d "$TARGET_DIR/.git" ]; then
+      echo -e "${BLUE}Repository already exists. Pulling latest changes...${NORMAL}"
+      cd "$TARGET_DIR" || { echo -e "${RED}Cannot change directory to $TARGET_DIR${NORMAL}"; exit 1; }
+      git pull origin "$BRANCH_NAME"
+    else
+      echo -e "${YELLOW}$TARGET_DIR exists but is not a git repository.${NORMAL}"
+
+      # Check if remote repo reachable
+      if git ls-remote "$REPO_URL" &>/dev/null; then
+        read -rp "Do you want to delete $TARGET_DIR and clone fresh? (Y/N): " yn
+        yn=${yn,,}
+        if [[ "$yn" == "y" ]]; then
+          rm -rf "$TARGET_DIR"
+          echo -e "${BLUE}Cloning Fail2Ban-Report repository into $TARGET_DIR...${NORMAL}"
+          git clone -b "$BRANCH_NAME" "$REPO_URL" "$TARGET_DIR"
+        else
+          echo -e "${RED}Installation aborted by user.${NORMAL}"
+          exit 1
+        fi
+      else
+        echo -e "${RED}Cannot reach remote repository at $REPO_URL.${NORMAL}"
+        echo -e "${RED}Please check your internet connection or fix $TARGET_DIR manually.${NORMAL}"
+        exit 1
+      fi
+    fi
+  else
     echo -e "${YELLOW}Cloning Fail2Ban-Report repository into $TARGET_DIR...${NORMAL}"
     git clone -b "$BRANCH_NAME" "$REPO_URL" "$TARGET_DIR"
-  else
-    echo -e "${BLUE}Repository already exists. Pulling latest changes...${NORMAL}"
-    cd "$TARGET_DIR" || { echo -e "${RED}Cannot change directory to $TARGET_DIR${NORMAL}"; exit 1; }
-    git pull origin "$BRANCH_NAME"
   fi
 fi
 

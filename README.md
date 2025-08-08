@@ -1,38 +1,58 @@
 # Fail2Ban-Report
-> Beta 3.2 | Version 0.3.2
+> Beta 3.3 | Version 0.3.3
 
-A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
+> A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
+
+**Integration**
+>Designed for easy integration on a wide range of Linux systems — from small Raspberry Pis to modest business setups — though it’s not (yet) targeted at large-scale enterprise environments.
+Flexibility comes from the two backend shell scripts, which you can adapt to your specific environment or log sources to provide the JSON data the web interface needs (daily JSON event files).
 
 🛡️ **Note**: This tool is a visualization and management layer — it does **not** replace proper intrusion detection or access control. Deploy it behind IP restrictions or HTTP authentication.
 
 🔐 Security Notice
 
-> **Current Status:**  
-Fail2Ban-Report currently manages bans and unbans via **UFW** as a safe **intermediate solution**.  
-It does **not yet** directly modify Fail2Ban jails or existing fail2ban configurations.
+**Current Status:**  
+> Fail2Ban-Report currently manages bans and unbans through **UFW**, serving as a safe **intermediate solution**.  
+It does **not** directly modify Fail2Ban jails or change existing fail2ban configurations.
 
-> **Future Direction:**  
-The goal is to support **direct management of Fail2Ban jails** in upcoming versions — including user-controlled bans and unbans per jail.  
-To ensure full control and auditability, all manual ban actions are already tracked in a structured `blocklist.json`, which will later serve as the trusted source for persistent and reviewable ban state.
- 
+**Future Direction:**  
+> A potential long-term enhancement could include **direct interaction with Fail2Ban jails** — for example, user-controlled bans and unbans per jail.  
+The existing structured `*.blocklist.json` format is already designed to support this, ensuring that any future manual ban management can remain "persistent", reviewable, and fully auditable.
+
 Please read the [Installation Instructions](Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
 > still a little experimental feature : Use the Installer ![Installer Setup Documentation](installer-setup.md) It would be great if you tell me if the installer worked for your needs.
 
 ---
 
 ## 📚 What It Does
-Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewable via a web dashboard. It provides optional tools to:
+Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports viewable via a responsive web dashboard.  
+It provides optional tools to:  
 
-- Visualize ban and unban events
-- Interact with IPs (e.g., manually block or unblock)
-- Maintain a persistent blocklist.json
-- Sync that list with your system firewall using ufw (support for other firewalls or direct communication with Fail2Ban jails is not yet implemented)
+- 📊 Visualize **ban** and **unban** events, including per-jail statistics  
+- ⚡ Interact with IPs (e.g., manually block, unblock, or report to external services)  
+- 📂 Maintain **jail-specific** persistent blocklists (JSON) with `active` and `pending` status  
+- 🔄 Sync those lists with your system firewall using **ufw**  
+- 🚨 Show **warning indicators** when ban rates exceed configurable thresholds  
 
-## 🧱 Architecture overview:
+> **Note:** Direct integration with other firewalls or native Fail2Ban jail commands is not yet implemented.
 
-- Backend Shell Scripts: Parse logs, generate JSON files, and update UFW rules based on blocklist.json
-- Frontend Web Interface: Visualizes data and offers action controls
-- JSON Blocklist: Stores manually blocked IPs marked with active=true
+---
+
+## 🧱 Architecture Overview
+- **Backend Shell Scripts**:  
+  - Parse logs and generate daily JSON event files  
+  - Maintain and update `*.blocklist.json`  
+  - Apply or remove firewall rules based on blocklist entries (`ufw`)  
+
+- **Frontend Web Interface**:  
+  - Displays event timelines, statistics, and per-jail blocklists  
+  - Allows **multi-selection** for bulk ban/report actions  
+  - Shows **pending status** for unprocessed manual actions  
+  - Displays real-time warning indicators  
+
+- **JSON Blocklists**:  
+  - Stored per jail  
+  - Contain IP entries with metadata (`active`, `pending`, timestamps, jail name)  
 
 ---
 
@@ -58,32 +78,32 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
 
 ---
 
-## 🆕 What's New in V 0.3.2
+## 🆕 What's New in V 0.3.3 (QoL Update)
+### ⚠️ Warning System and Pending Status Indicators
+- 🚨 New [Warnings] section in .config to configure warning & critical thresholds (events per minute per jail) in format warning:critical (e.g: 20:50).
+- 👀 warning & critical status indicators (colored dots) in the header for quick overview.
+- ⏳ Manual block/unblock actions now mark IPs as pending until processed by firewall-update.
+- 📊 Pending entries are now visible in blocklist stats for better tracking.
 
-### 🧱 New Blocklist Logic
-- 🔁 Blocking an IP address now stores it in a **jail-specific blocklist** (`blocklist["jailname"][]`) instead of one global list.
-- 🔍 Improves clarity and allows easier tracking of blocked IPs **per jail** as it is a step for better fail2ban integration.
+### ✔️ Multi-Selection UI and Bulk Actions for Ban & Report
+- ✅ Switched from per-row action buttons to checkbox multi-selection for IPs.
+- 📋 New dedicated “Ban” and “Info” buttons for bulk processing.
+- 🔄 Frontend updated to handle and display results for multiple IP actions simultaneously.
+- 🔔 New notification system for success/info/error messages on each action.
 
-### 📊 New Statistics
-- 📅 The Fail2Ban stats panel now includes:
-  - ✅ **Today’s** bans & unbans (as before)
-  - 🕓 **Yesterday**
-  - 📈 **Last 7 Days**
-  - 📊 **Last 30 Days**
-
-### 🧩 Per-Jail Blocklist Display
-- 🧾 Each jail now displays its own **blocklist section** with:
-  - 🔒 Active bans
-  - ⏳ Pending entries
-- 🔄 Auto-refresh every **60 seconds**. for Jail-Stats
+### 🛠 Backend Improvements & New IP Reporting
+- 🔄 Backend now accept arrays of IPs for ban and report actions, with detailed aggregated feedback.
+- 🆕 Added IPInfo API integration alongside AbuseIPDB for richer geolocation and network info.
+- ⏲️ Built-in delay between report requests to avoid API rate limits.
+- ⚙️ Improved error handling and user feedback for multi-IP operations.
 
 ---
 
 ### ⚠️ Upgrade Notice
 
-If you're upgrading from an existing installation:
+If you're upgrading from an existing installation : pre 0.3.2 and also from 0.3.2
 
-- ⚠️ **The new blocklist format is not compatible with the old `blocklist.json`.**
+- ⚠️ **The new blocklist format is not compatible with the old `blocklist.json`.** and got new field `pending` is in json since 0.3.3
 - 🧹 To ensure a clean transition and avoid orphaned firewall entries, follow these steps:
 
   1. **Empty your current blocklist** via the **Unblock** buttons in the UI.
@@ -95,42 +115,6 @@ If you're upgrading from an existing installation:
 - 🛠️ _Optional_ : Run the `installer.sh` again to get a fresh setup.
 
 > This ensures no leftover blocks remain in your firewall from the previous system.
-
-
-### 🔄 Updated and Added Files in v0.3.2
-
-#### 🗂️ Backend (PHP / Shell)
-
-- `includes/block-ip.php`  
-  → Refactored to support jail-specific blocklists
-
-- `includes/unblock-ip.php`  
-  → Now handles unblocking from jail-based lists
-
-- `includes/list-files.php`  
-  → Modified to read multiple jail-specific blocklists
-
-- `includes/footer.php`  
-  → Includes references to new JS files
-
-- `includes/fail2ban-logstats.php`  
-  → Extended to calculate aggregate statistics (Today, Yesterday, Last 7/30 Days)
-
-- `firewall-update.sh`  
-  → Now processes `blocklist.json` with jail-based structure:  
-  `{ "sshd": [...], "apache-auth": [...] }`
-
-- `assets/css/style.css`  
-  → added the new stuff (i know it is still a mess)
-  
-
-#### 🆕 New Files (JS)
-
-- `assets/js/blocklist-stats.js`  
-  → Displays per-jail "Active" and "Pending" IP statistics
-
-- `assets/js/fail2ban-logstats.js`  
-  → Displays time-based event statistics
 
 ---
 
@@ -153,7 +137,7 @@ This is especially useful if you want to manually patch or update individual fil
 - ✅ **File date filtering** fix to include today's JSON logs and ensure latest files are listed correctly.
 - ✅ **Blocklist Path on unblocking** fixed a possible bug that could lead to not finding the blocklist.json when unblocking from the Blocklist view.  
   → Hotfixed on 05.08.2025 at 13:10 (UTC+2) directly in latest
-=======
+- ✅ **Installer** should now ask if you want to delete and reclone repo when allready existing
 
 ---
 
@@ -168,15 +152,16 @@ This is especially useful if you want to manually patch or update individual fil
 ### 🔐 Security
 - ✅ Hardened `.htaccess` with best practices
 - ✅ add security layer between json and js
-- 🧩 moove `archive/` out of webdirectory
+- 🧩 move `archive/` out of webdirectory
 - ⏳ Further improvements (ongoing goal)
 
 ### 🔥 Active Defense
 - ✅ Manual IP blocking via UI in UFW 
 - ✅ IP reputation lookup via AbuseIPDB
+- ✅ Bulk blocking of multiple IPs
+- ✅ Shows warnings/critical states threshold for Bans/Minute/Jail (setable in config)
 - 🧩 Support for nftables, firewalld
 - 🧩 full integration with fail2ban jails for block/unblock actions
-- ⏳ Bulk blocking of multiple IPs
 - ⏳ Optional automatic blocking based on patterns or thresholds
 - ⏳ Integration with external services (e.g. AbuseIPDB reporting)
 
@@ -191,9 +176,10 @@ This is especially useful if you want to manually patch or update individual fil
 
 ## 🖼️ Screenshots
 
-![Main interface with log overview](assets/images/Main-List-032.png)  
-![Blocklist interface with unblock actions](assets/images/Block-List-032.png)
-![Result after banning an IP](assets/images/Message-Toast-032.png)
+![Main interface with log overview](assets/images/Main-List-033.png)  
+![Blocklist interface with unblock actions](assets/images/Block-List-033.png)
+![Result after banning an IP](assets/images/Message-Toast-033.png)
+![Result after Info](assets/images/Info-Msg-033.png)
 
 ---
 
@@ -201,6 +187,22 @@ This is especially useful if you want to manually patch or update individual fil
 👀 Want to try out the look & feel?
 There's a simple demo version available here – no backend, no real data:
 👉 https://suble.net/ 🔗
+
+---
+
+## ✅ What It Is
+- A **read-only + action-enabled** web dashboard for Fail2Ban events  
+- A tool to **visualize** bans/unbans and **manually** manage blocked IPs  
+- A **log parser + JSON generator** that works alongside your existing Fail2Ban setup  
+- A way to **sync a persistent blocklist** with your firewall (currently **UFW only**)  
+- Designed for **sysadmins** who want quick insights without SSH-ing into the server  
+
+## ❌ What It Is Not
+- ❌ A replacement for **Fail2Ban** itself (it depends on Fail2Ban)  
+- ❌ A real-time IDS/IPS (data updates depend on log parsing intervals)  
+- ❌ A universal firewall manager (no native support for iptables/nftables, etc. — yet)  
+- ❌ A tool for **automatic** jail management (manual actions only for now)  
+- ❌ A heavy analytics platform — it’s lightweight and log-driven by design  
 
 ---
 
@@ -217,10 +219,6 @@ Pull requests, feature ideas and bug reports are very welcome!
 
 ---
 
-## 🧪 Experimental
-- 🧪 [there is an highly experimental feature for using fail2ban instead of UFW.](using-Fail2Ban-firewall-update.md) (⚠️ not recommended)
-
----
 
 ## 📄 License
 

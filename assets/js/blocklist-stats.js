@@ -26,7 +26,7 @@ function renderBlocklistStats(stats) {
     const { active, pending } = stats[jail];
 
     const div = document.createElement("div");
-    div.innerHTML = `🔒 ${jail}: ${active} active / ${pending} pending`;
+    div.innerHTML = `🔒 ${jail}: 🟢 ${active} / 🟡${pending}`;
     container.appendChild(div);
   });
 }

@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # --- Configuration ---
-BLOCKLIST_DIR="/var/www/Fail2Ban-Report/archive"
+BLOCKLIST_DIR="/var/www/vhosts/suble.org/xbkupx/Fail2Ban-Report/archive"
 LOGFILE="/opt/Fail2Ban-Report/fail2ban_blocklist.log"
 LOGGING=false  # Set to true to enable logging
 
@@ -42,11 +42,18 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
   active_ips=$(jq -r '.[] | select(.active != false) | .ip' "$FILE")
   inactive_ips=$(jq -r '.[] | select(.active == false) | .ip' "$FILE")
 
-  # Block new IPs
+  # Block new IPs and update pending flag
   for ip in $active_ips; do
     if ! grep -qw "$ip" "$TMP_BLOCKED"; then
       log "Blocking IP: $ip"
-      ufw deny from "$ip"
+      if ufw deny from "$ip"; then
+        log "Blocked $ip successfully, updating pending flag"
+        # Update pending to false for this IP in JSON
+        tmp_file=$(mktemp)
+        jq --arg ip "$ip" 'map(if .ip == $ip then .pending = false else . end)' "$FILE" > "$tmp_file" && mv "$tmp_file" "$FILE"
+      else
+        log "Failed to block $ip via ufw"
+      fi
     fi
   done
 
