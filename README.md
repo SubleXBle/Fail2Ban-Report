@@ -83,7 +83,7 @@ Fail2Ban-Report parses your fail2ban.log and generates JSON-based reports viewab
 
 If you're upgrading from an existing installation : pre 0.3.2 and also from 0.3.2
 
-- ⚠️ **The new blocklist format is not compatible with the old `blocklist.json`.**
+- ⚠️ **The new blocklist format is not compatible with the old `blocklist.json`.** and got new field `pending` is in json since 0.3.3
 - 🧹 To ensure a clean transition and avoid orphaned firewall entries, follow these steps:
 
   1. **Empty your current blocklist** via the **Unblock** buttons in the UI.
