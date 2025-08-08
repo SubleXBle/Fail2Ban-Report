@@ -152,7 +152,7 @@ This is especially useful if you want to manually patch or update individual fil
 ### 🔐 Security
 - ✅ Hardened `.htaccess` with best practices
 - ✅ add security layer between json and js
-- 🧩 moove `archive/` out of webdirectory
+- 🧩 move `archive/` out of webdirectory
 - ⏳ Further improvements (ongoing goal)
 
 ### 🔥 Active Defense
