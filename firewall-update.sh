@@ -3,9 +3,9 @@
 set -euo pipefail
 
 # --- Configuration ---
-BLOCKLIST_DIR="/var/www/vhosts/suble.org/xbkupx/Fail2Ban-Report/archive"
-LOGFILE="/opt/Fail2Ban-Report/fail2ban_blocklist.log"
-LOGGING=false  # Set to true to enable logging
+BLOCKLIST_DIR="/set/pat/to/archive"
+LOGFILE="/var/log/Fail2Ban-Report.log"
+LOGGING=true  # Set to true to enable logging
 
 # --- Set PATH ---
 export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
@@ -38,6 +38,12 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
 
   log "Processing blocklist: $FILE"
 
+  # === LOCK START ===
+  LOCK_FILE="/tmp/$(basename "$FILE").lock"
+  exec 200>"$LOCK_FILE"
+  flock -x 200
+  log "Acquired lock for $FILE"
+
   # Extract active and inactive IPs
   active_ips=$(jq -r '.[] | select(.active != false) | .ip' "$FILE")
   inactive_ips=$(jq -r '.[] | select(.active == false) | .ip' "$FILE")
@@ -48,7 +54,6 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
       log "Blocking IP: $ip"
       if ufw deny from "$ip"; then
         log "Blocked $ip successfully, updating pending flag"
-        # Update pending to false for this IP in JSON
         tmp_file=$(mktemp)
         jq --arg ip "$ip" 'map(if .ip == $ip then .pending = false else . end)' "$FILE" > "$tmp_file" && mv "$tmp_file" "$FILE"
       else
@@ -59,7 +64,6 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
 
   # Remove UFW rules for inactive IPs
   for ip in $inactive_ips; do
-    # Reverse order to avoid shifting rule numbers
     mapfile -t rules < <(ufw status numbered | grep "$ip" | grep "DENY IN" | tac)
     for rule in "${rules[@]}"; do
       rule_number=$(echo "$rule" | awk -F'[][]' '{print $2}')
@@ -75,6 +79,11 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
   # Set ownership and permissions
   chown www-data:www-data "$FILE"
   chmod 644 "$FILE"
+
+  # === LOCK END ===
+  flock -u 200
+  log "Released lock for $FILE"
+
 done
 
 log "All blocklists processed successfully."
