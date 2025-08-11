@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # --- Configuration ---
-BLOCKLIST_DIR="/set/pat/to/archive"
+BLOCKLIST_DIR="/path/to/web/archive"
 LOGFILE="/var/log/Fail2Ban-Report.log"
 LOGGING=true  # Set to true to enable logging
 
@@ -36,13 +36,17 @@ ufw status numbered | grep "DENY IN" | awk '{print $3}' > "$TMP_BLOCKED" || true
 for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
   [ -e "$FILE" ] || continue  # skip if no files match
 
+  JAIL_NAME=$(basename "$FILE" .blocklist.json)
+  LOCKFILE="/tmp/${JAIL_NAME}.blocklist.lock"
+
   log "Processing blocklist: $FILE"
 
-  # === LOCK START ===
-  LOCK_FILE="/tmp/$(basename "$FILE").lock"
-  exec 200>"$LOCK_FILE"
-  flock -x 200
-  log "Acquired lock for $FILE"
+  # === Acquire lock ===
+  exec {lock_fd}>"$LOCKFILE"
+  if ! flock -x "$lock_fd"; then
+    log "ERROR: Could not acquire lock for $JAIL_NAME"
+    continue
+  fi
 
   # Extract active and inactive IPs
   active_ips=$(jq -r '.[] | select(.active != false) | .ip' "$FILE")
@@ -55,7 +59,8 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
       if ufw deny from "$ip"; then
         log "Blocked $ip successfully, updating pending flag"
         tmp_file=$(mktemp)
-        jq --arg ip "$ip" 'map(if .ip == $ip then .pending = false else . end)' "$FILE" > "$tmp_file" && mv "$tmp_file" "$FILE"
+        jq --arg ip "$ip" 'map(if .ip == $ip then .pending = false else . end)' "$FILE" > "$tmp_file" \
+          && mv "$tmp_file" "$FILE"
       else
         log "Failed to block $ip via ufw"
       fi
@@ -80,10 +85,9 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
   chown www-data:www-data "$FILE"
   chmod 644 "$FILE"
 
-  # === LOCK END ===
-  flock -u 200
-  log "Released lock for $FILE"
-
+  # === Release lock ===
+  flock -u "$lock_fd"
+  exec {lock_fd}>&-
 done
 
 log "All blocklists processed successfully."
