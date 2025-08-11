@@ -2,7 +2,7 @@
 
 ## Changes made for V 0.4.0
 
-Json Files should not loose Data anymore when several write processes trying to write the json file at the same time
+Json Files should not loose Data anymore when several write processes trying to write the json file at the same time.
 
 - `firewall-update.sh`: Added FLOCK to lock json when writing
 - `block-ip.php`: Added FLOCK to lock json when writing
