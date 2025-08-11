@@ -1,6 +1,6 @@
 <?php
 // Set correct path to your blocklist directory
-$blocklistDir = '/var/www/vhosts/suble.org/xbkupx/Fail2Ban-Report/archive/';
+$blocklistDir = dirname(__DIR__) . '/archive/';
 $stats = [];
 
 foreach (glob($blocklistDir . '*.blocklist.json') as $filepath) {
@@ -22,20 +22,13 @@ foreach (glob($blocklistDir . '*.blocklist.json') as $filepath) {
     $pending = 0;
 
     foreach ($entries as $entry) {
-    // Count pending entries (pending === true)
-    if (isset($entry['pending']) && $entry['pending'] === true) {
-        $pending++;
+        if (!isset($entry['active'])) continue;
+        if ($entry['active'] === true) {
+            $active++;
+        } else {
+            $pending++;
+        }
     }
-
-    // Count active entries only if not pending
-    if (
-        isset($entry['active']) && $entry['active'] === true &&
-        (!isset($entry['pending']) || $entry['pending'] === false)
-    ) {
-        $active++;
-    }
-   }
-
 
     // Store result
     $stats[$jail] = [
