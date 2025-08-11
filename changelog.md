@@ -7,6 +7,7 @@ Json Files should not loose Data anymore when several write processes trying to 
 - `firewall-update.sh`: Added FLOCK to lock json when writing
 - `block-ip.php`: Added FLOCK to lock json when writing
 - `unblock-ip.php`: Added FLOCK to lock json when writing
+- `blocklist-stats.php`: Shows now more correct States of active and pending when blocking and unblocking
 
 
 
