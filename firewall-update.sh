@@ -3,9 +3,9 @@
 set -euo pipefail
 
 # --- Configuration ---
-BLOCKLIST_DIR="/var/www/vhosts/suble.org/xbkupx/Fail2Ban-Report/archive"
-LOGFILE="/opt/Fail2Ban-Report/fail2ban_blocklist.log"
-LOGGING=false  # Set to true to enable logging
+BLOCKLIST_DIR="/path/to/web/archive"
+LOGFILE="/var/log/Fail2Ban-Report.log"
+LOGGING=true  # Set to true to enable logging
 
 # --- Set PATH ---
 export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
@@ -36,7 +36,17 @@ ufw status numbered | grep "DENY IN" | awk '{print $3}' > "$TMP_BLOCKED" || true
 for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
   [ -e "$FILE" ] || continue  # skip if no files match
 
+  JAIL_NAME=$(basename "$FILE" .blocklist.json)
+  LOCKFILE="/tmp/${JAIL_NAME}.blocklist.lock"
+
   log "Processing blocklist: $FILE"
+
+  # === Acquire lock ===
+  exec {lock_fd}>"$LOCKFILE"
+  if ! flock -x "$lock_fd"; then
+    log "ERROR: Could not acquire lock for $JAIL_NAME"
+    continue
+  fi
 
   # Extract active and inactive IPs
   active_ips=$(jq -r '.[] | select(.active != false) | .ip' "$FILE")
@@ -48,9 +58,9 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
       log "Blocking IP: $ip"
       if ufw deny from "$ip"; then
         log "Blocked $ip successfully, updating pending flag"
-        # Update pending to false for this IP in JSON
         tmp_file=$(mktemp)
-        jq --arg ip "$ip" 'map(if .ip == $ip then .pending = false else . end)' "$FILE" > "$tmp_file" && mv "$tmp_file" "$FILE"
+        jq --arg ip "$ip" 'map(if .ip == $ip then .pending = false else . end)' "$FILE" > "$tmp_file" \
+          && mv "$tmp_file" "$FILE"
       else
         log "Failed to block $ip via ufw"
       fi
@@ -59,7 +69,6 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
 
   # Remove UFW rules for inactive IPs
   for ip in $inactive_ips; do
-    # Reverse order to avoid shifting rule numbers
     mapfile -t rules < <(ufw status numbered | grep "$ip" | grep "DENY IN" | tac)
     for rule in "${rules[@]}"; do
       rule_number=$(echo "$rule" | awk -F'[][]' '{print $2}')
@@ -75,6 +84,10 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
   # Set ownership and permissions
   chown www-data:www-data "$FILE"
   chmod 644 "$FILE"
+
+  # === Release lock ===
+  flock -u "$lock_fd"
+  exec {lock_fd}>&-
 done
 
 log "All blocklists processed successfully."

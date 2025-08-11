@@ -1,5 +1,5 @@
 # Fail2Ban-Report
-> Beta 3.3 | Version 0.3.3
+> Beta 3.4 | Version 0.3.4
 
 > A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
 
@@ -78,6 +78,16 @@ It provides optional tools to:
 
 ---
 
+## 🆕 Fix V 0.3.4
+Json Files should not loose Data anymore when several write processes trying to write the json file at the same time.
+
+- `firewall-update.sh`: Added FLOCK to lock json when writing
+- `block-ip.php`: Added FLOCK to lock json when writing
+- `unblock-ip.php`: Added FLOCK to lock json when writing
+
+just copy those 3 Files to apply the hotfix.
+
+
 ## 🆕 What's New in V 0.3.3 (QoL Update)
 ### ⚠️ Warning System and Pending Status Indicators
 - 🚨 New [Warnings] section in .config to configure warning & critical thresholds (events per minute per jail) in format warning:critical (e.g: 20:50).
@@ -138,6 +148,7 @@ This is especially useful if you want to manually patch or update individual fil
 - ✅ **Blocklist Path on unblocking** fixed a possible bug that could lead to not finding the blocklist.json when unblocking from the Blocklist view.  
   → Hotfixed on 05.08.2025 at 13:10 (UTC+2) directly in latest
 - ✅ **Installer** should now ask if you want to delete and reclone repo when allready existing
+- ✅ **Added FLOCK** to lock json files to not loose data when several write processes write at the same time
 
 ---
 
