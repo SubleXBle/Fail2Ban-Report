@@ -37,18 +37,43 @@ function blockIp($ips, $jail = 'unknown', $source = 'manual') {
         }
 
         $jsonFile = dirname(__DIR__, 1) . "/archive/{$safeJail}.blocklist.json";
+        $lockFile = "/tmp/{$safeJail}.blocklist.lock"; // same lock file name as shell script
 
+        // Open lock file
+        $lockHandle = fopen($lockFile, 'c');
+        if (!$lockHandle) {
+            $results[] = [
+                'ip' => $ip,
+                'success' => false,
+                'message' => "Unable to open lock file for {$safeJail}.",
+                'type' => 'error'
+            ];
+            continue;
+        }
+
+        // Acquire exclusive lock
+        if (!flock($lockHandle, LOCK_EX)) {
+            fclose($lockHandle);
+            $results[] = [
+                'ip' => $ip,
+                'success' => false,
+                'message' => "Could not acquire lock for {$safeJail}.",
+                'type' => 'error'
+            ];
+            continue;
+        }
+
+        // Load existing JSON
         $data = [];
-
         if (file_exists($jsonFile)) {
             $existing = file_get_contents($jsonFile);
             $data = json_decode($existing, true);
             if (!is_array($data)) {
-                $data = []; // fallback bei Dateibeschädigung
+                $data = []; // fallback if file is corrupted
             }
         }
 
-        // Prüfen, ob IP schon vorhanden und aktiv
+        // Check if IP already exists
         $found = false;
         foreach ($data as &$item) {
             if ($item['ip'] === $ip) {
@@ -57,6 +82,8 @@ function blockIp($ips, $jail = 'unknown', $source = 'manual') {
                     $item['active'] = true;
                     $item['lastModified'] = date('c');
                     if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
+                        flock($lockHandle, LOCK_UN);
+                        fclose($lockHandle);
                         $results[] = [
                             'ip' => $ip,
                             'success' => false,
@@ -65,6 +92,8 @@ function blockIp($ips, $jail = 'unknown', $source = 'manual') {
                         ];
                         continue 2;
                     }
+                    flock($lockHandle, LOCK_UN);
+                    fclose($lockHandle);
                     $results[] = [
                         'ip' => $ip,
                         'success' => true,
@@ -73,6 +102,8 @@ function blockIp($ips, $jail = 'unknown', $source = 'manual') {
                     ];
                     continue 2;
                 } else {
+                    flock($lockHandle, LOCK_UN);
+                    fclose($lockHandle);
                     $results[] = [
                         'ip' => $ip,
                         'success' => true,
@@ -85,7 +116,7 @@ function blockIp($ips, $jail = 'unknown', $source = 'manual') {
         }
         unset($item);
 
-        // Neu hinzufügen
+        // Add new entry if not found
         if (!$found) {
             $entry = [
                 'ip' => $ip,
@@ -102,6 +133,8 @@ function blockIp($ips, $jail = 'unknown', $source = 'manual') {
             $data[] = $entry;
 
             if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
+                flock($lockHandle, LOCK_UN);
+                fclose($lockHandle);
                 $results[] = [
                     'ip' => $ip,
                     'success' => false,
@@ -110,6 +143,9 @@ function blockIp($ips, $jail = 'unknown', $source = 'manual') {
                 ];
                 continue;
             }
+
+            flock($lockHandle, LOCK_UN);
+            fclose($lockHandle);
             $results[] = [
                 'ip' => $ip,
                 'success' => true,
@@ -119,7 +155,7 @@ function blockIp($ips, $jail = 'unknown', $source = 'manual') {
         }
     }
 
-    // Bei nur einem Ergebnis flach zurückgeben
+    // Flatten result if only one entry
     if (count($results) === 1) {
         return $results[0];
     }
