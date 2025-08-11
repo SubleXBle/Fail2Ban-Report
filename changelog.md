@@ -1,6 +1,6 @@
 # changelog
 
-## Changes made for V 0.4.0
+## Changes made for V 0.3.4
 
 Json Files should not loose Data anymore when several write processes trying to write the json file at the same time.
 
