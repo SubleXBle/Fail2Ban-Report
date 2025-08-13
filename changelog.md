@@ -31,7 +31,19 @@
 - Ownership and permission setting (`chown www-data:www-data`, `chmod 644`).
 - Logging format and verbosity remain compatible.
 
+### Small Changes for Statistics and Header
 
+small changes where made in the following files:
+- `header.php` **History** visual Changes
+- `fail2ban-logstats.php` **History** visual Changes
+- `fail2ban-logstats.js` **History** visual Changes
+- `index.php` **Sort** per IP
+- `style.css` several small changes
+
+
+
+
+### 
 
 ---
 
