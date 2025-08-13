@@ -32,7 +32,7 @@
 - Logging format and verbosity remain compatible.
 
 
-
+---
 
 ## Changes made for V 0.3.4 (Fix)
 
