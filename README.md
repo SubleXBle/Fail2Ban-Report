@@ -78,35 +78,11 @@ It provides optional tools to:
 
 ---
 
-## 🆕 Fix V 0.3.4
-Json Files should not loose Data anymore when several write processes trying to write the json file at the same time.
 
-- `firewall-update.sh`: Added FLOCK to lock json when writing
-- `block-ip.php`: Added FLOCK to lock json when writing
-- `unblock-ip.php`: Added FLOCK to lock json when writing
-- `blocklist-stats.php`: Shows now more correct States of active and pending when blocking and unblocking
-
-just copy those 4 Files to apply the fix.
+## 🆕 What's New in V 0.4.0
 
 
-## 🆕 What's New in V 0.3.3 (QoL Update)
-### ⚠️ Warning System and Pending Status Indicators
-- 🚨 New [Warnings] section in .config to configure warning & critical thresholds (events per minute per jail) in format warning:critical (e.g: 20:50).
-- 👀 warning & critical status indicators (colored dots) in the header for quick overview.
-- ⏳ Manual block/unblock actions now mark IPs as pending until processed by firewall-update.
-- 📊 Pending entries are now visible in blocklist stats for better tracking.
 
-### ✔️ Multi-Selection UI and Bulk Actions for Ban & Report
-- ✅ Switched from per-row action buttons to checkbox multi-selection for IPs.
-- 📋 New dedicated “Ban” and “Info” buttons for bulk processing.
-- 🔄 Frontend updated to handle and display results for multiple IP actions simultaneously.
-- 🔔 New notification system for success/info/error messages on each action.
-
-### 🛠 Backend Improvements & New IP Reporting
-- 🔄 Backend now accept arrays of IPs for ban and report actions, with detailed aggregated feedback.
-- 🆕 Added IPInfo API integration alongside AbuseIPDB for richer geolocation and network info.
-- ⏲️ Built-in delay between report requests to avoid API rate limits.
-- ⚙️ Improved error handling and user feedback for multi-IP operations.
 
 ---
 
