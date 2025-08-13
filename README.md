@@ -88,7 +88,7 @@ It provides optional tools to:
 - Safe unblocking with rule renumbering and reload after each deletion.
 - JSON updates and cleanup done once per jail, not per IP.
 - Core mechanisms, logging, and permissions unchanged.
-> this reduces the runtime aswell as the lock duration of a blocklist by a lot especially for ban events
+> This significantly reduces both the runtime and the lock duration of the blocklists, especially during ban events.
 
 ### 🖥️ UI & Statistics
 - Minor visual improvements in:
