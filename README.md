@@ -82,7 +82,24 @@ It provides optional tools to:
 
 ## 🆕 What's New in V 0.4.0
 
+### 🧱 Firewall & JSON
+- Optimized `firewall-update.sh` for faster batch processing of IPs.
+- Batch blocking per jail with a single `ufw reload`.
+- Safe unblocking with rule renumbering and reload after each deletion.
+- JSON updates and cleanup done once per jail, not per IP.
+- Core mechanisms, logging, and permissions unchanged.
 
+### 🖥️ UI & Statistics
+- Minor visual improvements in:
+  - `header.php`, `fail2ban-logstats.php`, `fail2ban-logstats.js`
+  - `index.php` (IP sorting)
+  - `style.css`
+
+### 🟡🔴 Warnings Feature
+- **IP Event Markers**: Highlights repeated events (yellow) and IPs in multiple jails (red).
+- **Sortable & Filterable Mark Column**: New column `Mark` with dropdown filter.
+- **Dynamic Filtering**: Markers update live with Action, Jail, IP, or Date filters.
+- Marker column placed between Action and IP, responsive layout preserved.
 
 
 ---
