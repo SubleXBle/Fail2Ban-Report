@@ -29,7 +29,7 @@
   <div>
     <h1>Fail2Ban-Report</h1>
     <h2>Let's catch the bad guys!</h2>
-    <div><span title="Beta 3.4"><small>Version : 0.3.4</small></span></div>
+    <div><span title="Beta 4.0"><small>Version : 0.4.0</small></span></div>
   </div>
 
 
@@ -45,26 +45,29 @@
     </div>
   </div>
 
+  <div class="fail2ban-alerts-container">
+    <div class="headhead">Top 3 Bans/Jails:</div>
+    <div id="fail2ban-top3-jails" class="toplist"></div>
+  </div>
 
   <div id="fail2ban-stats">
-    <div class="headhead">F2B Blocks/Unblocks Today:</div>
+    <div class="headhead">Fail2Ban Today:</div>
     <div>🚫 Bans: <span id="fail2ban-bans">--</span></div>
     <div>🟢 Unbans: <span id="fail2ban-unbans">--</span></div>
     <div>📊 Total: <span id="fail2ban-total">--</span></div>
   </div>
 
   <div class="history-stats">
-    <div class="headhead">F2B Blocks/Unblocks History:</div>
-    <div class="headstat">🕓 Yesterday: <span id="fail2ban-yesterday">--</span></div>
-    <div class="headstat">📅 Last 7: <span id="fail2ban-last7">--</span></div>
-    <div class="headstat">📆 Last 30: <span id="fail2ban-last30">--</span></div>
+    <div class="headhead">Fail2Ban History:</div>
+    <div class="headstat">🕓 Yesterd: <span id="fail2ban-yesterday">--</span></div>
+    <div class="headstat">📅 7 Days : <span id="fail2ban-last7">--</span></div>
+    <div class="headstat">📆 30 Days: <span id="fail2ban-last30">--</span></div>
   </div>
 
   <div id="blocklist-stats">
-  <div class="headhead">Fail2Ban-Report Jail-Overview:</div>
+  <div class="headhead">Fail2Ban-Report Jails:</div>
   <div id="blocklist-stats-container">
     <!-- JS render Jails here -->
   </div>
   </div>
-
 </div>
