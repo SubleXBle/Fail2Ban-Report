@@ -35,6 +35,9 @@
   <button class="button-reset" id="reportSelectedBtn">Info</button>
 
   <button id="openBlocklistBtn">Blocklist</button>
+
+  <button class="button-reset" onclick="copyFilteredToClipboard()">📋</button>
+
 </div>
 
 <div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
