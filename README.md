@@ -1,5 +1,5 @@
 # Fail2Ban-Report
-> Beta 3.4 | Version 0.3.4
+> Beta 4.0 | Version 0.4.0
 
 > A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
 
@@ -164,7 +164,6 @@ This is especially useful if you want to manually patch or update individual fil
 ### 🔐 Security
 - ✅ Hardened `.htaccess` with best practices
 - ✅ add security layer between json and js
-- 🧩 move `archive/` out of webdirectory
 - ⏳ Further improvements (ongoing goal)
 
 ### 🔥 Active Defense
@@ -173,17 +172,20 @@ This is especially useful if you want to manually patch or update individual fil
 - ✅ IP GeoLoc and Provider Data with IP-Info (optional)
 - ✅ Bulk blocking of multiple IPs
 - ✅ Shows warnings/critical states threshold for Bans/Minute/Jail (setable in config)
+- ✅ Shows warning states for Ips that are more than once on List
+- ✅ Shows critical states for IPs that are in more than one Jail in List
 - 🧩 Support for nftables, firewalld
-- 🧩 full integration with fail2ban jails for block/unblock actions
-- ⏳ Optional automatic blocking based on patterns or thresholds
-- ⏳ Integration with external services (e.g. AbuseIPDB reporting)
+- ⏳ LTG: Integration with external services (e.g. AbuseIPDB reporting)
+- ⏳ LTG: Integration with fail2ban-jails directly
 
 ### 🌿 User Interface
 - ⏳ Improve CSS and styling
 
 ## 👀 Outlook
-- 📦 The next major version will focus on security by mooving and restructuring the `archive/` folder layout.
-- 🐳 A Docker image is expected probably around version v0.5.x, following the restructuring.
+- 📦 Further Improvements & Security Enhancements
+  - Moving `archive/` to `/opt` makes little sense if `www-data` still needs access.
+  - Working on a solution to authorize changes made to JSON files via the web interface. 
+- 🐳 A Docker image is expected probably around version v0.5.x
 
 ---
 
