@@ -101,7 +101,7 @@ It provides optional tools to:
 - **Dynamic Filtering**: Markers update live with Action, Jail, IP, or Date filters.
 - Marker column placed between Action and IP, responsive layout preserved.
 
-## ✨ New Feature: Copy Filtered Data to Clipboard
+### ✨ New Feature: Copy Filtered Data to Clipboard
 
 - **Added** a new "Copy to Clipboard" button to export the currently **filtered table data**.
 - **Implemented** a dedicated JavaScript file `assets/js/table-export.js` for the copy functionality.
