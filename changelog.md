@@ -1,5 +1,39 @@
 # changelog
 
+## Changes made for V 0.4.0
+
+### Changelog – Optimized `firewall-update.sh` for faster processing, improving performance with large JSON files.
+
+#### Changed
+- **Batch blocking of IPs**
+  - Original: Loops through each active IP and runs `ufw deny from "$ip"` immediately if not already blocked.
+  - New: Collects all new active IPs per jail and executes `ufw deny from "$ip"` in one batch section before performing a single `ufw reload`.
+
+- **UFW reload behavior**
+  - Original: No explicit reload after blocking; relied on UFW to apply rules instantly.
+  - New: Explicit `ufw reload` after all block actions are done to ensure all deny rules are active before proceeding.
+
+- **Unblocking procedure**
+  - Original: For each inactive IP:
+    - Lists all matching UFW rules.
+    - Deletes them immediately without reload between rules.
+  - New: For each inactive IP:
+    - Performs `ufw status numbered` before deletion to ensure correct rule numbering.
+    - Deletes rules one-by-one **with reload after each deletion** to avoid numbering mismatches.
+
+- **JSON update timing**
+  - Original: Updates JSON and cleans inactive entries after processing each IP.
+  - New: Updates and cleans JSON **once per jail** after all block/unblock actions are completed.
+
+#### Unchanged
+- Locking mechanism using `/tmp/{jail}.blocklist.lock` remains identical.
+- Validation of prerequisites (`jq`, `ufw`).
+- Ownership and permission setting (`chown www-data:www-data`, `chmod 644`).
+- Logging format and verbosity remain compatible.
+
+
+
+
 ## Changes made for V 0.3.4 (Fix)
 
 Json Files should not loose Data anymore when several write processes trying to write the json file at the same time.
