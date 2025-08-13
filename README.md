@@ -101,6 +101,17 @@ It provides optional tools to:
 - **Dynamic Filtering**: Markers update live with Action, Jail, IP, or Date filters.
 - Marker column placed between Action and IP, responsive layout preserved.
 
+## ✨ New Feature: Copy Filtered Data to Clipboard
+
+- **Added** a new "Copy to Clipboard" button to export the currently **filtered table data**.
+- **Implemented** a dedicated JavaScript file `assets/js/table-export.js` for the copy functionality.
+- **Integration** with existing DataTables filtering logic to ensure only visible/filtered rows are copied.
+- **Output Format**: Tab-separated values (TSV) with all HTML tags removed for clean text export.
+- **User Feedback**: 
+  - Shows a warning if there’s no data to copy.
+  - Shows a success or error alert based on the clipboard operation result.
+
+
 
 ---
 
