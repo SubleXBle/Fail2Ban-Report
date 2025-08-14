@@ -1,5 +1,104 @@
 # changelog
 
+## Changes made for V 0.4.0
+
+### Optimized `firewall-update.sh` for faster processing, improving performance with large JSON files.
+
+#### Changed
+- **Batch blocking of IPs**
+  - Original: Loops through each active IP and runs `ufw deny from "$ip"` immediately if not already blocked.
+  - New: Collects all new active IPs per jail and executes `ufw deny from "$ip"` in one batch section before performing a single `ufw reload`.
+
+- **UFW reload behavior**
+  - Original: No explicit reload after blocking; relied on UFW to apply rules instantly.
+  - New: Explicit `ufw reload` after all block actions are done to ensure all deny rules are active before proceeding.
+
+- **Unblocking procedure**
+  - Original: For each inactive IP:
+    - Lists all matching UFW rules.
+    - Deletes them immediately without reload between rules.
+  - New: For each inactive IP:
+    - Performs `ufw status numbered` before deletion to ensure correct rule numbering.
+    - Deletes rules one-by-one **with reload after each deletion** to avoid numbering mismatches.
+
+- **JSON update timing**
+  - Original: Updates JSON and cleans inactive entries after processing each IP.
+  - New: Updates and cleans JSON **once per jail** after all block/unblock actions are completed.
+
+#### Unchanged
+- Locking mechanism using `/tmp/{jail}.blocklist.lock` remains identical.
+- Validation of prerequisites (`jq`, `ufw`).
+- Ownership and permission setting (`chown www-data:www-data`, `chmod 644`).
+- Logging format and verbosity remain compatible.
+
+### Small Changes for Statistics in Header
+
+small changes where made in the following files:
+- `header.php` **History** visual Changes
+- `fail2ban-logstats.php` **History** visual Changes
+- `fail2ban-logstats.js` **History** visual Changes
+- `index.php` **Sort** per IP
+- `style.css` several small changes
+
+### 🟡🔴 Warnings Feature - Changelog
+
+#### New Features
+- **IP Event Marker System**:  
+  - Highlights IPs appearing multiple times with the same event (`Ban`/`Unban`) in the current view.
+  - Highlights IPs present in multiple jails in the current view.
+  - Visual markers:
+    - 🟡 Yellow → Multiple same events
+    - 🔴 Red → Appears in multiple jails
+    - ⚪ Grey → No marker
+- **Sortable & Filterable 'Mark' Column**:  
+  - Added a new column `Mark` in the main result table.
+  - Column is fully sortable like other columns.
+  - Marker filter dropdown added to filter by marker type:
+    - All
+    - Yellow
+    - Red
+    - Yellow + Red
+    - None
+- **Dynamic Filtering**:
+  - Markers update in real-time when filters (`Action`, `Jail`, `IP`, `Date`) are changed.
+  - Table automatically updates to reflect filtered marker status.
+
+#### UI Enhancements
+- Marker column added between `Action` and `IP` for better visibility.
+- Marker filter dropdown integrated into existing filters, maintaining logical order.
+- Supports responsive layout using flexbox, keeping filters and buttons aligned.
+
+#### Implementation Notes
+- Marker calculation is based on the currently displayed dataset, not the full JSON.
+- No changes to backend JSON structure are required; marker is computed client-side.
+- Fully compatible with existing sort and filter system.
+
+
+### ✨ New Feature: Copy Filtered Data to Clipboard
+
+- **Added** a new "Copy to Clipboard" button to export the currently **filtered table data**.
+- **Implemented** a dedicated JavaScript file `assets/js/table-export.js` for the copy functionality.
+- **Integration** with existing DataTables filtering logic to ensure only visible/filtered rows are copied.
+- **Output Format**: Tab-separated values (TSV) with all HTML tags removed for clean text export.
+- **User Feedback**: 
+  - Shows a warning if there’s no data to copy.
+  - Shows a success or error alert based on the clipboard operation result.
+
+
+### List of changed files
+
+- firewall-update.sh
+- index.php
+- includes/unblock-ip.php
+- includes/blocklist-stats.php
+- includes/fail2ban-logstats.php
+- includes/header.php
+- includes/unblock-ip.php
+- includes/warnings.php
+- assets/css/style.css
+- assets/js/fail2ban-logstats.js
+- assets/js/jsonreader.js
+- assets/js/table-export.js
 
 
 

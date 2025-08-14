@@ -1,6 +1,9 @@
 <?php include ('includes/list-files.php'); ?>
 <?php include 'includes/header.php'; ?>
 
+<!-- === Filters Container === -->
+<div id="filters" style="display:flex; flex-wrap:wrap; gap:0.5em; align-items:center; margin-bottom:1em;">
+
   <button class="button-reset" onclick="location.href=location.pathname" title="! reset and reload !">↻</button>
 
   <label for="dateSelect">Select Date:</label>
@@ -13,6 +16,15 @@
     <option value="Unban">Unban</option>
   </select>
 
+  <label for="markFilter">Mark:</label>
+  <select id="markFilter">
+    <option value="">All</option>
+    <option value="yellow">🟡 Warn</option>
+    <option value="red">🔴 Crit</option>
+    <option value="yellowred">🟡🔴 Both</option>
+    <option value="none">⚪ None</option>
+  </select>
+
   <label for="jailFilter">Jail:</label>
   <select id="jailFilter"></select>
 
@@ -22,60 +34,60 @@
   <button class="button-reset" id="banSelectedBtn">Ban</button>
   <button class="button-reset" id="reportSelectedBtn">Info</button>
 
-  <button id="openBlocklistBtn">Edit Blocklist</button>
+  <button id="openBlocklistBtn">Blocklist</button>
 
-  <div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+  <button class="button-reset" onclick="copyFilteredToClipboard()">📋</button>
 
-  <table id="resultTable">
-     <thead>
-       <tr>
-         <th data-sort="timestamp" data-label="Date">Date</th>
-         <th data-sort="action" data-label="Action">Action</th>
-         <th>IP</th>
-         <th data-sort="jail" data-label="Jail">Jail</th>
-         <th></th>
-       </tr>
-     </thead>
-    <tbody></tbody>
-  </table>
+</div>
 
-  <!-- Edit Blocklist Overlay -->
+<div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+<div class="jaillistdiv">
+  <div class="headhead jaillist">Todays Blocks per Jail:</div>
+  <div id="fail2ban-bans-per-jail" class="jaillist">loading list ...</div>
+</div>
+
+<table id="resultTable">
+   <thead>
+     <tr>
+       <th data-sort="timestamp" data-label="Date">Date</th>
+       <th data-sort="action" data-label="Action">Action</th>
+       <th data-sort="marker" data-label="Mark">Mark</th> <!-- Mark column -->
+       <th data-sort="ip" data-label="IP">IP</th>
+       <th data-sort="jail" data-label="Jail">Jail</th>
+       <th></th>
+     </tr>
+   </thead>
+  <tbody></tbody>
+</table>
+
+<!-- Edit Blocklist Overlay -->
 <div id="blocklistOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="blocklistTitle" aria-describedby="blocklistDesc">
   <div class="overlay-content">
     <h2 id="blocklistTitle">Edit Blocklist</h2>
-    <p id="blocklistDesc" class="sr-only">Hier können Sie die gebannten IPs verwalten und durchsuchen.</p>
-
+    <p id="blocklistDesc" class="sr-only">Here is your Blocklist</p>
 
     <div id="blocklistFilters" style="margin-bottom: 1em;">
-
-
       <button id="blocklistJailFilterBtn" title="Filter by Jail ▾">Filter by Jail ▾</button>
-
       <div id="blocklistJailFilterOverlay" class="hidden" style="position:absolute; background:#222; border:1px solid #444; padding:10px; max-height:200px; overflow-y:auto; z-index:1100;">
        <div id="blocklistJailFilterContainer">
-      <!-- Checkboxes here -->
+        <!-- Checkboxes here -->
        </div>
       </div>
 
-
-
-
       <input type="date" id="blocklistDateFilter" />
-      <button id="blocklistResetBtn" class="button-reset"  type="button">Reset</button>
+      <button id="blocklistResetBtn" class="button-reset" type="button">Reset</button>
       <input type="text" id="blocklistSearch" placeholder="Search IP or jail" />
     </div>
-
 
     <button id="closeOverlayBtn" class="close-btn" aria-label="Close Blocklist Overlay">× Close</button>
 
     <div id="blocklistContainer">Loading blocklist...</div>
 
     <button id="reloadBlocklistBtn">Reload Blocklist</button>
-
   </div>
 </div>
+
 <?php include 'includes/footer.php'; ?>
-
-
 </body>
 </html>

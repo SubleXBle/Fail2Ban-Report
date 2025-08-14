@@ -1,4 +1,4 @@
-/* Document Styles */
+/* Dokument Styles */
 body {
       background-color: #111;
       color: #eee;
@@ -66,6 +66,9 @@ select, input {
       color: #ffd700;
       border: 1px solid #444;
       border-radius: 5px;
+    /*  box-shadow: 0 2px 2px rgba(212, 175, 55, 0.5); */
+      transition: background-color 0.3s ease;
+
     }
 /* Table Styles for Output */
 table {
@@ -87,7 +90,7 @@ tr:nth-child(even) {
     }
 /* Styles for Action Buttons */
 .action-btn {
-  background-color: #b8860b; /* dark gold */
+  background-color: #b8860b; /* dark Gold */
   color: #111;
   border: none;
   padding: 5px 8px;
@@ -100,7 +103,7 @@ tr:nth-child(even) {
 
 .action-btn:hover,
 .action-btn:focus {
-  background-color: #ffd700; /* light gold on hover */
+  background-color: #ffd700; /* light Gold when Hover */
   color: #000;
   outline: none;
   box-shadow: 0 0 10px #ffd700;
@@ -218,8 +221,8 @@ tr:nth-child(even) {
   transition: color 0.3s ease;
 }
 
-close-btn:hover,
-close-btn:focus {
+.close-btn:hover,
+.close-btn:focus {
   color: #ffd54f;
   outline: none;
 }
@@ -259,7 +262,7 @@ close-btn:focus {
 
 #reloadBlocklistBtn:hover,
 #reloadBlocklistBtn:focus {
-  background-color: #218838; /* dark green on hover */
+  background-color: #218838; /* dark green on Hover */
   box-shadow:
     0 0 8px 2px rgba(40, 167, 69, 0.8),
     0 0 15px 4px rgba(40, 167, 69, 0.5);
@@ -289,9 +292,9 @@ close-btn:focus {
   border: 0;
 }
 /* Checkboxes  */
-/* Hide original checkbox */
+/* Hide original Checkbox */
 input[type="checkbox"] {
-  appearance: none; /* Firefox and modern browsers */
+  appearance: none; /* Firefox and modern Browsers */
   -webkit-appearance: none; /* Safari/Chrome */
   -moz-appearance: none; /* Firefox */
   width: 20px;
@@ -306,14 +309,14 @@ input[type="checkbox"] {
   transition: background 0.3s, border-color 0.3s;
 }
 
-/* Style for checked state */
+/* Style for Checked */
 input[type="checkbox"]:checked {
   background-color: #d4af37;
   border-color: #d4af37;
   box-shadow: 0 0 5px #d4af37aa;
 }
 
-/* Black check mark */
+/* Black Check */
 input[type="checkbox"]:checked::after {
   content: "";
   position: absolute;
@@ -326,32 +329,34 @@ input[type="checkbox"]:checked::after {
   transform: rotate(45deg);
 }
 
-/* Hover state */
+/* Hover  */
 input[type="checkbox"]:hover {
   border-color: #d4af37;
 }
 
-/* Blocklist button */
+/* Blocklist Button */
 #openBlocklistBtn {
-  background-color: #d4af37;
-  color: black;
-  border: none;
+  background-color: #222;
+  color: #d4af37;
+  border: 1px solid #555;
   padding: 5px 8px;
   font-size: 1.0rem;
   font-weight: 100;
   border-radius: 6px;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(212, 175, 55, 0.5);
+/*  box-shadow: 0 2px 2px rgba(212, 175, 55, 0.5); */
   transition: box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 #openBlocklistBtn:hover,
 #openBlocklistBtn:focus {
   background-color: #d4af37;
-  box-shadow:
+  color: #222;
+/*  box-shadow:
     0 0 8px 2px rgba(212, 175, 55, 0.7),
     0 0 15px 4px rgba(212, 175, 55, 0.4);
   outline: none;
+*/
 }
 /* Footer */
 .site-footer {
@@ -384,12 +389,24 @@ input[type="checkbox"]:hover {
   outline: none;
 }
 
-/* Reset button style for blocklist overlay  */
+/* Reset Button Style for Blocklist-Overlay  */
 
 .button-reset {
-  background-color: #f9da5f;
-  color: #000;
-  border: 1px solid #000;
+  background-color: #222;
+  color: #d4af37;
+  border: 1px solid #555;
+  padding: 0.35em 0.75em;
+  font-size: 0.9em;
+  border-radius: 4px;
+  cursor: pointer;
+/*  box-shadow: 0 2px 2px rgba(212, 175, 55, 0.5); */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.button-reset:hover {
+  background-color: #d4af37;
+  color: #222;
+  border: 1px solid #222;
   padding: 0.35em 0.75em;
   font-size: 0.9em;
   border-radius: 4px;
@@ -397,13 +414,9 @@ input[type="checkbox"]:hover {
   transition: background-color 0.2s ease-in-out;
 }
 
-.button-reset:hover {
-  background-color: #f4cd3c; /* slightly darker on hover */
-}
+/* Jailfilter in Blocklist */
 
-/* Jail filter in blocklist */
-
-/* Jail filter button */
+/* Jail Filter Button */
 #blocklistJailFilterBtn {
   background-color: #333;
   color: #d4af37;
@@ -413,6 +426,7 @@ input[type="checkbox"]:hover {
   font-size: 0.9rem;
   border-radius: 4px;
   user-select: none;
+/*  box-shadow: 0 2px 5px rgba(212, 175, 55, 0.5); */
   transition: background-color 0.3s ease;
 }
 
@@ -422,24 +436,25 @@ input[type="checkbox"]:hover {
   outline: none;
 }
 
-/* Jail filter overlay */
+/* Jail Filter Overlay */
 #blocklistJailFilterOverlay {
   position: absolute;
-  background-color: #222;
+  background-color: #d4af37;
+  color: 333;
   border: 1px solid #444;
   border-radius: 6px;
   padding: 10px;
   max-height: 200px;
   width: 180px;
   overflow-y: auto;
-  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4); /* golden shadow */
+/*  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4); /* golden shaddow */
   z-index: 1100;
   font-size: 0.9rem;
   color: #eee;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Checkbox labels for overlay */
+/* Checkbox Labels for Overlay */
 #blocklistJailFilterContainer label {
   display: flex;
   align-items: center;
@@ -457,7 +472,7 @@ input[type="checkbox"]:hover {
   accent-color: #d4af37;
 }
 
-/* Scrollbar styling (modern browsers) */
+/* Scrollbar Styling (modern Browser) */
 #blocklistJailFilterOverlay::-webkit-scrollbar {
   width: 8px;
 }
@@ -471,12 +486,12 @@ input[type="checkbox"]:hover {
   border-radius: 4px;
 }
 
-/* Hide overlay */
+/* Hide Overlay */
 .hidden {
   display: none;
 }
 
-/* Blocklist stats */
+/* Blocklist Stats */
 
 #blocklist-stats-container {
   display: grid;
@@ -488,12 +503,12 @@ input[type="checkbox"]:hover {
   font-family: Arial, sans-serif;
   color: #aaa;
   line-height: 1.4;
-  padding-left: 1rem;
+  padding-left: 0.0rem;
   border-left: 0px solid #333;
 }
 
 #blocklist-stats-container div {
-  white-space: nowrap; /* do not break text */
+  white-space: nowrap; /* dont break text */
   font-size: 0.9rem;
   font-family: Arial, sans-serif;
   color: #aaa;
@@ -503,6 +518,7 @@ input[type="checkbox"]:hover {
   font-family: Arial, sans-serif;
   color: #d4af37;
   font-size: 0.9rem;
+  margin-bottom: 3px;
 }
 .headstat {
   font-family: Arial, sans-serif;
@@ -511,30 +527,30 @@ input[type="checkbox"]:hover {
 }
 
 /* Warning Dots */
-/* Container for the Fail2Ban status indicators */
+/* Container for Fail2Ban Statuses */
 .fail2ban-status {
   display: inline-block;
   margin-right: 10px;
-  font-size: 0.95em;  /* adjust font size here */
-  /* color: #333;   Optional: set text color here */
+  font-size: 0.95em;  
+  /* color: #333;  */
 }
 
-/* Dot (emoji) representation */
+/* Warning Dot grey when inactive */
 .status-dot {
   opacity: 1;
   filter: grayscale(0%);
   transition: all 0.3s ease;
-  /* color: inherit;   Dot color inherits from container or can be set here */
+  /* color: inherit;   */
 }
 
-/* When no warning/critical present */
+/* Warn/Crit */
 .status-dot.disabled {
   opacity: 0.3;
   filter: grayscale(100%);
-  /* color: #999;   Optional: set gray tone for disabled dots here */
+  /* color: #999;  */
 }
 
-/* Text next to the dot */
+/* Warn Text */
 .status-label {
   margin-left: 4px;
   vertical-align: middle;
@@ -543,7 +559,7 @@ input[type="checkbox"]:hover {
   color: #aaa;
 }
 
-/* Individual status line (Warn / Crit) */
+/* Statusline (Warn / Crit) */
 #fail2ban-warning-status,
 #fail2ban-critical-status {
   display: flex;
@@ -552,8 +568,34 @@ input[type="checkbox"]:hover {
   margin-bottom: 4px;
 }
 
-/* Main container */
+/* Alert Container */
 #fail2ban-alerts-container {
   display: flex;
   flex-direction: column;
+}
+
+/* Top Jail List */
+.toplist {
+  margin-top: 0px;
+  color: #aaa;
+  margin-left: 0px;
+}
+.toplist li::marker {
+  content: "";
+}
+ul.toplist li {
+  list-style: none;
+}
+
+/* Jail List Small Row */
+.jaillistdiv {
+  display: flex;
+  gap: 10px;
+  white-space: nowrap;
+  animation: marquee 10s linear infinite;
+}
+.jaillist {
+  color: #aaa;
+  font-size: 0.7em;
+  display: inline-block;
 }

@@ -1,7 +1,9 @@
 # Fail2Ban-Report
-> Beta 3.4 | Version 0.3.4
+> Beta 4.0 | Version 0.4.0
 
 > A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
+
+> This version brings more stability and performance, as well as improved visibility into Fail2Ban events.
 
 **Integration**
 >Designed for easy integration on a wide range of Linux systems — from small Raspberry Pis to modest business setups — though it’s not (yet) targeted at large-scale enterprise environments.
@@ -29,10 +31,11 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 It provides optional tools to:  
 
 - 📊 Visualize **ban** and **unban** events, including per-jail statistics  
-- ⚡ Interact with IPs (e.g., manually block, unblock, or report to external services)  
+- ⚡ Interact with IPs (e.g., manually block, unblock, get report from external services)  
 - 📂 Maintain **jail-specific** persistent blocklists (JSON) with `active` and `pending` status  
 - 🔄 Sync those lists with your system firewall using **ufw**  
-- 🚨 Show **warning indicators** when ban rates exceed configurable thresholds  
+- 🚨 Show **warning indicators** when ban rates exceed configurable thresholds
+- 🚨 Show **Markers** when a IP Address is present more than once in one (yellow) or more (red) jails.
 
 > **Note:** Direct integration with other firewalls or native Fail2Ban jail commands is not yet implemented.
 
@@ -78,39 +81,53 @@ It provides optional tools to:
 
 ---
 
-## 🆕 Fix V 0.3.4
-Json Files should not loose Data anymore when several write processes trying to write the json file at the same time.
 
-- `firewall-update.sh`: Added FLOCK to lock json when writing
-- `block-ip.php`: Added FLOCK to lock json when writing
-- `unblock-ip.php`: Added FLOCK to lock json when writing
-- `blocklist-stats.php`: Shows now more correct States of active and pending when blocking and unblocking
+## 🆕 What's New in V 0.4.0
 
-just copy those 4 Files to apply the fix.
+### 🧱 Firewall & JSON
+- Optimized `firewall-update.sh` for faster batch processing of IPs.
+- Batch blocking per jail with a single `ufw reload`.
+- Safe unblocking with rule renumbering and reload after each deletion.
+- JSON updates and cleanup done once per jail, not per IP.
+- Core mechanisms, logging, and permissions unchanged.
+> This significantly reduces both the runtime and the lock duration of the blocklists, especially during ban events.
 
+### 🖥️ UI & Statistics
+- Minor visual improvements in:
+  - `header.php`, `fail2ban-logstats.php`, `fail2ban-logstats.js`
+  - `index.php` (IP sorting)
+  - `style.css`
 
-## 🆕 What's New in V 0.3.3 (QoL Update)
-### ⚠️ Warning System and Pending Status Indicators
-- 🚨 New [Warnings] section in .config to configure warning & critical thresholds (events per minute per jail) in format warning:critical (e.g: 20:50).
-- 👀 warning & critical status indicators (colored dots) in the header for quick overview.
-- ⏳ Manual block/unblock actions now mark IPs as pending until processed by firewall-update.
-- 📊 Pending entries are now visible in blocklist stats for better tracking.
+### 🟡🔴 Marker Feature
+- **IP Event Markers**: Highlights repeated events per IP (yellow) and IPs in multiple jails (red).
+- **Sortable & Filterable Mark Column**: New column `Mark` with dropdown filter.
+- **Dynamic Filtering**: Markers update live with Action, Jail, IP, or Date filters.
+- Marker column placed between Action and IP, responsive layout preserved.
 
-### ✔️ Multi-Selection UI and Bulk Actions for Ban & Report
-- ✅ Switched from per-row action buttons to checkbox multi-selection for IPs.
-- 📋 New dedicated “Ban” and “Info” buttons for bulk processing.
-- 🔄 Frontend updated to handle and display results for multiple IP actions simultaneously.
-- 🔔 New notification system for success/info/error messages on each action.
+### ✨ New Feature: Copy Filtered Data to Clipboard
 
-### 🛠 Backend Improvements & New IP Reporting
-- 🔄 Backend now accept arrays of IPs for ban and report actions, with detailed aggregated feedback.
-- 🆕 Added IPInfo API integration alongside AbuseIPDB for richer geolocation and network info.
-- ⏲️ Built-in delay between report requests to avoid API rate limits.
-- ⚙️ Improved error handling and user feedback for multi-IP operations.
+- **Added** a new "Copy to Clipboard" button to export the currently **filtered table data**.
+- **Implemented** a dedicated JavaScript file `assets/js/table-export.js` for the copy functionality.
+- **Integration** with existing DataTables filtering logic to ensure only visible/filtered rows are copied.
+- **Output Format**: Tab-separated values (TSV) with all HTML tags removed for clean text export.
+- **User Feedback**: 
+  - Shows a warning if there’s no data to copy.
+  - Shows a success or error alert based on the clipboard operation result.
+
+> This Feature will only work with enabled https for security reasons
+
 
 ---
 
 ### ⚠️ Upgrade Notice
+
+If you're upgrading from an existing installation : from 0.3.3 and later
+
+1. 📦 Replace all or changed files with the new version (overwrite).
+2. 👀 List of changed files: ![changelog.md#list-of-changed-files](changelog.md#list-of-changed-files)
+3. 📦 make sure new shellscripts are executable
+4. 🛠️ Control needed Paths
+5. 🛠️ Control .htaccess
 
 If you're upgrading from an existing installation : pre 0.3.2 and also from 0.3.2
 
@@ -164,7 +181,6 @@ This is especially useful if you want to manually patch or update individual fil
 ### 🔐 Security
 - ✅ Hardened `.htaccess` with best practices
 - ✅ add security layer between json and js
-- 🧩 move `archive/` out of webdirectory
 - ⏳ Further improvements (ongoing goal)
 
 ### 🔥 Active Defense
@@ -173,23 +189,26 @@ This is especially useful if you want to manually patch or update individual fil
 - ✅ IP GeoLoc and Provider Data with IP-Info (optional)
 - ✅ Bulk blocking of multiple IPs
 - ✅ Shows warnings/critical states threshold for Bans/Minute/Jail (setable in config)
+- ✅ Shows warning states for Ips that are more than once on List
+- ✅ Shows critical states for IPs that are in more than one Jail in List
 - 🧩 Support for nftables, firewalld
-- 🧩 full integration with fail2ban jails for block/unblock actions
-- ⏳ Optional automatic blocking based on patterns or thresholds
-- ⏳ Integration with external services (e.g. AbuseIPDB reporting)
+- ⏳ LTG: Integration with external services (e.g. AbuseIPDB reporting)
+- ⏳ LTG: Integration with fail2ban-jails directly
 
 ### 🌿 User Interface
 - ⏳ Improve CSS and styling
 
 ## 👀 Outlook
-- 📦 The next major version will focus on security by mooving and restructuring the `archive/` folder layout.
-- 🐳 A Docker image is expected probably around version v0.5.x, following the restructuring.
+- 📦 Further Improvements & Security Enhancements
+  - Moving `archive/` to `/opt` makes little sense if `www-data` still needs access.
+  - Working on a solution to authorize changes made to JSON files via the web interface. 
+- 🐳 A Docker image is expected probably around version v0.5.x
 
 ---
 
 ## 🖼️ Screenshots
 
-![Main interface with log overview](assets/images/Main-List-033.png)  
+![Main interface with log overview](assets/images/Main-List-040.png)  
 ![Blocklist interface with unblock actions](assets/images/Block-List-033.png)
 ![Result after banning an IP](assets/images/Message-Toast-033.png)
 ![Result after Info](assets/images/Info-Msg-033.png)

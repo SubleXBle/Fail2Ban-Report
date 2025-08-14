@@ -49,37 +49,50 @@ for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
   fi
 
   # Extract active and inactive IPs
-  active_ips=$(jq -r '.[] | select(.active != false) | .ip' "$FILE")
-  inactive_ips=$(jq -r '.[] | select(.active == false) | .ip' "$FILE")
+  mapfile -t active_ips < <(jq -r '.[] | select(.active != false) | .ip' "$FILE")
+  mapfile -t inactive_ips < <(jq -r '.[] | select(.active == false) | .ip' "$FILE")
 
-  # Block new IPs and update pending flag
-  for ip in $active_ips; do
+  blocked_success=()
+
+  # --- BLOCK: Collect all new IPs and block them ---
+  for ip in "${active_ips[@]}"; do
     if ! grep -qw "$ip" "$TMP_BLOCKED"; then
       log "Blocking IP: $ip"
       if ufw deny from "$ip"; then
-        log "Blocked $ip successfully, updating pending flag"
-        tmp_file=$(mktemp)
-        jq --arg ip "$ip" 'map(if .ip == $ip then .pending = false else . end)' "$FILE" > "$tmp_file" \
-          && mv "$tmp_file" "$FILE"
+        blocked_success+=("$ip")
       else
         log "Failed to block $ip via ufw"
       fi
     fi
   done
 
-  # Remove UFW rules for inactive IPs
-  for ip in $inactive_ips; do
+  # Reload UFW once after all block actions
+  if ((${#blocked_success[@]} > 0)); then
+    log "Reloading UFW after block actions"
+    ufw reload
+  fi
+
+  # --- UNBLOCK: Process each inactive IP individually ---
+  for ip in "${inactive_ips[@]}"; do
     mapfile -t rules < <(ufw status numbered | grep "$ip" | grep "DENY IN" | tac)
     for rule in "${rules[@]}"; do
       rule_number=$(echo "$rule" | awk -F'[][]' '{print $2}')
-      log "Removing UFW rule #$rule_number for IP: $ip"
-      ufw --force delete "$rule_number"
+      if [[ -n "$rule_number" ]]; then
+        log "Removing UFW rule #$rule_number for IP: $ip"
+        ufw --force delete "$rule_number"
+      fi
     done
   done
 
-  # Clean up JSON by removing inactive entries
+  # --- JSON Update: pending=false for blocked_success, remove inactive entries ---
   tmp_file=$(mktemp)
-  jq 'map(select(.active != false))' "$FILE" > "$tmp_file" && mv "$tmp_file" "$FILE"
+  BLOCK_JSON=$(printf '%s\n' "${blocked_success[@]:-}" | jq -R . | jq -s .)
+  jq --argjson ips "$BLOCK_JSON" '
+    map(
+      if (.ip as $ip | $ips | index($ip)) then .pending = false else . end
+    )
+    | map(select(.active != false))
+  ' "$FILE" > "$tmp_file" && mv "$tmp_file" "$FILE"
 
   # Set ownership and permissions
   chown www-data:www-data "$FILE"

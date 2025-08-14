@@ -62,10 +62,32 @@ function processEntries($entries): array {
     ];
 }
 
+// Zähle Bans pro Jail in einem Eintrags-Array
+function countBansPerJail(array $entries): array {
+    $bansPerJail = [];
+
+    foreach ($entries as $entry) {
+        if (!isset($entry['action'], $entry['jail'])) continue;
+
+        if ($entry['action'] === 'Ban') {
+            $jail = $entry['jail'];
+            if (!isset($bansPerJail[$jail])) {
+                $bansPerJail[$jail] = 0;
+            }
+            $bansPerJail[$jail]++;
+        }
+    }
+
+    return $bansPerJail;
+}
+
 // Zuerst: heutige Datei verarbeiten
 $todayPath = $archiveDirectory . '/' . $todayFile;
 $todayEntries = json_decode(file_get_contents($todayPath), true);
 $todayStats = processEntries($todayEntries);
+
+// Zusätzliche Statistik: Bans pro Jail (nur heute)
+$banCountPerJail = countBansPerJail($todayEntries);
 
 // Dann aggregierte Werte berechnen
 $aggregatedStats = [];
@@ -84,7 +106,8 @@ foreach ($aggregationRanges as $label => $count) {
     $aggregatedStats[$label] = processEntries($aggregatedEntries);
 }
 
-// Finales JSON-Resultat
+// Finales JSON-Resultat mit zusätzlichem Feld ban_count_per_jail
 echo json_encode(array_merge($todayStats, [
-    'aggregated' => $aggregatedStats
+    'aggregated' => $aggregatedStats,
+    'ban_count_per_jail' => $banCountPerJail,
 ]));

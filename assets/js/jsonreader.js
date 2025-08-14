@@ -44,7 +44,9 @@ function renderTable() {
   const actionFilter = document.getElementById('actionFilter').value;
   const jailFilter = document.getElementById('jailFilter').value;
   const ipFilter = document.getElementById('ipFilter').value.trim();
+  const markFilter = document.getElementById('markFilter').value;
 
+  // === Step 1: Filter by base criteria ===
   const filtered = allData.filter(entry => {
     const entryDate = entry.timestamp ? entry.timestamp.substring(0, 10) : '';
     return (!selectedDate || entryDate === selectedDate) &&
@@ -53,6 +55,37 @@ function renderTable() {
            (!ipFilter || entry.ip.includes(ipFilter));
   });
 
+  // === Step 2: Prepare marker counts ===
+  const eventCounts = {};
+  const ipJails = {};
+  filtered.forEach(e => {
+    const key = e.ip + '|' + e.action;
+    eventCounts[key] = (eventCounts[key] || 0) + 1;
+
+    if (!ipJails[e.ip]) ipJails[e.ip] = new Set();
+    ipJails[e.ip].add(e.jail);
+  });
+
+  // === Step 3: Assign marker field ===
+  filtered.forEach(e => {
+    let marker = '';
+    if (eventCounts[e.ip + '|' + e.action] > 1) marker += '🟡'; // multiple same event
+    if (ipJails[e.ip].size > 1) marker += '🔴'; // multiple jails
+    if (!marker) marker = '⚪'; // grey dot if no marker
+    e.marker = marker;
+  });
+
+  // === Step 4: Apply marker filter ===
+  const filteredWithMarker = filtered.filter(e => {
+    if (!markFilter) return true; // All
+    if (markFilter === 'yellow') return e.marker.includes('🟡') && !e.marker.includes('🔴');
+    if (markFilter === 'red') return e.marker.includes('🔴') && !e.marker.includes('🟡');
+    if (markFilter === 'yellowred') return e.marker.includes('🟡') && e.marker.includes('🔴');
+    if (markFilter === 'none') return e.marker === '⚪';
+    return true;
+  });
+
+  // === Step 5: Rebuild jail dropdown ===
   const jailSelect = document.getElementById('jailFilter');
   const previousSelection = jailSelect.value;
   jailSelect.innerHTML = '';
@@ -60,7 +93,7 @@ function renderTable() {
   emptyOption.value = "";
   emptyOption.textContent = "All";
   jailSelect.appendChild(emptyOption);
-  const jails = [...new Set(filtered.map(e => e.jail).filter(Boolean))].sort();
+  const jails = [...new Set(filteredWithMarker.map(e => e.jail).filter(Boolean))].sort();
   jails.forEach(j => {
     const o = document.createElement('option');
     o.value = j;
@@ -74,7 +107,8 @@ function renderTable() {
     return;
   }
 
-  const sorted = [...filtered].sort((a, b) => {
+  // === Step 6: Sorting ===
+  const sorted = [...filteredWithMarker].sort((a, b) => {
     const { column, direction } = currentSort;
     let valA = a[column] || '';
     let valB = b[column] || '';
@@ -92,18 +126,21 @@ function renderTable() {
     return 0;
   });
 
+  // === Step 7: Table header sort arrows ===
   document.querySelectorAll('#resultTable thead th[data-sort]').forEach(th => {
     const col = th.getAttribute('data-sort');
     const arrow = col === currentSort.column ? (currentSort.direction === 'asc' ? ' ⮝' : ' ⮟') : '';
     th.textContent = th.getAttribute('data-label') + arrow;
   });
 
+  // === Step 8: Render table ===
   tbody.innerHTML = '';
   sorted.forEach(entry => {
     const row = document.createElement('tr');
     row.innerHTML = `
       <td>${entry.timestamp}</td>
       <td>${entry.action}</td>
+      <td>${entry.marker}</td>
       <td>${entry.ip}</td>
       <td>${entry.jail}</td>
       <td><input type="checkbox" class="ip-select" data-ip="${entry.ip}" data-jail="${entry.jail}"></td>
@@ -118,13 +155,14 @@ function getSelectedDate() {
   return dateMatch ? `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}` : null;
 }
 
-// Event listeners for filters
+// === Event listeners for filters ===
 document.getElementById('dateSelect').addEventListener('change', e => loadDataAndRender(e.target.value));
 document.getElementById('actionFilter').addEventListener('change', renderTable);
 document.getElementById('jailFilter').addEventListener('change', renderTable);
 document.getElementById('ipFilter').addEventListener('input', renderTable);
+document.getElementById('markFilter').addEventListener('change', renderTable);
 
-// Event listeners for sorting
+// === Event listeners for sorting ===
 document.querySelectorAll('#resultTable thead th[data-sort]').forEach(th => {
   th.addEventListener('click', () => {
     const column = th.getAttribute('data-sort');
@@ -138,5 +176,5 @@ document.querySelectorAll('#resultTable thead th[data-sort]').forEach(th => {
   });
 });
 
-// Initial loading
+// === Initial loading ===
 populateDateDropdown();
