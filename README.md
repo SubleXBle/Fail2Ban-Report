@@ -4,7 +4,6 @@
 > A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
 
 > This version brings more stability and performance, as well as improved visibility into Fail2Ban events.
-> Also this is the **Start of the Docker-Version**
 
 **Integration**
 >Designed for easy integration on a wide range of Linux systems — from small Raspberry Pis to modest business setups — though it’s not (yet) targeted at large-scale enterprise environments.
