@@ -122,6 +122,12 @@ It provides optional tools to:
 
 ### ⚠️ Upgrade Notice
 
+If you're upgrading from an existing installation : from 0.3.3 and later
+
+1. 📦 Replace all files with the new version (overwrite).
+2. 🛠️ Control needed Paths
+
+
 If you're upgrading from an existing installation : pre 0.3.2 and also from 0.3.2
 
 - ⚠️ **The new blocklist format is not compatible with the old `blocklist.json`.** and got new field `pending` is in json since 0.3.3
