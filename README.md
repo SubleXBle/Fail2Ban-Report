@@ -124,9 +124,10 @@ It provides optional tools to:
 If you're upgrading from an existing installation : from 0.3.3 and later
 
 1. 📦 Replace all or changed files with the new version (overwrite).
-2. 📦 make sure new shellscripts are executable
-3. 🛠️ Control needed Paths
-4. 🛠️ Control .htaccess
+2. 👀 List of changed files: ![changelog.md#list-of-changed-files](changelog.md#list-of-changed-files)
+3. 📦 make sure new shellscripts are executable
+4. 🛠️ Control needed Paths
+5. 🛠️ Control .htaccess
 
 If you're upgrading from an existing installation : pre 0.3.2 and also from 0.3.2
 
