@@ -33,7 +33,7 @@ archive/
 - Usage:
 ```php
 require_once __DIR__ . "/paths.php";
-$PFAD = $PATHS["blocklists"];
+$NEEDED_PATH = $PATHS["blocklists"];
 ```
 - Server-specific paths are automatically considered
 
