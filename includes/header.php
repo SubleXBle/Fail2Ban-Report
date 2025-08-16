@@ -21,15 +21,38 @@
   <script src="assets/js/blocklist-stats.js"></script>
   <script src="assets/js/warnings.js"></script>
   <script src="assets/js/table-export.js"></script>
+  <script src="assets/js/ufw-report.js"></script>
 
 </head>
 <body>
+
+
+
+
+<!-- ################################## -->
+
+<form method="post" style="margin-bottom: 1em;">
+    <label for="server">Server: </label>
+    <select name="server" id="server" onchange="this.form.submit()">
+        <?php
+        foreach ($SERVERS as $key => $name) {
+            $selected = ($key === $activeServer) ? "selected" : "";
+            echo "<option value='$key' $selected>$name</option>";
+        }
+        ?>
+    </select>
+</form>
+
+<!-- ################################## -->
+
+
+
 
 <div class="inline-headlines">
   <div>
     <h1>Fail2Ban-Report</h1>
     <h2>Let's catch the bad guys!</h2>
-    <div><span title="Beta 4.0"><small>Version : 0.4.0</small></span></div>
+    <div><span title="Beta 5.0"><small>Version : 0.5.0</small></span></div>
   </div>
 
 
@@ -65,10 +88,11 @@
   </div>
 
   <div id="blocklist-stats">
-  <div class="headhead">Fail2Ban-Report Jails:</div>
+  <div class="headhead">Fail2Ban-Report Blocklists:</div>
   <div id="blocklist-stats-container">
     <!-- JS render Jails here -->
   </div>
   </div>
+
 
 </div>
