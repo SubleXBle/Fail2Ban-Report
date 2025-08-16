@@ -1,7 +1,8 @@
 <?php
 header('Content-Type: application/json');
 
-$archiveDirectory = dirname(__DIR__) . '/archive/';
+require_once __DIR__ . "/paths.php";
+$archiveDirectory = $blocklistDir = $PATHS["fail2ban"];
 
 $files = array_filter(scandir($archiveDirectory), function($file) {
     return preg_match('/^fail2ban-events-\d{8}\.json$/', $file);
