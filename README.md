@@ -5,8 +5,8 @@
 
 ## This version brings Multiserver usage
 > Web UI and Backend are completley seperated
-> You can run the Web-UI on nearly every system - as long as it brings a webserver and php with it from Raspberry Pi to Windows IIS - internal / external - as you like it - it fits your needs.
-> Backend uses rsync now to syncronize json data from and to hosts (while trying to stay lightweight and without dependencies, tsync is on nearly every linux system and also available for windows (with a little fiddeling)
+> - You can run the Web-UI on nearly every system - as long as it brings a webserver and php with it from Raspberry Pi to Windows IIS - internal / external - as you like it - it fits your needs.
+> - Backend uses rsync now to syncronize json data from and to hosts (while trying to stay lightweight and without dependencies, tsync is on nearly every linux system and also available for windows (with a little fiddeling)
 > 
 
 
