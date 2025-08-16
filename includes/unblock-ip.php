@@ -1,95 +1,140 @@
-#!/bin/bash
+<?php
+// includes/unblock-ip.php
 
-set -euo pipefail
+/**
+ * Unblocks one or multiple IP addresses by marking them inactive
+ * in their jail-specific blocklist JSON files.
+ *
+ * @param string|array $ips        IP address or array of IP addresses to unblock.
+ * @param string $jail             Fail2Ban jail/context name (optional).
+ * @return array                   Result array or array of results with 'success', 'message' and 'type'.
+ */
 
-# --- Configuration ---
-BLOCKLIST_DIR="/var/www/vhosts/suble.org/xbkupx/Fail2Ban-Report/archive"
-LOGFILE="/opt/Fail2Ban-Report/Firewall-Report.log"
-LOGGING=true  # Set to true to enable logging
+require_once __DIR__ . "/paths.php";
 
-# --- Set PATH ---
-export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+function unblockIp($ips, $jail = 'unknown') {
+    $results = [];
 
-# --- Logging function ---
-log() {
-  if [ "$LOGGING" = true ]; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $*" >> "$LOGFILE"
-  fi
+    if (!is_array($ips)) {
+        $ips = [$ips];
+    }
+
+    foreach ($ips as $ip) {
+        $ip = trim($ip);
+
+        // Validate IP address format
+        if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            $results[] = [
+                'ip' => $ip,
+                'success' => false,
+                'message' => "Invalid IP address: $ip",
+                'type' => 'error'
+            ];
+            continue;
+        }
+
+        // Sanitize jail name
+        $safeJail = strtolower(preg_replace('/[^a-z0-9_-]/', '', $jail));
+        if ($safeJail === '') {
+            $safeJail = 'unknown';
+        }
+
+        $jsonFile = $GLOBALS["PATHS"]["blocklists"] . $safeJail . ".blocklist.json";
+        $lockFile = "/tmp/{$safeJail}.blocklist.lock";
+
+        if (!file_exists($jsonFile)) {
+            $results[] = [
+                'ip' => $ip,
+                'success' => false,
+                'message' => "[NOTFOUND] Blocklist file {$safeJail}.blocklist.json not found.",
+                'type' => 'error'
+            ];
+            continue;
+        }
+
+        // Open lock file
+        $lockHandle = fopen($lockFile, 'c');
+        if (!$lockHandle) {
+            $results[] = [
+                'ip' => $ip,
+                'success' => false,
+                'message' => "[LOCK] Unable to open lock file for {$safeJail}.",
+                'type' => 'error'
+            ];
+            continue;
+        }
+
+        if (!flock($lockHandle, LOCK_EX)) {
+            fclose($lockHandle);
+            $results[] = [
+                'ip' => $ip,
+                'success' => false,
+                'message' => "[LOCK] Could not acquire lock for {$safeJail}.",
+                'type' => 'error'
+            ];
+            continue;
+        }
+
+        // Load existing JSON
+        $data = json_decode(file_get_contents($jsonFile), true);
+        if (!is_array($data)) {
+            $data = [];
+        }
+
+        $found = false;
+        foreach ($data as &$item) {
+            if ($item['ip'] === $ip && (!isset($item['active']) || $item['active'] === true)) {
+                $item['active'] = false;
+                $item['lastModified'] = date('c');
+                $found = true;
+
+                if (file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) === false) {
+                    flock($lockHandle, LOCK_UN);
+                    fclose($lockHandle);
+                    $results[] = [
+                        'ip' => $ip,
+                        'success' => false,
+                        'message' => "[WRITE] Failed to update {$safeJail}.blocklist.json.",
+                        'type' => 'error'
+                    ];
+                    continue 2;
+                }
+
+                flock($lockHandle, LOCK_UN);
+                fclose($lockHandle);
+                $results[] = [
+                    'ip' => $ip,
+                    'success' => true,
+                    'message' => "IP $ip was successfully unblocked in {$safeJail}.blocklist.json.",
+                    'type' => 'success'
+                ];
+                continue 2;
+            }
+        }
+        unset($item);
+
+        flock($lockHandle, LOCK_UN);
+        fclose($lockHandle);
+
+        if (!$found) {
+            $results[] = [
+                'ip' => $ip,
+                'success' => false,
+                'message' => "[NOTFOUND] IP $ip not active in {$safeJail}.blocklist.json.",
+                'type' => 'error'
+            ];
+        }
+    }
+
+    // Flatten result if only one entry
+    if (count($results) === 1) {
+        return $results[0];
+    }
+
+    return [
+        'success' => true,
+        'message' => count($results) . ' IP(s) processed.',
+        'details' => $results,
+        'type' => 'success'
+    ];
 }
-
-# --- Check prerequisites ---
-if ! command -v jq &>/dev/null; then
-  log "ERROR: jq is not installed."
-  exit 1
-fi
-
-if ! command -v ufw &>/dev/null; then
-  log "ERROR: ufw is not installed."
-  exit 1
-fi
-
-# --- Get currently blocked IPs from UFW ---
-TMP_BLOCKED="/tmp/current_ufw_blocklist.txt"
-ufw status numbered | grep "DENY IN" | awk '{print $3}' > "$TMP_BLOCKED" || true
-
-# --- Loop through all blocklist files ---
-for FILE in "$BLOCKLIST_DIR"/*.blocklist.json; do
-  [ -e "$FILE" ] || continue  # skip if no files match
-
-  JAIL_NAME=$(basename "$FILE" .blocklist.json)
-  LOCKFILE="/tmp/${JAIL_NAME}.blocklist.lock"
-
-  log "Processing blocklist: $FILE"
-
-  # === Acquire lock ===
-  exec {lock_fd}>"$LOCKFILE"
-  if ! flock -x "$lock_fd"; then
-    log "ERROR: Could not acquire lock for $JAIL_NAME"
-    continue
-  fi
-
-  # Extract active and inactive IPs
-  active_ips=$(jq -r '.[] | select(.active != false) | .ip' "$FILE")
-  inactive_ips=$(jq -r '.[] | select(.active == false) | .ip' "$FILE")
-
-  # Block new IPs and update pending flag
-  for ip in $active_ips; do
-    if ! grep -qw "$ip" "$TMP_BLOCKED"; then
-      log "Blocking IP: $ip"
-      if ufw deny from "$ip"; then
-        log "Blocked $ip successfully, updating pending flag"
-        tmp_file=$(mktemp)
-        jq --arg ip "$ip" 'map(if .ip == $ip then .pending = false else . end)' "$FILE" > "$tmp_file" \
-          && mv "$tmp_file" "$FILE"
-      else
-        log "Failed to block $ip via ufw"
-      fi
-    fi
-  done
-
-  # Remove UFW rules for inactive IPs
-  for ip in $inactive_ips; do
-    mapfile -t rules < <(ufw status numbered | grep "$ip" | grep "DENY IN" | tac)
-    for rule in "${rules[@]}"; do
-      rule_number=$(echo "$rule" | awk -F'[][]' '{print $2}')
-      log "Removing UFW rule #$rule_number for IP: $ip"
-      ufw --force delete "$rule_number"
-    done
-  done
-
-  # Clean up JSON by removing inactive entries
-  tmp_file=$(mktemp)
-  jq 'map(select(.active != false))' "$FILE" > "$tmp_file" && mv "$tmp_file" "$FILE"
-
-  # Set ownership and permissions
-  chown www-data:www-data "$FILE"
-  chmod 644 "$FILE"
-
-  # === Release lock ===
-  flock -u "$lock_fd"
-  exec {lock_fd}>&-
-done
-
-log "All blocklists processed successfully."
-
-exit 0
