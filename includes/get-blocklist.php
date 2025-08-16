@@ -3,9 +3,9 @@
 
 header('Content-Type: application/json');
 
-// Directory containing blocklist files
-//$archiveDir = dirname(__DIR__) . '/../archive/';
-$archiveDir = realpath(__DIR__ . '/../archive');
+require_once __DIR__ . "/paths.php";
+
+$archiveDir = $blocklistDir = $PATHS["blocklists"];
 if (!$archiveDir) {
     http_response_code(500);
     die('Archive directory not found.');
@@ -41,11 +41,6 @@ foreach ($blocklistFiles as $file) {
     // Append all entries from this file
     $allEntries = array_merge($allEntries, $data);
 }
-
-// Optional: sort entries by timestamp descending or IP ascending, etc.
-// usort($allEntries, function($a, $b) {
-//     return strcmp($b['timestamp'], $a['timestamp']); // newest first
-// });
 
 // Output the aggregated blocklist entries as JSON
 echo json_encode([
