@@ -1,5 +1,50 @@
 # changelog
 
+## Changes made for 0.5.0
+
+### Restructuring `archive/` directory
+The archive structure has been reorganized for multi-server support:
+
+```
+archive/
+└── %server%/ <= Hostname or choosen Name for Host
+├── fail2ban/ <= daily json files from fail2ban
+├── blocklists/ <= blocklists
+└── ufw/ <= future feature
+```
+
+
+### Updated PHP files
+- `block-ip.php` → path updated to `archive/%server%/blocklists/`
+- `blocklist-stats.php` → path updated to `archive/%server%/blocklists/`
+- `fail2ban-logstats.php` → path updated to `archive/%server%/fail2ban/`
+- `get-blocklist.php` → path updated to `archive/%server%/blocklists/`
+- `get-json.php` → path updated to `archive/%server%/fail2ban/` (2x)
+- `list-files.php` → path updated to `archive/%server%/fail2ban/`
+- `ufw-report.php` → paths updated to `archive/%server%/blocklists/` and `archive/%server%/ufw/`
+- `unblock-ip.php` → path updated to `archive/%server%/blocklists/`
+- `warnings.php` → path updated to `archive/%server%/fail2ban/`
+
+### Updated JS files
+- `action-collector.js`
+
+### Centralized Path Configuration
+- New `paths.php` introduced for centralized path management
+- Usage:
+```php
+require_once __DIR__ . "/paths.php";
+$PFAD = $PATHS["blocklists"];
+```
+- Server-specific paths are automatically considered
+
+### UI
+
+Multi-server UI fully decoupled from hosts
+- new dropdown for server-list to switch between servers
+
+
+---
+
 ## Changes made for V 0.4.0
 
 ### Optimized `firewall-update.sh` for faster processing, improving performance with large JSON files.
