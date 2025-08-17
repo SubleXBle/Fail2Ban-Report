@@ -149,6 +149,12 @@ This is especially useful if you want to manually patch or update individual fil
 
 ## 🖼️ Screenshots
 
+![screenshots/Header-050-1.png](screenshots/Header-050-1.png)
+![screenshots/Header-050-2.png](screenshots/Header-050-2.png)
+![screenshots/List-050-1.png](screenshots/List-050-1.png)
+![screenshots/Block-List-050-1.png](screenshots/Block-List-050-1.png)
+![screenshots/Message-Toast-050-1.png](screenshots/Message-Toast-050-1.png)
+![screenshots/Message-Toast-050-2.png](screenshots/Message-Toast-050-2.png)
 
 
 ---
