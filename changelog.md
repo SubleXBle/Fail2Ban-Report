@@ -76,6 +76,14 @@ $NEEDED_PATH = $PATHS["blocklists"];
    - Login Form in Header
    - Logout button resets role to `Viewer`  
 
+#### Roles
+  - `Block` and `Unblock` Features need now Admin Role to work
+  - Users and Roles can be added with provided .sh Script `manage-users.sh`
+
+
+
+
+
 ---
 
 ## Changes made for V 0.4.0
