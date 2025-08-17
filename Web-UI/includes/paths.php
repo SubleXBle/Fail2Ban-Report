@@ -21,15 +21,15 @@ $SERVERS = [
     "tests"  => "Testing"
 ];
 
-// Standardserver
+// Default Server
 $DEFAULT_SERVER = "swsrv";
 
-// Falls Auswahl im Dropdown getroffen wurde → merken
+// If choosen item -> dont forget
 if (isset($_POST['server']) && array_key_exists($_POST['server'], $SERVERS)) {
     $_SESSION['active_server'] = $_POST['server'];
 }
 
-// Aktiven Server bestimmen (Session → Default)
+// active server (Session → Default)
 $activeServer = $_SESSION['active_server'] ?? $DEFAULT_SERVER;
 
 /**
