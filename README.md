@@ -88,7 +88,7 @@ It provides optional tools to:
 - ✅ Centralized path management → reduced hardcoding, clearer structure
 - ✅ Multi-server dashboard → switch between servers seamlessly
 - ✅ Authentication → login with session, only admins can ban/unban
-- ✅ User management script (.sh) → manage htpasswd user list
+- ✅ User management script (.sh) → manage Fail2Ban-Report User-List
 - ✅ User groups → Viewer (read-only) / Admin (ban/unban)
 - ⏳ Working on the Sync-Backend
 
