@@ -29,19 +29,52 @@ archive/
 - `action-collector.js`
 
 ### Centralized Path Configuration
+
+**Dynamic Path Management**
 - New `paths.php` introduced for centralized path management
+   - `$PATHS['config']` → `/opt/Fail2Ban-Report/Settings/`  
+   - `$PATHS['blocklists']` → server-specific blocklist paths  
 - Usage:
 ```php
 require_once __DIR__ . "/paths.php";
 $NEEDED_PATH = $PATHS["blocklists"];
 ```
-- Server-specific paths are automatically considered
 
 ### UI
 
-Multi-server UI fully decoupled from hosts
 - new dropdown for server-list to switch between servers
 
+## Authentication for Admin-Actions
+
+1. **Session-based Authentication**
+   - Secure sessions with `session_set_cookie_params`:  
+     - `HttpOnly = true`  
+     - `Secure = true` (HTTPS only)  
+     - `SameSite = Strict`  
+   - Session timeout set to 30 minutes  
+   - Session roles: `viewer` (default) / `admin`  
+
+2. **Login / Logout Functionality**
+   - Login form with username & password  
+   - Password verification using `password_verify()` (bcrypt)  
+   - Session regeneration after successful login (`session_regenerate_id(true)`)  
+   - Logout destroys the session and redirects back to login page  
+
+3. **User Management via JSON File**
+   - File: `users.json` located outside the web root (`/opt/Fail2Ban-Report/Settings/users.json`)  
+   - No default users – users must be created via shell script  
+   - File permissions: `chown root:www-data` + `chmod 0660`  
+   - All admin and viewer information loaded from this file  
+
+4. **Admin-only Actions**
+   - `block-ip.php` and `unblock-ip.php` check `is_admin()`  
+   - Viewers cannot execute these actions and receive clear error messages  
+
+5. **UI Adjustments**
+   - Role display, e.g., `Viewer` or `Admin`  
+   - Server selection preserved correctly across sessions
+   - Login Form in Header
+   - Logout button resets role to `Viewer`  
 
 ---
 
