@@ -164,10 +164,11 @@ There's a simple demo version available here – no backend, no real data:
 ---
 
 ## ✅ What It Is
-- A **read-only + action-enabled** web dashboard for Fail2Ban events  
+- A **role-based web dashboard** for Fail2Ban events: read-only for Viewers, action-enabled for Admins  
 - A tool to **visualize** bans/unbans and **manually** manage blocked IPs  
 - A **log parser + JSON generator** that works alongside your existing Fail2Ban setup  
-- A way to **sync a persistent blocklist** with your firewall (currently **UFW only**)  
+- A way to **sync a persistent, per-jail blocklist** with your firewall (currently **UFW only**)  
+- Supports **multi-server setups**, allowing you to switch between servers in the dashboard  
 - Designed for **sysadmins** who want quick insights without SSH-ing into the server  
 
 ## ❌ What It Is Not
@@ -175,7 +176,8 @@ There's a simple demo version available here – no backend, no real data:
 - ❌ A real-time IDS/IPS (data updates depend on log parsing intervals)  
 - ❌ A universal firewall manager (no native support for iptables/nftables, etc. — yet)  
 - ❌ A tool for **automatic** jail management (manual actions only for now)  
-- ❌ A heavy analytics platform — it’s lightweight and log-driven by design  
+- ❌ A heavy analytics platform — it’s lightweight and log-driven by design
+
 
 ---
 
