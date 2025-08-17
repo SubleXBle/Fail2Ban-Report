@@ -83,7 +83,14 @@ It provides optional tools to:
 
 ## 🆕 What's New in V 0.5.0
 
-✅ There is one new Dropdown List
+- ✅ Archive/ restructured → separated per server
+- ✅ /opt/Fail2Ban-Report/ reorganized → clean separation of Code, Config, Assets, and Includes
+- ✅ Centralized path management → reduced hardcoding, clearer structure
+- ✅ Multi-server dashboard → switch between servers seamlessly
+- ✅ Authentication → login with session, only admins can ban/unban
+- ✅ User management script (.sh) → manage htpasswd user list
+- ✅ User groups → Viewer (read-only) / Admin (ban/unban)
+- ⏳ Working on the Sync-Backend
 
 ---
 
