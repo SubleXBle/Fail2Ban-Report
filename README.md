@@ -14,7 +14,9 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 
 **Current Status:**  
 > Fail2Ban-Report currently manages bans and unbans through **UFW**, serving as a safe solution.
-It does **not** directly modify Fail2Ban jails or change existing fail2ban configurations as it uses ufw for it's own permanent "Jails"
+> It does **not** directly modify Fail2Ban jails or change existing fail2ban configurations as it uses ufw for it's own permanent "Jails"
+> Fail2Ban-Report now supports **multi-server setups** and **role-based access**:  
+> Viewer accounts are read-only, while Admins can manage bans/unbans via the dashboard.
 
 **Future Direction:**  
 > A potential long-term enhancement could include **direct interaction with Fail2Ban jails** — for example, user-controlled bans and unbans per jail.  
@@ -30,45 +32,54 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 It provides optional tools to:  
 
 - 📊 Visualize **ban** and **unban** events, including per-jail statistics  
-- ⚡ Interact with IPs (e.g., manually block, unblock, get report from external services)  
-- 📂 Maintain **jail-specific** persistent blocklists (JSON) with `active` and `pending` status  
+- ⚡ Interact with IPs (e.g., manually block, unblock) — **only Admins** can perform actions  
+- 📂 Maintain **jail-specific and per-server** persistent blocklists (JSON) with `active`, `pending`, and `source` metadata  
 - 🔄 Sync those lists with your system firewall using **ufw**  
-- 🚨 Show **warning indicators** when ban rates exceed configurable thresholds
-- 🚨 Show **Markers** when a IP Address is present more than once in one (yellow) or more (red) jails.
+- 🌐 Switch between multiple servers in the dashboard for multi-server setups  
+- 🚨 Show **warning indicators** when ban rates exceed configurable thresholds  
+- 🚨 Show **Markers** when an IP Address is present multiple times in one (yellow) or more (red) jails  
 
-> **Note:** Direct integration with other firewalls or native Fail2Ban jail commands is not yet implemented.
+> **Note:** Viewer accounts are read-only. Direct integration with other firewalls or native Fail2Ban jail commands is not yet implemented.  
+
 
 ---
 
 ## 🧱 Architecture Overview
+
 - **Backend Shell Scripts**:  
   - Parse logs and generate daily JSON event files  
-  - Maintain and update `*.blocklist.json`  
+  - Maintain and update `*.blocklist.json` per server  
   - Apply or remove firewall rules based on blocklist entries (`ufw`)  
+  - Support for multi-server environments (future: rsync backend)  
 
 - **Frontend Web Interface**:  
   - Displays event timelines, statistics, and per-jail blocklists  
   - Allows **multi-selection** for bulk ban/report actions  
   - Shows **pending status** for unprocessed manual actions  
   - Displays real-time warning indicators  
+  - **Server switching**: choose which server’s data to view  
+  - **Authentication**: Viewer (read-only) / Admin (Ban/Unban)  
 
 - **JSON Blocklists**:  
-  - Stored per jail  
-  - Contain IP entries with metadata (`active`, `pending`, timestamps, jail name)  
+  - Stored per jail and per server  
+  - Contain IP entries with metadata (`active`, `pending`, timestamps, jail name, source)  
+  - Only admins can modify entries (block/unblock) 
 
 ---
 
 ## 📦 Features
 
-- 🔍 **Searchable + filterable** log reports (date, jail, IP)
-- 🔧 **Integrated JSON blocklist** for persistent Block-Overview
-- 🧱 **Firewall sync** using UFW (planned: nftables, firewalld)
-- ⚡ **Lightweight setup** — no DB, no frameworks
-- 🔐 **Compatible with hardened environments** (no external assets, strict headers)
-- 🛠️ **Installer script** to automate setup and permissions
-- 🧩 **Modular design** for easy extension
-- 🪵 Optional logging of block/unblock actions (set true/false and logpath in `firewall-update.sh`)
-- 🕵️ **Optional Feature :** IP reputation check via AbuseIPDB (manual lookup from web interface)
+🔍 **Searchable & filterable log reports** — by date, jail, IP  
+🔧 **Integrated JSON blocklist** — persistent Block-Overview per server  
+🧱 **Firewall sync** — UFW supported (future: nftables, firewalld, rsync backend)  
+⚡ **Lightweight setup** — no DB, no frameworks  
+🔐 **Secure & hardened** — minimal external dependencies, strict headers, htaccess protected  
+🛠️ **Installer / Setup scripts** — automate folder creation, permissions, user management  
+🧩 **Modular & extendable design** — includes, paths, scripts clearly separated  
+🪵 **Optional logging** — block/unblock actions logged via firewall-update.sh  
+🕵️ **Optional IP reputation check** — AbuseIPDB manual lookup from UI  
+👥 **User roles & authentication** — Viewer (read-only) / Admin (Ban/Unban)  
+🌐 **Multiserver support** — switch between servers in UI, central blocklist management
 
 > 🧰 Works even on small setups (Raspberry Pi, etc.)
 
