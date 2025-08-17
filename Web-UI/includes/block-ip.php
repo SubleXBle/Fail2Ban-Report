@@ -10,9 +10,36 @@
  * @return array                   Result array or array of results with 'success', 'message' and 'type'.
  */
 
+// auth
+/*
+require_once __DIR__ . '/auth.php';
+
+header('Content-Type: application/json');
+
+if (!is_admin()) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Unauthorized: Only admin can perform this action.'
+    ]);
+    exit;
+}
+*/
+// end auth
+
+
+
 require_once __DIR__ . "/paths.php";
 
 function blockIp($ips, $jail = 'unknown', $source = 'manual') {
+    // Admin-Check
+    if (!is_admin()) {
+        return [
+            'success' => false,
+            'message' => 'Unauthorized: Only admin can block IPs.',
+            'type' => 'error'
+        ];
+    }
+
     $results = [];
 
     if (!is_array($ips)) {
