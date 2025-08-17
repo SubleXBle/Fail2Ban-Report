@@ -21,7 +21,7 @@ $SERVERS = [
     "tests"  => "Testing"
 ];
 
-// Default Server
+// Default Server => Will have to be set in config to work for others
 $DEFAULT_SERVER = "swsrv";
 
 // If choosen item -> dont forget
