@@ -127,15 +127,12 @@ This is especially useful if you want to manually patch or update individual fil
 ---
 
 ## 🛣️ Roadmap
-> I gave up the usual Roadmap - to have more freedom with development
+> I gave up the usual Roadmap - to have more freedom with development - Things like Multiserver was never on the Roadmap but allways in my mind.
 > Using Fail2Ban-Report since it exists i have got some different views in terms of what do I want and how I think about what this project can become with a little time and polish.
 > Suggestions and Ideas still welcome at any time (see Discussions)
 
 ## 👀 Outlook
 - 📦 Further Improvements & Security Enhancements
-  - Moving `archive/` to `/opt` makes little sense if `www-data` still needs access.
-  - Working on a solution to authorize changes made to JSON files via the web interface. 
-- 🐳 A Docker image is expected probably around version v0.5.x
 
 ---
 
@@ -151,7 +148,7 @@ This is especially useful if you want to manually patch or update individual fil
 ## 🖥️ Demo
 👀 Want to try out the look & feel?
 There's a simple demo version available here – no backend, no real data:
-👉 https://suble.net/ 🔗
+👉 https://demo.suble.net/ 🔗
 
 ---
 
