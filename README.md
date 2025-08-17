@@ -96,28 +96,9 @@ It provides optional tools to:
 
 ### ⚠️ Upgrade Notice
 
-If you're upgrading from an existing installation : from 0.3.3 and later
+If you're upgrading from an existing installation 
 
-1. 📦 Replace all or changed files with the new version (overwrite).
-2. 👀 List of changed files: ![changelog.md#list-of-changed-files](changelog.md#list-of-changed-files)
-3. 📦 make sure new shellscripts are executable
-4. 🛠️ Control needed Paths
-5. 🛠️ Control .htaccess
-
-If you're upgrading from an existing installation : pre 0.3.2 and also from 0.3.2
-
-- ⚠️ **The new blocklist format is not compatible with the old `blocklist.json`.** and got new field `pending` is in json since 0.3.3
-- 🧹 To ensure a clean transition and avoid orphaned firewall entries, follow these steps:
-
-  1. **Empty your current blocklist** via the **Unblock** buttons in the UI.
-  2. 🔄 Trigger a **sync** using the `firewall-update.sh` to remove all Fail2Ban-Report-related rules from the firewall.
-  3. 🗑️ Delete the old `blocklist.json`.
-  4. 📦 Replace all files with the new version (overwrite).
-  5. ✅ Done! The new system will now build jail-specific blocklists automatically.
-
-- 🛠️ _Optional_ : Run the `installer.sh` again to get a fresh setup.
-
-> This ensures no leftover blocks remain in your firewall from the previous system.
+> here will be added some new stuff
 
 ---
 
