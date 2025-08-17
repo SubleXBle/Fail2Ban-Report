@@ -1,11 +1,11 @@
 # Fail2Ban-Report
 > Beta 5.0 | Version 0.5.0
 
-> A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
+> A simple and clean web-based multi-Server dashboard to turn your daily Fail2Ban logs from your servers/hosts into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
 
 **Integration**
 >Designed for easy integration on a wide range of Linux systems — from small Raspberry Pis to modest business setups — though it’s not (yet) targeted at large-scale enterprise environments.
-Flexibility comes from the two backend shell scripts, which you can adapt to your specific environment or log sources to provide the JSON data the web interface needs (daily JSON event files).
+High flexibility comes from the backend shell scripts, which you can adapt to your specific environment or log sources to provide the JSON data the web interface needs (daily JSON event files).
 
 
 🛡️ **Note**: This tool is a visualization and management layer — it does **not** replace proper intrusion detection or access control. Deploy it behind IP restrictions or HTTP authentication.
@@ -13,8 +13,8 @@ Flexibility comes from the two backend shell scripts, which you can adapt to you
 🔐 Security Notice
 
 **Current Status:**  
-> Fail2Ban-Report currently manages bans and unbans through **UFW**, serving as a safe **intermediate solution**.  
-It does **not** directly modify Fail2Ban jails or change existing fail2ban configurations.
+> Fail2Ban-Report currently manages bans and unbans through **UFW**, serving as a safe solution.
+It does **not** directly modify Fail2Ban jails or change existing fail2ban configurations as it uses ufw for it's own permanent "Jails"
 
 **Future Direction:**  
 > A potential long-term enhancement could include **direct interaction with Fail2Ban jails** — for example, user-controlled bans and unbans per jail.  
@@ -112,47 +112,24 @@ This is especially useful if you want to manually patch or update individual fil
 
 ---
 
-## 🪳 Bugfixes
+## 🪳 Bugfixes (History)
 
 > - Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
 
-- ✅ **Date filter** now correctly limits displayed events
-- ✅ **Jail filter** now correctly shows only the jails present in the displayed event list.
-- ✅ **File date filtering** fix to include today's JSON logs and ensure latest files are listed correctly.
-- ✅ **Blocklist Path on unblocking** fixed a possible bug that could lead to not finding the blocklist.json when unblocking from the Blocklist view.  
-  → Hotfixed on 05.08.2025 at 13:10 (UTC+2) directly in latest
-- ✅ **Installer** should now ask if you want to delete and reclone repo when allready existing
-- ✅ **Added FLOCK** to lock json files to not loose data when several write processes write at the same time
+- ✅ **Date filter** now correctly limits displayed events (0.1.2)
+- ✅ **Jail filter** now correctly shows only the jails present in the displayed event list. (0.2.1)
+- ✅ **File date filtering** fix to include today's JSON logs and ensure latest files are listed correctly. (0.2.2)
+- ✅ **Blocklist Path on unblocking** fixed a possible bug that could lead to not finding the blocklist.json when unblocking from the Blocklist view. (0.2.2)
+  → Hotfixed on 05.08.2025 at 13:10 (UTC+2) directly in latest (0.2.3)
+- ✅ **Installer** should now ask if you want to delete and reclone repo when allready existing (0.3.1)
+- ✅ **Added FLOCK** to lock json files to not loose data when several write processes write at the same time (0.3.2)
 
 ---
 
 ## 🛣️ Roadmap
-
-### 🔧 Setup & Automation
-- ✅ Automated installer script 
-- ✅ Optional cron setup for log parsing and firewall sync
-- 🧩 More robust installer
-- ⏳ Secure-by-default deployments
-
-### 🔐 Security
-- ✅ Hardened `.htaccess` with best practices
-- ✅ add security layer between json and js
-- ⏳ Further improvements (ongoing goal)
-
-### 🔥 Active Defense
-- ✅ Manual IP blocking via UI in UFW 
-- ✅ IP reputation lookup via AbuseIPDB (optional)
-- ✅ IP GeoLoc and Provider Data with IP-Info (optional)
-- ✅ Bulk blocking of multiple IPs
-- ✅ Shows warnings/critical states threshold for Bans/Minute/Jail (setable in config)
-- ✅ Shows warning states for Ips that are more than once on List
-- ✅ Shows critical states for IPs that are in more than one Jail in List
-- 🧩 Support for nftables, firewalld
-- ⏳ LTG: Integration with external services (e.g. AbuseIPDB reporting)
-- ⏳ LTG: Integration with fail2ban-jails directly
-
-### 🌿 User Interface
-- ⏳ Improve CSS and styling
+> I gave up the usual Roadmap - to have more freedom with development
+> Using Fail2Ban-Report since it exists i have got some different views in terms of what do I want and how I think about what this project can become with a little time and polish.
+> Suggestions and Ideas still welcome at any time (see Discussions)
 
 ## 👀 Outlook
 - 📦 Further Improvements & Security Enhancements
