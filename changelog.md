@@ -78,7 +78,7 @@ $NEEDED_PATH = $PATHS["blocklists"];
 
 #### Roles
   - `Block` and `Unblock` Features need now Admin Role to work
-  - Users and Roles can be added with provided .sh Script `manage-users.sh`
+  - Users with Roles `Viewer` or `Admin` can be added with provided .sh Script `manage-users.sh`
 
 
 
