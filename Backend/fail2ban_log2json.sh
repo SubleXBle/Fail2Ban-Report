@@ -13,7 +13,7 @@ mkdir -p "$OUTPUT_JSON_DIR"
 # === Processing ===
 echo "[" > "$OUTPUT_JSON_FILE"
 
-grep -E "Ban |Unban " "$LOGFILE" | awk -v today="$TODAY" '
+grep -E "(^|[^A-Za-z])(Ban|Unban) " "$LOGFILE" | awk -v today="$TODAY" '
 {
     timestamp = $1 " " $2;
 
