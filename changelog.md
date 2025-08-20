@@ -83,6 +83,43 @@ $NEEDED_PATH = $PATHS["blocklists"];
 
 
 
+### fail2ban_log2json.sh
+
+**Changes:**
+- **Support for "Increase Ban" events:**  
+  - Added parsing logic for `Increase Ban` events in addition to `Ban` and `Unban`.
+  - Extracts the IP from `Increase Ban` lines separately.
+  - Ensures only lines with valid IPs are included in the JSON output.
+- **Updated grep pattern:**  
+  - From `grep -E "(^|[^A-Za-z])(Ban|Unban) "` to `grep -E "(Ban|Unban)"` to capture `Increase Ban`.
+- **Output path adjustment:**  
+  - `OUTPUT_JSON_DIR` updated from `/opt/Fail2Ban-Report/archive/YOUR-HOSTNAME/fail2ban` to `/var/www/Fail2Ban-Report/archive`.
+- **Minor cleanup:**  
+  - Last comma removal logic kept to ensure valid JSON.
+
+---
+
+### jsonreader.js
+
+**Changes:**
+- **Increase Ban handling in table:**
+  - `Increase Ban` events are no longer rendered as separate rows to avoid flooding the table.
+  - Counts `Increase Ban` events per IP and marks the corresponding `Ban`/`Unban` row with a yellow marker (`🟡`).
+  - Appends the count of `Increase Ban` events in parentheses next to the yellow marker.
+- **Marker logic updated:**
+  - Red marker (`🔴`) now indicates multiple `Ban`/`Unban` events per IP.
+  - Yellow marker (`🟡`) indicates that `Increase Ban` events exist for that IP, even if no repeated `Ban`/`Unban`.
+  - Combination of red and yellow markers can appear if both conditions apply.
+- **Filtering remains consistent:**
+  - Marker filter logic updated to respect new marker assignments.
+- **Step restructuring for clarity:**
+  - Added steps for counting `Increase Ban`, filtering, marker assignment, marker filtering, jail dropdown rebuild, sorting, and rendering.
+
+**Behavioral impact:**
+- Reduces duplicate rows caused by multiple `Increase Ban` events.
+- Highlights IPs with `Increase Ban` activity on the same day.
+- Table rendering and filtering continue to work as before with updated marker system.
+
 
 
 ---
