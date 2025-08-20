@@ -19,8 +19,8 @@
   <label for="markFilter">Mark:</label>
   <select id="markFilter">
     <option value="">All</option>
-    <option value="yellow">🟡 Warn</option>
-    <option value="red">🔴 Crit</option>
+    <option value="yellow">🟡 Ban Increases</option>
+    <option value="red">🔴 Multiple Bans</option>
     <option value="yellowred">🟡🔴 Both</option>
     <option value="none">⚪ None</option>
   </select>
