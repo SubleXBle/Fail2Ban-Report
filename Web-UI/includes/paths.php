@@ -1,10 +1,6 @@
 <?php
-//session_start();
-
 // Use existing Session or start a new one
 if (session_status() === PHP_SESSION_NONE) {
-//    die("Session not started. Include auth.php first.");
-//    session_start();
     require_once __DIR__ . '/auth.php';
 }
 
@@ -14,20 +10,33 @@ $CONFIG_ROOT = "/opt/Fail2Ban-Report/Settings/";
 // Basispfad
 $ARCHIVE_ROOT = __DIR__ . "/../archive/";
 
-// Liste verfügbarer Server
-$SERVERS = [
-    "swsrv"  => "Webserver",
-    "sasrv"  => "Appserver",
-    "tests"  => "Testing"
-];
+// Serverliste automatisch aus archive/ generieren
+$SERVERS = [];
+if (is_dir($ARCHIVE_ROOT)) {
+    foreach (scandir($ARCHIVE_ROOT) as $entry) {
+        if ($entry === '.' || $entry === '..') {
+            continue;
+        }
+        if (is_dir($ARCHIVE_ROOT . $entry)) {
+            // z. B. Key = Ordnername, Value = "Schönschreibweise"
+            $SERVERS[$entry] = ucfirst($entry);
+        }
+    }
+}
 
 // Config einlesen
-$configFile = '/opt/Fail2Ban-Report/Settings/fail2ban-report.config';
+$configFile = $CONFIG_ROOT . 'fail2ban-report.config';
 $config = parse_ini_file($configFile, true);
 
-// Standardserver aus Config laden, fallback auf "swsrv"
-$DEFAULT_SERVER = $config['Default Server']['defaultserver'] ?? 'swsrv';
+// Standardserver aus Config lesen
+$configDefault = $config['Default Server']['defaultserver'] ?? null;
 
+// Validierung Default: aus Config, sonst erster gefundener Server
+if ($configDefault && array_key_exists($configDefault, $SERVERS)) {
+    $DEFAULT_SERVER = $configDefault;
+} else {
+    $DEFAULT_SERVER = array_key_first($SERVERS);
+}
 
 // If choosen item -> dont forget
 if (isset($_POST['server']) && array_key_exists($_POST['server'], $SERVERS)) {
@@ -35,7 +44,9 @@ if (isset($_POST['server']) && array_key_exists($_POST['server'], $SERVERS)) {
 }
 
 // active server (Session → Default)
-$activeServer = $_SESSION['active_server'] ?? $DEFAULT_SERVER;
+$activeServer = (isset($_SESSION['active_server']) && array_key_exists($_SESSION['active_server'], $SERVERS))
+    ? $_SESSION['active_server']
+    : $DEFAULT_SERVER;
 
 /**
  * Pfade für den aktuell aktiven Server zurückgeben
