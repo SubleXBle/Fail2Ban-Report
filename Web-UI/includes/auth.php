@@ -1,18 +1,18 @@
 <?php
-// Session starten (mit sicheren Cookie-Flags)
+// Start session (with secure cookie flags)
 if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
-        'lifetime' => 0,          // Session endet beim Schließen des Browsers
+        'lifetime' => 0,          // Session ends when the browser is closed
         'path' => '/',
-        'httponly' => true,       // Kein Zugriff via JavaScript
-        'secure' => true,         // Nur über HTTPS
-        'samesite' => 'Strict'    // Kein Cross-Site-Request möglich
+        'httponly' => true,       // No access via JavaScript
+        'secure' => true,         // HTTPS only
+        'samesite' => 'Strict'    // No cross-site requests allowed
     ]);
     session_start();
 }
 
-// Timeout-Check direkt nach Session-Start
-$SESSION_TIMEOUT = 1800; // 30 Minuten
+// Timeout check immediately after session start
+$SESSION_TIMEOUT = 1800; // 30 Minutes
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $SESSION_TIMEOUT)) {
     session_unset();
     session_destroy();
@@ -20,20 +20,16 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
 }
 $_SESSION['last_activity'] = time();
 
-// Standardrolle setzen
+// set Standard Role
 if (!isset($_SESSION['user_role'])) {
     $_SESSION['user_role'] = 'viewer';
 }
 
-// paths.php einbinden, damit $PATHS['config'] existiert
-//require_once __DIR__ . '/paths.php';
-
-// User-Datei laden
-//$USER_FILE = $PATHS['config'] . "users.json";
+// Load User-File
 $USER_FILE= "/opt/Fail2Ban-Report/Settings/users.json";
 $USERS = json_decode(file_get_contents($USER_FILE), true) ?: [];
 
-// Logout verarbeiten
+// Logout
 if (isset($_POST['logout'])) {
     session_unset();
     session_destroy();
@@ -41,7 +37,7 @@ if (isset($_POST['logout'])) {
     exit;
 }
 
-// Loginformular gesendet?
+// sent Loginform?
 if (isset($_POST['login_user']) && isset($_POST['login_pass'])) {
     $user = $_POST['login_user'];
     $pass = $_POST['login_pass'];
@@ -49,7 +45,7 @@ if (isset($_POST['login_user']) && isset($_POST['login_pass'])) {
 
     foreach ($USERS as $u) {
         if ($u['username'] === $user && password_verify($pass, $u['password'])) {
-            // Login erfolgreich -> Session fixieren
+            // Login success -> Hold Session
             session_regenerate_id(true);
             $_SESSION['user_role'] = $u['role'];
             $_SESSION['username']  = $u['username'];
@@ -59,7 +55,7 @@ if (isset($_POST['login_user']) && isset($_POST['login_pass'])) {
     }
 
     if (!$loggedIn) {
-        // Optional: Loginversuch loggen / Fail2Ban triggern
+        // trigger error on failed login (could take this to fail2ban)
         error_log("Failed login for $user from " . $_SERVER['REMOTE_ADDR']);
         die("Login failed");
     }
@@ -70,7 +66,7 @@ function is_admin() {
     return (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin');
 }
 
-// Optional: Session Debug
+// Session Debug
 function debug_session() {
     echo "<pre>";
     print_r($_SESSION);
