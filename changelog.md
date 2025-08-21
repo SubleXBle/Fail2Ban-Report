@@ -123,6 +123,71 @@ $NEEDED_PATH = $PATHS["blocklists"];
 ### index.php
 changed the dropdown-list to match the new Marker assignment
 
+
+# Fail2Ban-Report 0.5.0 – Backend / Endpoint Updates
+
+### Endpoint
+
+### 1. Endpoint (`/endpoint/index.php`)
+- New HTTPS endpoint for clients to send JSON data (`fail2ban-events-*.json` and `*.blocklist.json`).  
+- Authentication using:
+  - Username  
+  - Password (bcrypt)  
+  - UUID  
+  - IP address (optional whitelist via `.htaccess`)  
+- File type handling:
+  - **fail2ban-events-*.json:** overwrites existing file in `archive/<username>/fail2ban/`  
+  - **\*.blocklist.json:** locked via `flock`; existing entries are updated (`pending=false`) or deleted depending on transmitted status  
+- Automatic creation of client folders in `archive/` on first upload  
+- Correct permissions set for web server (`root:www-data`)  
+
+---
+
+### 2. Client Script for JSON Creation & Upload (`fail2ban_log2json_push.sh`)
+- Generates daily JSON from Fail2Ban logs (`fail2ban-events-YYYYMMDD.json`).  
+- Uploads the JSON directly to the endpoint using `curl` with authentication (Username + Password + UUID).  
+- Logs upload results locally.  
+- All key settings (log file, output directory, endpoint URL, auth credentials) configurable at the top of the script.  
+
+---
+
+### 3. Client List Management Helper (`manage-clients.sh`)
+- CLI tool to add, edit, or delete client entries.  
+- Each client has:
+  - Username  
+  - Password (bcrypt, server-side hash)  
+  - UUID  
+  - IP address  
+- Stored in `client-list.json` (`/opt/Fail2Ban-Report/Settings/`).  
+- Password hash generated via PHP `password_hash()`.  
+
+---
+
+### 4. Client UUID Generation (`create-client-uuid.sh`)
+- Script to generate a client UUID for installation or rotation.  
+- Stores UUID in `/opt/Fail2Ban-Report/Settings/client-uuid`.  
+- Lightweight, intended for initialization or rotation only.  
+
+---
+
+### 5. `.htaccess` for Endpoint
+- Separate `.htaccess` in the `endpoint/` folder to override global security rules.  
+- By default, only `index.php` is accessible; all other files blocked.  
+- Optional IP whitelist (`Require ip <IP>`) can be enabled.  
+- Optional Basic Auth can be added.  
+- Prevents directory listing and access to sensitive files.  
+
+---
+
+### Summary
+- Fully new endpoint infrastructure for client JSON push/pull.  
+- Client scripts for upload, UUID, and client list management created.  
+- Security enhanced through combined authentication and dedicated `.htaccess` for endpoint.  
+- Flexible file handling for Fail2Ban events and blocklists implemented.
+
+
+
+
 ---
 
 ## Changes made for V 0.4.0
