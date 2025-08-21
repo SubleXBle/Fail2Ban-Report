@@ -67,9 +67,11 @@ function is_admin() {
 }
 
 // Session Debug
+/*
 function debug_session() {
     echo "<pre>";
     print_r($_SESSION);
     echo "</pre>";
 }
+*/
 ?>
