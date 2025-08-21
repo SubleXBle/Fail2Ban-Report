@@ -5,7 +5,7 @@
 # Directory Listing
 Options -Indexes
 
-# Block all but index.php
+# Block all but index.php and update.php
 <FilesMatch "^(?!index\.php$)(?!update\.php$).*">
   Require all denied
 </FilesMatch>
