@@ -97,7 +97,7 @@ It provides optional tools to:
 
 ## 🆕 What's New in V 0.5.0
 
-- ✅ Archive/ restructured → separated per server and "department" (fail2ban / blocklists)
+- ✅ archive/ restructured → separated per server and "department" (fail2ban / blocklists)
 - ✅ /opt/Fail2Ban-Report/ reorganized → cleaner separation of configs and scripts
 - ✅ Centralized path management → reduced hardcoding, clearer structure
 - ✅ Multi-server dashboard → switch between servers seamlessly
