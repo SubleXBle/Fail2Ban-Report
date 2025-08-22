@@ -2,7 +2,9 @@
 
 ## Timeline
 ```
+
 0.3.1 ──► 0.3.2 ──► 0.3.3 ──► 0.3.4 ──► 0.4.0 ──► 0.5.0
+ 🔐        📊       ⚠️        🗂️       ✨        🌐
   │         │         │         │         │         │
   │         │         │         │         │         └─ Multi-server + endpoint
   │         │         │         │         └─ Marker system, copy clipboard & Docker Version
@@ -10,6 +12,17 @@
   │         │         └─ Jail-specific blocklists & filters
   │         └─ Aggregated Fail2Ban stats
   └─ Secure JSON proxy, daily logs, mobile, favicon
+
+
+##########  Legend #########
+
+🔐 Security / Protection
+📊 Statistics / Reporting
+⚠️ Warnings / Quality of Life
+🗂️ Organization / Structure (Blocklists, Jails)
+✨ UI / UX Features
+🌐 Multi-server, Endpoint, Integration
+
 
 ```
 
