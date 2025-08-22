@@ -170,6 +170,7 @@ This is especially useful if you want to manually patch or update individual fil
 
 - ⏳ Rework Blocklist Overlay
 - ⏳ Rework Stylesheet
+- ⏳ Rework Info Notices
 
 > As I am using Fail2Ban-Report I think it has a lot of potential to become something nice for not just myself.
 
