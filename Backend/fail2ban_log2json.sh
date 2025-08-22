@@ -1,6 +1,3 @@
-#!/bin/bash
-
-# === Configuration ===
 LOGFILE="/var/log/fail2ban.log"
 OUTPUT_JSON_DIR="/var/www/Fail2Ban-Report/archive"
 
