@@ -1,19 +1,19 @@
 #!/bin/bash
 # fail2ban_log2json.sh
-# Erstellt die tägliche Fail2Ban-Events JSON und überträgt sie direkt an den Server
+# will send the logfile to the server when done creating
 
 set -euo pipefail
 
 # === Configuration ===
 LOGFILE="/var/log/fail2ban.log"
 OUTPUT_JSON_DIR="/var/www/Fail2Ban-Report/archive"
-CLIENT_USER="meinclient"
-CLIENT_PASS="geheimespasswort"
-CLIENT_UUID="123e4567-e89b-12d3-a456-426614174000"
-ENDPOINT_URL="https://meinserver/Fail2Ban-Report/endpoint/index.php"
+CLIENT_USER="MyClientName"
+CLIENT_PASS="MyPassword"
+CLIENT_UUID="MyUUID"
+ENDPOINT_URL="https://my.server.tld/Fail2Ban-Report/endpoint/index.php"
 CLIENT_LOG="/var/log/fail2ban-report-client.log"
 
-# === JSON Erstellung (unverändert) ===
+# === create JSON  ===
 TODAY=$(date +"%Y-%m-%d")
 TODAY_SHORT=$(date +"%Y%m%d")
 OUTPUT_JSON_FILE="$OUTPUT_JSON_DIR/fail2ban-events-$TODAY_SHORT.json"
@@ -72,7 +72,7 @@ fi
 echo "]" >> "$OUTPUT_JSON_FILE"
 echo "✅ JSON created: $OUTPUT_JSON_FILE"
 
-# === Upload der JSON an den Server ===
+# === Upload JSON to Server ===
 upload_file() {
     local file=$1
     echo "🔄 Uploading $file ..."
@@ -109,7 +109,7 @@ upload_file() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') ✅ Upload succeeded for $file" | tee -a "$CLIENT_LOG"
 }
 
-# Upload der gerade erstellten JSON
+# Upload JSON
 upload_file "$OUTPUT_JSON_FILE"
 
 echo "✅ Upload completed."
