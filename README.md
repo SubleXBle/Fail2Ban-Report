@@ -158,9 +158,7 @@ This is especially useful if you want to manually patch or update individual fil
 
 > As I am using Fail2Ban-Report I think it has a lot of potential to become something nice for not just myself.
 
-> Suggestions and Ideas still welcome at any time (see Discussions)
-
-> When you are using Fail2Ban-Report and you think "I would need to see .. " tell me, I am happy to see your Ideas!
+> Suggestions and Ideas still welcome at any time (see Discussions) - When you are using Fail2Ban-Report and you think "I would need to see .. " tell me, I am happy to see your Ideas!
 
 ## 👀 Outlook
 - 📦 will have a deeper look into statistics with the next releases
