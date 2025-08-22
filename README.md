@@ -104,7 +104,11 @@ It provides optional tools to:
 - ✅ Authentication → login with session, only admins can ban/unban
 - ✅ User management script (.sh) → manage Fail2Ban-Report User-List
 - ✅ User groups → Viewer (read-only) / Admin (ban/unban)
-- ⏳ Working on the Sync-Backend
+- ⏳ **Sync-Backend**
+  - ✅ Security
+    - ✅ Username passwd uuid and optional ip will get checked by backend
+    - ✅ password bcrypt hashed stored
+    - ✅ additional .htaccess ip whitelist provided
   - ✅ Syncing Eventlists
   - ⏳ Update Update-List on Block and Unblock
   - ⏳ Client get update list
