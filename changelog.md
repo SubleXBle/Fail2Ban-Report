@@ -13,8 +13,7 @@
 
 ```
 
-# Version Changes
-
+# detailed Changes
 
 ## Changes made for 0.5.0
 
