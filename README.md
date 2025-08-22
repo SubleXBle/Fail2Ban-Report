@@ -97,7 +97,9 @@ It provides optional tools to:
 
 ## 🆕 What's New in V 0.5.0
 
-> This Version brings Multiserver Support and several Security enhancements
+> This Versions new Features are:
+>  -  Multiserver Support with Sync Backend
+>  -  Authentication with User Roles
 
 ⚙️ Backend
 
