@@ -9,7 +9,7 @@ These instructions explain how to manually install and configure **Fail2Ban-Repo
 - A Linux system (tested with debian only) with the following installed:
   - `fail2ban`
   - `jq`
-  - `awk`
+  - `awk` (gawk)
   - `ufw` (only UFW is supported at this time)
 - A PHP-enabled web server (e.g. Apache with PHP 7.4+)
 - The web server user (e.g. `www-data`) must have write access to the `/archive/` directory
