@@ -101,7 +101,15 @@ It provides optional tools to:
 - ✅ Authentication → login with session, only admins can ban/unban
 - ✅ User management script (.sh) → manage Fail2Ban-Report User-List
 - ✅ User groups → Viewer (read-only) / Admin (ban/unban)
+- ✅ Multiserver UI working
 - ⏳ Working on the Sync-Backend
+  - ✅ Syncing Eventlists
+  - ⏳ Update Update-List on Block and Unblock
+  - ⏳ Client get update list
+  - ⏳ client snyc blocklists
+- ⏳ rework installer
+- ⏳ documentation
+- ⏳ how 2 stuff
 
 ---
 
