@@ -1,7 +1,7 @@
 # Fail2Ban-Report
 > Beta 5.0 | Version 0.5.0
 
-> A simple and clean web-based multi-Server dashboard to turn your daily Fail2Ban logs from your servers/hosts into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
+> A lightweight web-based multi-server dashboard that transforms daily Fail2Ban logs into searchable and filterable JSON reports, while also providing centralized UFW IP blocklist management across all your servers.
 
 **Integration**
 >Designed for easy integration on a wide range of Linux systems — from small Raspberry Pis to modest business setups — though it’s not (yet) targeted at large-scale enterprise environments.
@@ -13,10 +13,10 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 🔐 Security Notice
 
 **Current Status:**  
-> Fail2Ban-Report currently manages bans and unbans through **UFW**, serving as a safe solution.
-> It does **not** directly modify Fail2Ban jails or change existing fail2ban configurations as it uses ufw for it's own permanent "Jails"
-> Fail2Ban-Report now supports **multi-server setups** and **role-based access**:  
-> Viewer accounts are read-only, while Admins can manage bans/unbans via the dashboard.
+> Fail2Ban-Report currently manages bans and unbans via UFW, providing a safe and persistent solution.
+It does not modify Fail2Ban jails or existing Fail2Ban configurations directly, instead using UFW for its own "permanent jails".
+
+> Version 0.5.0 introduces multi-server support and role-based access: Viewer accounts are read-only, while Admins can manage bans/unbans and blocklists across all connected servers via the dashboard.
 
 **Future Direction:**  
 > A potential long-term enhancement could include **direct interaction with Fail2Ban jails** — for example, user-controlled bans and unbans per jail.  
@@ -32,12 +32,12 @@ Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports view
 It provides optional tools to:  
 
 - 📊 Visualize **ban** and **unban** events, including per-jail statistics  
-- ⚡ Interact with IPs (e.g., manually block, unblock) — **only Admins** can perform actions  
+- ⚡ Interact with IPs (e.g., manually block, unblock) — **only Admins can perform actions**  
 - 📂 Maintain **jail-specific and per-server** persistent blocklists (JSON) with `active`, `pending`, and `source` metadata  
 - 🔄 Sync those lists with your system firewall using **ufw**  
 - 🌐 Switch between multiple servers in the dashboard for multi-server setups  
-- 🚨 Show **warning indicators** when ban rates exceed configurable thresholds  
-- 🚨 Show **Markers** when an IP Address is present multiple times in one (yellow) or more (red) jails  
+- 🚨 Show **Warning and Critical indicators** when ban rates exceed configurable thresholds  
+- 🚨 Show **Markers** when an IP Address had a **ban-increase** (🟡) or **more than one ban event** on one day (🔴)
 
 > **Note:** Viewer accounts are read-only. Direct integration with other firewalls or native Fail2Ban jail commands is not yet implemented.  
 
@@ -71,13 +71,14 @@ It provides optional tools to:
 
 🔍 **Searchable & filterable log reports** — by date, jail, IP  
 🔧 **Integrated JSON blocklist** — persistent Block-Overview per server  
-🧱 **Firewall sync** — UFW supported (future: nftables, firewalld, rsync backend)  
+🧱 **Firewall sync** — UFW supported
 ⚡ **Lightweight setup** — no DB, no frameworks  
-🔐 **Secure & hardened** — minimal external dependencies, strict headers, htaccess protected  
+🔐 **Secure & hardened** — minimal external dependencies (jq, awk), strict headers, htaccess protected  
 🛠️ **Installer / Setup scripts** — automate folder creation, permissions, user management  
 🧩 **Modular & extendable design** — includes, paths, scripts clearly separated  
-🪵 **Optional logging** — block/unblock actions logged via firewall-update.sh  
+🪵 **Optional Backend logging** — block/unblock actions logged via firewall-update.sh  
 🕵️ **Optional IP reputation check** — AbuseIPDB manual lookup from UI  
+🕵️ **Optional IP location/provider Check** — IP-Info manual lookup from UI
 👥 **User roles & authentication** — Viewer (read-only) / Admin (Ban/Unban)  
 🌐 **Multiserver support** — switch between servers in UI, central blocklist management
 
