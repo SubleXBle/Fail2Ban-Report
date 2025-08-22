@@ -6,7 +6,7 @@
 0.3.1 ──► 0.3.2 ──► 0.3.3 ──► 0.3.4 ──► 0.4.0 ──► 0.5.0
 🔐🌐     ⚙️🌐     ⚙️🌐     ⚙️🌐     🌐🐳    ⚙️🔐🌐
   │         │         │         │         │         │
-  │         │         │         │         │         └─ Multi-server & endpoint, Admin Authentication
+  │         │         │         │         │         └─ Multi-server & endpoint & Admin Authentication
   │         │         │         │         └─ Marker system, copy clipboard & Docker Version
   │         │         │         └─ Warnings & pending status
   │         │         └─ Jail-specific blocklists & filters
