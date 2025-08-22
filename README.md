@@ -97,6 +97,7 @@ It provides optional tools to:
 
 ## 🆕 What's New in V 0.5.0
 
+> This Version brings Multiserver Support and several Security enhancements
 
 ⚙️ Backend
 
