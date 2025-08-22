@@ -97,25 +97,31 @@ It provides optional tools to:
 
 ## 🆕 What's New in V 0.5.0
 
-- ✅ archive/ restructured → separated per server and "department" (fail2ban / blocklists)
-- ✅ /opt/Fail2Ban-Report/ reorganized → cleaner separation of configs and scripts
-- ✅ Centralized path management → reduced hardcoding, clearer structure
-- ✅ Multi-server dashboard → switch between servers seamlessly
-- ✅ Authentication → login with session, only admins can ban/unban
-- ✅ User management script (.sh) → manage Fail2Ban-Report User-List
-- ✅ User groups → Viewer (read-only) / Admin (ban/unban)
+- ⚙️ archive/ restructured → separated per server and "department" (fail2ban / blocklists)
+- ⚙️ /opt/Fail2Ban-Report/ reorganized → cleaner separation of configs and scripts
+- ⚙️ Centralized path management → reduced hardcoding, clearer structure
+- ⚙️🌐 Multi-server dashboard → switch between servers seamlessly
+- 🔐 Authentication → login with session, only admins can ban/unban
+- 🔐 User management script (.sh) → manage Fail2Ban-Report User-List
+- 🔐 User groups → Viewer (read-only) / Admin (ban/unban)
 - ⏳ **Sync-Backend**
-  - ✅ Security
-    - ✅ Username passwd uuid and optional ip will get checked by backend
-    - ✅ password bcrypt hashed stored
-    - ✅ additional .htaccess ip whitelist provided
-  - ✅ Syncing Eventlists
+  - 🔐 Security
+    - 🔐 Username passwd uuid and optional ip will get checked by backend
+    - 🔐 password: only bcrypt hash is stored
+    - 🔐 additional .htaccess for ip whitelist provided
+  - ⚙️ Syncing Eventlists
   - ⏳ Update Update-List on Block and Unblock
   - ⏳ Client get update list
   - ⏳ client snyc blocklists
 - ⏳ rework installer
 - ⏳ documentation
 - ⏳ how 2 stuff
+
+
+- 🔐 Security
+- ⚙️ Backend
+- 🌐 Frontend
+
 
 ---
 
