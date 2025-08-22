@@ -4,7 +4,7 @@
 ```
 
 0.3.1 ──► 0.3.2 ──► 0.3.3 ──► 0.3.4 ──► 0.4.0 ──► 0.5.0
- 🔐        📊       ⚠️        🗂️       ✨        🌐
+🔐🌐     ⚙️🌐     ⚙️🌐     ⚙️🌐     🌐🐳     ⚙️🌐
   │         │         │         │         │         │
   │         │         │         │         │         └─ Multi-server + endpoint
   │         │         │         │         └─ Marker system, copy clipboard & Docker Version
@@ -16,13 +16,10 @@
 
 ##########  Legend #########
 
-🔐 Security / Protection
-📊 Statistics / Reporting
-⚠️ Warnings / Quality of Life
-🗂️ Organization / Structure (Blocklists, Jails)
-✨ UI / UX Features
-🌐 Multi-server, Endpoint, Integration
-
+🔐 Security
+🌐 UI
+⚙️ Backend
+🐳 Docker
 
 ```
 
