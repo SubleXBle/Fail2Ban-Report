@@ -97,6 +97,33 @@ It provides optional tools to:
 
 ## 🆕 What's New in V 0.5.0
 
+
+⚙️ Backend
+
+- archive/ restructured → separated per server and "department" (fail2ban / blocklists)
+- /opt/Fail2Ban-Report/ reorganized → cleaner separation of configs and scripts
+- Centralized path management → reduced hardcoding, clearer structure
+- Sync-Backend
+
+🌐 Frontend
+
+- Multi-server dashboard → switch between servers seamlessly
+
+🔐 Security
+
+- Authentication → login with session, only admins can ban/unban
+- User management script (.sh) → manage Fail2Ban-Report User-List
+- User groups → Viewer (read-only) / Admin (ban/unban)
+- Username, password, UUID and optional IP checked by backend
+- password stored as bcrypt hash only
+- additional .htaccess for IP whitelist provided
+
+
+
+
+
+
+
 - ⚙️ archive/ restructured → separated per server and "department" (fail2ban / blocklists)
 - ⚙️ /opt/Fail2Ban-Report/ reorganized → cleaner separation of configs and scripts
 - ⚙️ Centralized path management → reduced hardcoding, clearer structure
