@@ -10,6 +10,7 @@ These instructions explain how to manually install and configure **Fail2Ban-Repo
   - `fail2ban`
   - `jq`
   - `awk` (gawk)
+  - `curl`
   - `ufw` (only UFW is supported at this time)
 - A PHP-enabled web server (e.g. Apache with PHP 7.4+)
 - The web server user (e.g. `www-data`) must have write access to the `/archive/` directory
