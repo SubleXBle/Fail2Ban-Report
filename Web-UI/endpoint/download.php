@@ -3,7 +3,7 @@
 
 // === Konfiguration ===
 $CLIENTS_FILE   = "/opt/Fail2Ban-Report/Settings/client-list.json";
-$BLOCKLIST_BASE = __DIR__ . "/endpoint/"; // Basis-Pfad zu den Blocklists
+$BLOCKLIST_BASE = __DIR__ . "/"; // Basis-Pfad zu den Blocklists
 
 // --- Hilfsfunktion für JSON-Antworten ---
 function respond($statusCode, $data) {
