@@ -25,19 +25,17 @@ if (!is_array($clients)) {
 
 // --- Parse input ---
 $input = json_decode(file_get_contents('php://input'), true);
-if (!$input || !isset($input['username'], $input['password'], $input['uuid'])) {
+if (!$input || !isset($input['username'], $input['password'])) {
     respond(['success' => false, 'error' => 'Invalid request'], 400);
 }
 $username = $input['username'];
 $password = $input['password'];
-$uuid     = $input['uuid'];
 $client_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 
 // --- Authenticate client ---
 $authorized = false;
 foreach ($clients as $c) {
-    if ($c['username'] === $username && $c['uuid'] === $uuid && password_verify($password, $c['password'])) {
-        // Optional: IP whitelist check
+    if ($c['username'] === $username && password_verify($password, $c['password'])) {
         if (isset($c['ip']) && $c['ip'] !== '' && $c['ip'] !== $client_ip) {
             respond(['success' => false, 'error' => 'IP not allowed'], 403);
         }
@@ -58,7 +56,7 @@ if (!file_exists(UPDATE_FILE)) {
 }
 
 // --- Check if client has updates ---
-$client_updates = $update_data[$uuid] ?? [];
+$client_updates = $update_data[$username] ?? [];
 
 if (empty($client_updates)) {
     respond(['success' => true, 'updates' => []]);
@@ -73,7 +71,10 @@ foreach ($client_updates as $file => $flag) {
     // Only allow blocklists
     if (!preg_match('/\.blocklist\.json$/', $file)) continue;
 
-    $filepath = BLOCKLIST_BASE . $username . '/blocklists/' . $file;
+    // Sicherheits-Check für Username
+    $username_safe = preg_replace('/[^a-zA-Z0-9_\-]/', '', $username);
+    $filepath = BLOCKLIST_BASE . $username_safe . '/blocklists/' . $file;
+
     if (!file_exists($filepath)) {
         continue;
     }
@@ -92,7 +93,7 @@ foreach ($client_updates as $file => $flag) {
 
 // --- Optionally reset update flags ---
 foreach (array_keys($client_updates) as $file) {
-    $update_data[$uuid][$file] = false;
+    $update_data[$username][$file] = false;
 }
 file_put_contents(UPDATE_FILE, json_encode($update_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
