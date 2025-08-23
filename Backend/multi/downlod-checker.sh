@@ -1,58 +1,36 @@
-#!/bin/bash
-
-set -euo pipefail
-
-# === Configuration ===
-SERVER_URL="https://yourserver.com/endpoint/download.php"
-USERNAME="ClientServer1"
-PASSWORD="deinPasswort"
-UUID="deinUUID"
-DOWNLOAD_DIR="/opt/Fail2Ban-Report/archive/$USERNAME/blocklists"
-LOGFILE="/var/log/Fail2Ban-Report.log"
-LOGGING=true
-
-# === Logging function ===
-log() {
-  if [ "$LOGGING" = true ]; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $*" >> "$LOGFILE"
-  fi
-}
-
 mkdir -p "$DOWNLOAD_DIR"
 
-# === 1) Liste der verfügbaren Updates vom Server holen ===
-RESPONSE=$(curl -s -X POST "$SERVER_URL" \
-  -d "username=$USERNAME" \
-  -d "password=$PASSWORD" \
-  -d "uuid=$UUID" \
-  -d "check=true") # optionaler Parameter, falls serverseitig Update prüfen
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOGFILE"
+}
 
-# === 2) Updates auswerten ===
-UPDATES=$(echo "$RESPONSE" | jq -r '.updates[]?')
+# --- 1) Liste der zu aktualisierenden Blocklists vom Server holen ---
+log "Checking for blocklist updates..."
+UPDATES_JSON=$(curl -s -X POST -d "username=$USERNAME&password=$PASSWORD&uuid=$UUID" \
+    "https://deinserver.tld/endpoint/update.php")
+
+# Prüfen ob Updates vorhanden sind
+UPDATES=$(echo "$UPDATES_JSON" | grep -Po '(?<="updates": \[)[^\]]*' | tr -d '"[] ' | tr ',' '\n')
+
 if [ -z "$UPDATES" ]; then
-  log "No blocklist updates available."
-  echo "ℹ️ No updates available."
-  exit 0
+    log "No blocklist updates available."
+    exit 0
 fi
 
 log "Updates available: $(echo "$UPDATES" | wc -l) blocklist(s)."
 
-# === 3) Jede Blocklist herunterladen ===
-for FILE in $UPDATES; do
-  log "Downloading blocklist: $FILE"
-  curl -s -X GET "$SERVER_URL?file=$FILE" \
-       -d "username=$USERNAME" \
-       -d "password=$PASSWORD" \
-       -d "uuid=$UUID" \
-       -o "$DOWNLOAD_DIR/$FILE"
+# --- 2) Jede Blocklist herunterladen ---
+for BLOCKLIST in $UPDATES; do
+    OUTPUT_FILE="$DOWNLOAD_DIR/$BLOCKLIST"
+    log "Downloading $BLOCKLIST..."
+    curl -s -X POST -d "username=$USERNAME&password=$PASSWORD&uuid=$UUID" \
+         "$SERVER_URL?file=$BLOCKLIST" -o "$OUTPUT_FILE"
 
-  if [ $? -eq 0 ]; then
-    log "Successfully downloaded $FILE"
-    echo "✅ $FILE downloaded."
-  else
-    log "Failed to download $FILE"
-    echo "❌ Failed to download $FILE"
-  fi
+    if [ $? -eq 0 ] && [ -s "$OUTPUT_FILE" ]; then
+        log "$BLOCKLIST downloaded successfully to $OUTPUT_FILE"
+    else
+        log "Failed to download $BLOCKLIST"
+    fi
 done
 
-echo "Blocklist download completed."
+log "All available blocklists downloaded."
