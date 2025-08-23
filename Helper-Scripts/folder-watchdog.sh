@@ -21,6 +21,7 @@ for DIR in "$BASE_PATH"/*/; do
         
         # Create folders next to fail2ban, if they don't exist
         # ufw and stats are not needed by now - but will be needed soon
+        # you can comment them out if you want
         mkdir -p "${DIR}blocklists"
         mkdir -p "${DIR}ufw"
         mkdir -p "${DIR}stats"
