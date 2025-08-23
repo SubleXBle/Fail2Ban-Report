@@ -54,20 +54,17 @@ if (!$files || count($files) === 0) {
     respond(404, ["success" => false, "message" => "No blocklists available for download."]);
 }
 
-// === 3) Optional: Alle Blocklists als ZIP anbieten ===
-// Wenn du willst, kann man hier eine ZIP bauen, aktuell senden wir einzelne JSONs.
+// === 3) Dateien ausliefern (eine pro Request) ===
+$fileToDownload = $_GET['file'] ?? '';
+$fullPath = realpath($userBlocklistDir . $fileToDownload);
 
-// === 4) Download per Curl/Wget möglich machen ===
-foreach ($files as $file) {
-    $filename = basename($file);
-
-    // Header für direkten Download
-    header('Content-Type: application/json');
-    header('Content-Disposition: attachment; filename="' . $filename . '"');
-    header('Content-Length: ' . filesize($file));
-    readfile($file);
-    exit; // nur eine Datei pro Request
+if (!$fileToDownload || !$fullPath || strpos($fullPath, realpath($userBlocklistDir)) !== 0 || !file_exists($fullPath)) {
+    respond(404, ["success" => false, "message" => "Requested blocklist not found."]);
 }
 
-// === Optional: Status in update.json auf false setzen ===
-// Das kann in update.php bleiben oder hier implementiert werden
+// Header für direkten Download
+header('Content-Type: application/json');
+header('Content-Disposition: attachment; filename="' . basename($fullPath) . '"');
+header('Content-Length: ' . filesize($fullPath));
+readfile($fullPath);
+exit;
