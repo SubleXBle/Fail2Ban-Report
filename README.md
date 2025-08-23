@@ -156,6 +156,7 @@ This is especially useful if you want to manually patch or update individual fil
 - ✅ **Added FLOCK** to lock json files to not loose data when several write processes write at the same time (0.3.2)
 - ✅ **Handling of "Increase Ban" Events** : will now processed correct by backend and is also visible in frontend via markers (0.4.0)
   - Thanks to ***jbd7*** for reporting and debugging 👍.
+- ⏳ **Copy to Clipboard** cannot copy the list when filtered by markers
 
 ---
 
