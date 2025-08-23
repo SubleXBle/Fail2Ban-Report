@@ -1,70 +1,47 @@
 #!/bin/bash
 
-set -euo pipefail
-
 # --- Configuration ---
-SERVER_URL="https://deinserver.tld/endpoint/download.php"
-USERNAME="deinusername"
-PASSWORD="deinpasswort"
-UUID="dein-uuid"
+UPDATE_URL="https://SERVERURL/Fail2Ban-Report/endpoint/update.php"
+DOWNLOAD_URL="https://SERVERURL/Fail2Ban-Report/endpoint/download.php"
+USERNAME="SERVERNAME"
+PASSWORD="PASSWORD"
+UUID="UUID"
 DEST_DIR="/path/to/downloaded/blocklists"
-LOGFILE="/var/log/Fail2Ban-Report-download.log"
-LOGGING=true
-
-# --- Logging function ---
-log() {
-    if [ "$LOGGING" = true ]; then
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOGFILE"
-    fi
-}
 
 mkdir -p "$DEST_DIR"
 
-# --- Step 1: Liste aller Blocklists prüfen (via download.php) ---
-log "Checking available blocklists for $USERNAME..."
+# --- 1) Update-Check ---
+response=$(curl -s -X POST "$UPDATE_URL" \
+  -F "username=$USERNAME" \
+  -F "password=$PASSWORD" \
+  -F "uuid=$UUID")
 
-RESPONSE=$(curl -s -X POST "$SERVER_URL" \
+echo "Server Response:"
+echo "$response"
+
+updates=$(echo "$response" | jq -r '.updates | length')
+
+if [ "$updates" -eq 0 ]; then
+  echo "ℹ️ No updates available."
+  exit 0
+fi
+
+echo "✅ Updates available: $updates blocklist(s)."
+
+# --- 2) Blocklists herunterladen ---
+for FILE in $(echo "$response" | jq -r '.updates[]'); do
+  echo "⬇️ Downloading $FILE ..."
+  curl -s -X POST "$DOWNLOAD_URL?file=$FILE" \
     -d "username=$USERNAME" \
     -d "password=$PASSWORD" \
-    -d "uuid=$UUID")
+    -d "uuid=$UUID" \
+    -o "$DEST_DIR/$FILE"
 
-# Prüfen ob JSON
-if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
-    log "ERROR: Server response is not valid JSON:"
-    log "$RESPONSE"
-    exit 1
-fi
-
-# Prüfen auf Fehler
-SUCCESS=$(echo "$RESPONSE" | jq -r '.success')
-if [ "$SUCCESS" != "true" ]; then
-    MESSAGE=$(echo "$RESPONSE" | jq -r '.message')
-    log "ERROR from server: $MESSAGE"
-    exit 1
-fi
-
-# --- Step 2: Liste der verfügbaren Blocklists herunterladen ---
-FILES=$(echo "$RESPONSE" | jq -r '.updates[]?')
-if [ -z "$FILES" ]; then
-    log "No blocklists available for download."
-    exit 0
-fi
-
-for FILE in $FILES; do
-    log "Downloading blocklist: $FILE"
-
-    curl -s -X POST "$SERVER_URL?file=$FILE" \
-        -d "username=$USERNAME" \
-        -d "password=$PASSWORD" \
-        -d "uuid=$UUID" \
-        -o "$DEST_DIR/$FILE"
-
-    if [ $? -eq 0 ]; then
-        log "Blocklist $FILE downloaded successfully."
-    else
-        log "ERROR downloading $FILE"
-    fi
+  if [ $? -eq 0 ] && [ -s "$DEST_DIR/$FILE" ]; then
+    echo "✅ $FILE downloaded successfully."
+  else
+    echo "❌ Failed to download $FILE"
+  fi
 done
 
-log "All available blocklists processed."
-exit 0
+echo "🎉 All blocklists processed."
