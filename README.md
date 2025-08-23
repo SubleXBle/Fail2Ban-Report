@@ -160,7 +160,7 @@ This is especially useful if you want to manually patch or update individual fil
 ---
 
 ## 👀 Outlook
-- 📦 will have a deeper look into statistics with the next releases
+- 📦 will have a deeper look into statistics and more Fail2Ban Integration with the next releases
 
 ---
 
