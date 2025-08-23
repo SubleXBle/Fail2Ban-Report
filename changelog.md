@@ -166,7 +166,7 @@ changed the dropdown-list to match the new Marker assignment
 
 ---
 
-### 2. Client Script for JSON Creation & Upload (`fail2ban_log2json_push.sh`)
+### 2. Client Script for JSON Creation & Upload (`fail2ban_log2json.sh`)
 - Generates daily JSON from Fail2Ban logs (`fail2ban-events-YYYYMMDD.json`).  
 - Uploads the JSON directly to the endpoint using `curl` with authentication (Username + Password + UUID).  
 - Logs upload results locally.  
