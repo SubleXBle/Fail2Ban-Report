@@ -1,20 +1,19 @@
 <?php
-// download.php – Sicherer Download von Blocklists für Clients
+// download.php – Authentifizierter Blocklist-Download (eine Datei pro Request)
 
-// === Config ===
-$CLIENTS_FILE = "/opt/Fail2Ban-Report/Settings/client-list.json";
-$BLOCKLIST_BASE = __DIR__ . "/endpoint/"; // Pfad zu den vorbereiteten Blocklists
+// === Konfiguration ===
+$CLIENTS_FILE   = "/opt/Fail2Ban-Report/Settings/client-list.json";
+$BLOCKLIST_BASE = __DIR__ . "/endpoint/"; // Basis-Pfad zu den Blocklists
 
-header('Content-Type: application/json');
-
-// === Helper: Antwortfunktion ===
+// --- Hilfsfunktion für JSON-Antworten ---
 function respond($statusCode, $data) {
     http_response_code($statusCode);
+    header('Content-Type: application/json');
     echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     exit;
 }
 
-// === 1) Authentifizierung ===
+// === 1) Clients laden ===
 if (!file_exists($CLIENTS_FILE)) {
     respond(500, ["success" => false, "message" => "Client list not found."]);
 }
@@ -23,6 +22,7 @@ if (!is_array($clients)) {
     respond(500, ["success" => false, "message" => "Client list corrupted."]);
 }
 
+// === 2) Authentifizierung ===
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 $uuid     = $_POST['uuid'] ?? '';
@@ -35,7 +35,9 @@ foreach ($clients as $c) {
         break;
     }
 }
-if (!$client) respond(403, ["success" => false, "message" => "Authentication failed (user/uuid)."]);
+if (!$client) {
+    respond(403, ["success" => false, "message" => "Authentication failed (user/uuid)."]);
+}
 if (!password_verify($password, $client['password'])) {
     respond(403, ["success" => false, "message" => "Authentication failed (password)."]);
 }
@@ -43,28 +45,26 @@ if (isset($client['ip']) && $client['ip'] !== $remoteIp) {
     respond(403, ["success" => false, "message" => "Authentication failed (ip mismatch)."]);
 }
 
-// === 2) Prüfen, ob Blocklists existieren ===
-$userBlocklistDir = $BLOCKLIST_BASE . $username . "/blocklists/";
-if (!is_dir($userBlocklistDir)) {
-    respond(404, ["success" => false, "message" => "No blocklists found for this client."]);
-}
-
-$files = glob($userBlocklistDir . "*.json");
-if (!$files || count($files) === 0) {
-    respond(404, ["success" => false, "message" => "No blocklists available for download."]);
-}
-
-// === 3) Dateien ausliefern (eine pro Request) ===
+// === 3) Datei bestimmen ===
 $fileToDownload = $_GET['file'] ?? '';
+if (!$fileToDownload) {
+    respond(400, ["success" => false, "message" => "Missing 'file' parameter."]);
+}
+
+$userBlocklistDir = $BLOCKLIST_BASE . $username . "/blocklists/";
 $fullPath = realpath($userBlocklistDir . $fileToDownload);
 
-if (!$fileToDownload || !$fullPath || strpos($fullPath, realpath($userBlocklistDir)) !== 0 || !file_exists($fullPath)) {
+if (!$fullPath || strpos($fullPath, realpath($userBlocklistDir)) !== 0 || !file_exists($fullPath)) {
     respond(404, ["success" => false, "message" => "Requested blocklist not found."]);
 }
 
-// Header für direkten Download
+// === 4) Datei ausliefern ===
 header('Content-Type: application/json');
 header('Content-Disposition: attachment; filename="' . basename($fullPath) . '"');
 header('Content-Length: ' . filesize($fullPath));
 readfile($fullPath);
+
+// === 5) Datei löschen nach Auslieferung ===
+unlink($fullPath);
+
 exit;
