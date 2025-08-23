@@ -80,6 +80,7 @@ function unblockIp($ips, $jail = 'unknown') {
         foreach ($data as &$item) {
             if ($item['ip'] === $ip && (!isset($item['active']) || $item['active'] === true)) {
                 $item['active'] = false;
+                $item['pending'] = true;
                 $item['lastModified'] = date('c');
                 $found = true;
 
