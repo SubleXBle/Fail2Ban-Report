@@ -1,5 +1,5 @@
 #!/bin/bash
-# update.sh – Prüft, ob Blocklist-Updates vorhanden sind, und lädt sie herunter
+# update-check.sh – Prüft, ob Blocklist-Updates vorhanden sind, und lädt sie herunter
 
 set -euo pipefail
 
