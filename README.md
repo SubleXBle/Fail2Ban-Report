@@ -98,8 +98,8 @@ It provides optional tools to:
 ## 🆕 What's New in V 0.5.0
 
 > This Versions new Features are:
->  -  Multiserver Support with Sync Backend
->  -  Authentication with User Roles
+>  -  Multiserver Support with HTTPS-Sync Backend
+>  -  Authentication with User Roles (admin-Role is set - viewer is like guest for now)
 
 ⚙️ Backend
 
