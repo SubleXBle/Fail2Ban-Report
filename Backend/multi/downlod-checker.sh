@@ -1,36 +1,70 @@
-mkdir -p "$DOWNLOAD_DIR"
+#!/bin/bash
 
+set -euo pipefail
+
+# --- Configuration ---
+SERVER_URL="https://deinserver.tld/endpoint/download.php"
+USERNAME="deinusername"
+PASSWORD="deinpasswort"
+UUID="dein-uuid"
+DEST_DIR="/path/to/downloaded/blocklists"
+LOGFILE="/var/log/Fail2Ban-Report-download.log"
+LOGGING=true
+
+# --- Logging function ---
 log() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOGFILE"
+    if [ "$LOGGING" = true ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') - $*" | tee -a "$LOGFILE"
+    fi
 }
 
-# --- 1) Liste der zu aktualisierenden Blocklists vom Server holen ---
-log "Checking for blocklist updates..."
-UPDATES_JSON=$(curl -s -X POST -d "username=$USERNAME&password=$PASSWORD&uuid=$UUID" \
-    "https://deinserver.tld/endpoint/update.php")
+mkdir -p "$DEST_DIR"
 
-# Prüfen ob Updates vorhanden sind
-UPDATES=$(echo "$UPDATES_JSON" | grep -Po '(?<="updates": \[)[^\]]*' | tr -d '"[] ' | tr ',' '\n')
+# --- Step 1: Liste aller Blocklists prüfen (via download.php) ---
+log "Checking available blocklists for $USERNAME..."
 
-if [ -z "$UPDATES" ]; then
-    log "No blocklist updates available."
+RESPONSE=$(curl -s -X POST "$SERVER_URL" \
+    -d "username=$USERNAME" \
+    -d "password=$PASSWORD" \
+    -d "uuid=$UUID")
+
+# Prüfen ob JSON
+if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
+    log "ERROR: Server response is not valid JSON:"
+    log "$RESPONSE"
+    exit 1
+fi
+
+# Prüfen auf Fehler
+SUCCESS=$(echo "$RESPONSE" | jq -r '.success')
+if [ "$SUCCESS" != "true" ]; then
+    MESSAGE=$(echo "$RESPONSE" | jq -r '.message')
+    log "ERROR from server: $MESSAGE"
+    exit 1
+fi
+
+# --- Step 2: Liste der verfügbaren Blocklists herunterladen ---
+FILES=$(echo "$RESPONSE" | jq -r '.updates[]?')
+if [ -z "$FILES" ]; then
+    log "No blocklists available for download."
     exit 0
 fi
 
-log "Updates available: $(echo "$UPDATES" | wc -l) blocklist(s)."
+for FILE in $FILES; do
+    log "Downloading blocklist: $FILE"
 
-# --- 2) Jede Blocklist herunterladen ---
-for BLOCKLIST in $UPDATES; do
-    OUTPUT_FILE="$DOWNLOAD_DIR/$BLOCKLIST"
-    log "Downloading $BLOCKLIST..."
-    curl -s -X POST -d "username=$USERNAME&password=$PASSWORD&uuid=$UUID" \
-         "$SERVER_URL?file=$BLOCKLIST" -o "$OUTPUT_FILE"
+    curl -s -X POST "$SERVER_URL?file=$FILE" \
+        -d "username=$USERNAME" \
+        -d "password=$PASSWORD" \
+        -d "uuid=$UUID" \
+        -o "$DEST_DIR/$FILE"
 
-    if [ $? -eq 0 ] && [ -s "$OUTPUT_FILE" ]; then
-        log "$BLOCKLIST downloaded successfully to $OUTPUT_FILE"
+    if [ $? -eq 0 ]; then
+        log "Blocklist $FILE downloaded successfully."
     else
-        log "Failed to download $BLOCKLIST"
+        log "ERROR downloading $FILE"
     fi
 done
 
-log "All available blocklists downloaded."
+log "All available blocklists processed."
+exit 0
