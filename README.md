@@ -2,6 +2,13 @@
 ![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20🕵️-Beta_V0.5.0-gold?style=flat&logoColor=black)
 
 
+![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20🕵️-Beta_V0.5.0-gold?style=flat&logoColor=black)
+![UFW Integration](https://img.shields.io/badge/UFW-Enabled-gold?style=flat&logoColor=black)
+![Multi-Server](https://img.shields.io/badge/Multi--Server-Yes-gold?style=flat&logoColor=black)
+![Dark Mode](https://img.shields.io/badge/Dark--Mode-Enabled-gold?style=flat&logoColor=black)
+![Beta](https://img.shields.io/badge/Beta-v0.5.0-gold?style=flat&logoColor=black)
+
+
 
 > A lightweight web-based multi-server dashboard that transforms daily Fail2Ban logs into searchable and filterable JSON reports, while also providing centralized UFW IP blocklist management across all your servers.
 
