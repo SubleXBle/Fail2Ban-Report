@@ -12,16 +12,17 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 
 ## 🛡️ **Note**: This tool is a visualization and management layer — it does **not** replace proper intrusion detection or access control. Deploy it behind IP restrictions or HTTP authentication only!
 
-🔐 Security Notice
+
+## ⚠️ Status of the Project
 
 **Current Status:**  
 > Fail2Ban-Report currently manages bans and unbans via UFW, providing a safe and persistent solution.
 It does not modify Fail2Ban jails or existing Fail2Ban configurations directly, instead using UFW for its own "permanent jails".
 
-
-## 🔍 Status of the Project
-
 > Version 0.5.0 introduces multi-server support and role-based access: Viewer accounts are read-only, while Admins can manage bans/unbans and blocklists across all connected servers via the dashboard.
+
+**Read about the Syncronisation-Concept**
+> in this Document ![Docs/Sync-Concept.md](Docs/Sync-Concept.md)
 
 **Future Direction:**  
 > A potential long-term enhancement could include **direct interaction with Fail2Ban jails** — for example, user-controlled bans and unbans per jail.  
