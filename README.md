@@ -222,7 +222,7 @@ Fail2Ban-Report has been tested under high-load conditions to verify stability, 
 
 **Key Results:**
 
-- The WebUI loads all 13,480 daily JSON entries in about **1 second**.  
+- The WebUI loads all 13,480 daily JSON entries in about **1,5 seconds**.  
 - Connected clients consistently pull and push blocklists, even under high event volume.  
 - Clients processing 80+ new entries per sync handled all updates correctly.  
 - Switching between multiple servers in the dashboard remains smooth, typically under **2 seconds**, even during attacks.  
