@@ -212,24 +212,25 @@ New Feature : Block and Unblock Actions only for logged in admin role
 
 ## ⚡ Performance & Stress Test
 
-Fail2Ban-Report V 0.5.0 has been tested under high-load conditions to ensure stability and responsiveness.
+Fail2Ban-Report has been tested under high-load conditions to verify stability, responsiveness, and reliable synchronization across multiple servers.
 
-**Example scenario:**
+**Real Scenario:**
 
 - **Duration:** 10 minutes  
-- **Webserver events:** ~13,400 entries (across multiple jails, mainly SSH)  
-- **Event data per entry:** date, action, marker, IP, jail
+- **Webserver events:** ~13,400 entries across several jails (mostly SSH)  
+- **Data per event:** date, action, marker, IP, jail  
 
-**Observations:**
+**Key Results:**
 
-- The WebUI loads 13,480 daily JSON entries in ~1.5 second.  
-- Connected clients reliably pull and push blocklists, even under high load.  
-- Clients with 80+ new entries per sync processed all changes without errors.  
-- Switching between multiple servers in the dashboard remains fast (<2 seconds), even with high event counts.  
+- The WebUI loads all 13,480 daily JSON entries in about **1 second**.  
+- Connected clients consistently pull and push blocklists, even under high event volume.  
+- Clients processing 80+ new entries per sync handled all updates correctly.  
+- Switching between multiple servers in the dashboard remains smooth, typically under **2 seconds**, even during attacks.  
 
-**Conclusion:**  
+**Takeaway:**  
 
-Fail2Ban-Report scales efficiently with multiple servers and high-frequency events, maintaining consistent data synchronization and UI responsiveness.
+Fail2Ban-Report maintains fast performance and reliable data synchronization, proving its suitability for multi-server setups and high-frequency event environments.
+
 
 ---
 
