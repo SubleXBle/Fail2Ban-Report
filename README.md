@@ -63,7 +63,7 @@ The existing structured `*.blocklist.json` format is already designed to support
 
 Critical backend operations (like UFW updates) are executed via root cron scripts; ensure the server running Fail2Ban-Report is fully secured.
 
-![↑ Table of Contents ↑](#-Table-of-Contents)
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
 ## 🖥️ Demo
