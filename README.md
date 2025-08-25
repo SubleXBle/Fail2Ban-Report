@@ -39,7 +39,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 - [✅ What It Is](#-what-it-is)
 - [❌ What It Is Not](#-what-it-is-not)
 - [🤝 Contributing](#-contributing)
-- [🖼️ Screenshots](#-screenshots)
+- [🖼Screenshots](#-screenshots)
 
 
 ---
