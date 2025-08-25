@@ -17,7 +17,8 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 ## 📑 Table of Contents
 
 - [⚠️ Status of the Project](#️-status-of-the-project)
-  - [Syncronisation-Concept and Chain of Trust](#-Syncronisation-Concept-and-Chain-of-Trust)
+  - [Syncronisation-Concept](Docs/Sync-Concept.md)
+  - [Chain of Trust](Docs/chain-of-trust.md)
 - [🖥️ Demo](#️-demo)
 - [🛠️ Installation](#️-installation)
 - [📚 What It Does](#-what-it-does)
