@@ -98,6 +98,28 @@ It provides optional tools to:
 
 ---
 
+## ⚙️ Requirements
+
+### Server
+- Fail2Ban with logging enabled  
+- UFW (for firewall integration)    
+- PHP 7.4+ with JSON support  
+- HTTPS-capable web server (Apache or Nginx)  
+- `bash` - (https://en.wikipedia.org/wiki/Bash_(Unix_shell))
+- `jq`   - (https://jqlang.org/)
+- `awk`  - (https://en.wikipedia.org/wiki/AWK)
+- `curl` - (https://curl.se/)
+
+### Client
+- Fail2Ban with logging enabled  
+- UFW (for firewall integration)    
+- `bash` - (https://en.wikipedia.org/wiki/Bash_(Unix_shell))
+- `jq`   - (https://jqlang.org/)
+- `awk`  - (https://en.wikipedia.org/wiki/AWK)
+- `curl` - (https://curl.se/)
+
+---
+
 ## 📦 Features
 
 - 🔍 Searchable & filterable event reports  
@@ -131,18 +153,6 @@ It provides optional tools to:
   - UUID and optional IP checks  
   - Additional `.htaccess` IP whitelist
  
----
-
-## ⚙️ Requirements
-
-- Fail2Ban with logging enabled  
-- UFW (for firewall integration)    
-- PHP 7.4+ with JSON support  
-- HTTPS-capable web server (Apache or Nginx)  
-- `bash` - (https://en.wikipedia.org/wiki/Bash_(Unix_shell))
-- `jq`   - (https://jqlang.org/)
-- `awk`  - (https://en.wikipedia.org/wiki/AWK)
-- `curl` - (https://curl.se/)
 ---
 
 
