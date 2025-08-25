@@ -26,9 +26,9 @@ It does not modify Fail2Ban jails or existing Fail2Ban configurations directly, 
 The existing structured `*.blocklist.json` format is already designed to support this, ensuring that any future manual ban management can remain "persistent", reviewable, and fully auditable.
 
 **Syncronisation-Concept**
-> in this Document ![Docs/Sync-Concept.md](Docs/Sync-Concept.md)
+> you can read about the Syncronisation Concept in this Document ![Sync-Concept.md](Docs/Sync-Concept.md) to get a better understanding of how it works
 
-Please read the ![Docs/Installation Instructions](Docs/Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
+Please read the ![Setup Instructions](Docs/Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
 > Have in mind, that you are installing Beta Software that could contain bugs or can change with next release.
 
 > Critical backend operations (like UFW updates) are executed via root cron scripts; ensure the server running Fail2Ban-Report is fully secured.
