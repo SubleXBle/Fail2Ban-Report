@@ -62,30 +62,28 @@ The client UUID will be displayed – copy it.
 
 
 ## Cron jobs
-
+```muss ich noch ändern
 /path/to/fail2ban_log2json.sh
 /path/to/download-checker.sh && /path/to/firewall-update.sh && /path/to/syncback.sh
-
+```
 ---
 
 # On the UI-Server
 
 ## Go to Helper-Scripts:
 
-cd /opt/Fail2Ban-Report/Helper-Scripts/
-./manage-clients.sh
+```cd /opt/Fail2Ban-Report/Helper-Scripts/```
+```./manage-clients.sh```
 
 Enter data for the new client.
 
 ## WebUI configuration
 
-Adjust .htaccess as needed
+Adjust `.htaccess` in `/var/www/html/Fail2Ban-Report/` (or where your Installation exists) and `/endpoint/` to let the new IPs access it
 
 Add your IP (use Require Any)
 
-If .htaccess is also used in endpoint/, add IP there as well
-
 ## After first sync of Fail2Ban events from the new Client
 
-cd /opt/Fail2Ban-Report/Helper-Scripts/
-./folder-watchdog.sh
+```cd /opt/Fail2Ban-Report/Helper-Scripts/```
+```./folder-watchdog.sh```
