@@ -61,7 +61,7 @@ Run it once to generate client-uuid.json inside
 The client UUID will be displayed – copy it.
 
 
-Optional: Cron jobs
+## Cron jobs
 
 /path/to/fail2ban_log2json.sh
 /path/to/download-checker.sh && /path/to/firewall-update.sh && /path/to/syncback.sh
