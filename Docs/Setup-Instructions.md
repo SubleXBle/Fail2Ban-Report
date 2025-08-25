@@ -245,3 +245,4 @@ cd /opt/Fail2Ban-Report/Helper-Scripts/
 
 Fail2Ban-Report is now running on your server.
 To add more clients, follow the ![**“Adding-Clients”** guide](Adding-Clients.md).
+> Username of the Client and Displayed Servername in Web-UI are the same.
