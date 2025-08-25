@@ -4,7 +4,7 @@
 # this Script creates the folders for blocklists if you want to automate it.
 
 # Set the base path here
-BASE_PATH="/path/to/your/archive"
+BASE_PATH="/SET/PATH/TO/Fail2Ban-Report/archive"
 
 # Check if the path exists
 if [ ! -d "$BASE_PATH" ]; then
