@@ -232,40 +232,6 @@ Fail2Ban-Report maintains fast performance and reliable data synchronization, pr
 ---
 
 
-## 🖼️ Screenshots
-
-![screenshots/Header-050-1.png](screenshots/Header-050-1.png)
-
-New Header with Login/Logout and Server-Chooser - grey text when not logged in
-
-
-![screenshots/Header-050-2.png](screenshots/Header-050-2.png)
-
-Yellow Text when logged in user
-
-
-![screenshots/List-050-1.png](screenshots/List-050-1.png)
-
-Fail2Ban - Event List
-
-
-![screenshots/Block-List-050-1.png](screenshots/Block-List-050-1.png)
-
-Blocklist
-
-
-![screenshots/Message-Toast-050-1.png](screenshots/Message-Toast-050-1.png)
-
-Message Toaster
-
-
-![screenshots/Message-Toast-050-2.png](screenshots/Message-Toast-050-2.png)
-
-New Feature : Block and Unblock Actions only for logged in admin role
-
-
----
-
 ## 🛣️ Roadmap or "Things I will have to do - but I do them later"
 
 > I gave up the usual Roadmap - to have more freedom with development - Things like Multiserver was never on the Roadmap but allways in my mind.
@@ -312,3 +278,36 @@ Pull requests, feature ideas and bug reports are very welcome!
 
 ---
 
+## 🖼️ Screenshots
+
+![screenshots/Header-050-1.png](screenshots/Header-050-1.png)
+
+New Header with Login/Logout and Server-Chooser - grey text when not logged in
+
+
+![screenshots/Header-050-2.png](screenshots/Header-050-2.png)
+
+Yellow Text when logged in user
+
+
+![screenshots/List-050-1.png](screenshots/List-050-1.png)
+
+Fail2Ban - Event List
+
+
+![screenshots/Block-List-050-1.png](screenshots/Block-List-050-1.png)
+
+Blocklist
+
+
+![screenshots/Message-Toast-050-1.png](screenshots/Message-Toast-050-1.png)
+
+Message Toaster
+
+
+![screenshots/Message-Toast-050-2.png](screenshots/Message-Toast-050-2.png)
+
+New Feature : Block and Unblock Actions only for logged in admin role
+
+
+---
