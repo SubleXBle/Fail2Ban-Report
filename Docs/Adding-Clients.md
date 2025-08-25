@@ -55,7 +55,9 @@ chmod +x /opt/Fail2Ban-Report/Helper-Scripts/create-client-uuid.sh
 
 Run it once to generate client-uuid.json inside
 /opt/Fail2Ban-Report/Settings/
-
+```
+./create-client-uuid.sh
+```
 The client UUID will be displayed – copy it.
 
 
