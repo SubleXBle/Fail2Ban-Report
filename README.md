@@ -28,7 +28,7 @@ The existing structured `*.blocklist.json` format is already designed to support
 **Syncronisation-Concept**
 > in this Document ![Docs/Sync-Concept.md](Docs/Sync-Concept.md)
 
-Please read the [Installation Instructions](Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
+Please read the ![Docs/Installation Instructions](Docs/Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
 > Have in mind, that you are installing Beta Software that could contain bugs or can change with next release.
 
 > Critical backend operations (like UFW updates) are executed via root cron scripts; ensure the server running Fail2Ban-Report is fully secured.
