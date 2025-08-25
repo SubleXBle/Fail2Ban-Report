@@ -19,11 +19,12 @@ for DIR in "$BASE_PATH"/*/; do
         echo "Processing folder: $DIR"
         
         # Create folders next to fail2ban, if they don't exist
-        # ufw and stats are not needed by now - but will be needed soon
-        # you can comment them out if you want
         mkdir -p "${DIR}blocklists"
         mkdir -p "${DIR}ufw"
         mkdir -p "${DIR}stats"
+
+        # Set ownership for the created folders
+        chown -R www-data:www-data "${DIR}blocklists" "${DIR}ufw" "${DIR}stats"
     fi
 done
 
