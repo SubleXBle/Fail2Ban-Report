@@ -81,7 +81,7 @@ Add your IP (use Require Any)
 
 If .htaccess is also used in endpoint/, add IP there as well
 
-## After first sync of Fail2Ban events
+## After first sync of Fail2Ban events from the new Client
 
 cd /opt/Fail2Ban-Report/Helper-Scripts/
 ./folder-watchdog.sh
