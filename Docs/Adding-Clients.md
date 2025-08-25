@@ -2,6 +2,8 @@
 
 > Username of the Client and Displayed Servername in Web-UI are the same.
 
+> Wanna know more about ![Chain of Trust](chain-of-trust.md) or ![Syncronisation Concept](Sync-Concept.md) ?
+
 # On the new Sync-Client
 ## Preparation
 
