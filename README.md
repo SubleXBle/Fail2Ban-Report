@@ -73,7 +73,7 @@ There's a simple demo version available here – no backend, no real data:
 Username and Password for Website Access is : `admin`:`admin`
 Username and Password for Blocklist manipulation is `admin`:`admin`
 
-[↑ Table of Contents ↑](#-Table-of-Contents)
+![↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
 ## 🛠️ Installation
