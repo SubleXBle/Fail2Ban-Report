@@ -30,7 +30,7 @@ The existing structured `*.blocklist.json` format is already designed to support
 
 > you can read about the "Chain of Trust" between Server and Clients in this Document: ![Chain of Trust](Docs/chain-of-trust.md)
 
-⚠️ Critical backend operations (like UFW updates) are executed via root cron scripts; ensure the server running Fail2Ban-Report is fully secured.
+Critical backend operations (like UFW updates) are executed via root cron scripts; ensure the server running Fail2Ban-Report is fully secured.
 
 ---
 
