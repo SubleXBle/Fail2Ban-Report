@@ -299,6 +299,7 @@ There's a simple demo version available here – no backend, no real data:
 - ❌ A universal firewall manager (no native support for iptables/nftables, etc. — yet)  
 - ❌ A tool for **automatic** jail management (manual actions only for now)  
 - ❌ A heavy analytics platform — it’s lightweight and log-driven by design
+- ❌ A Playground for inexperienced People trying to block half of the Internet
 
 
 ---
