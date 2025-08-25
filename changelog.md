@@ -290,6 +290,7 @@ small changes where made in the following files:
 - Marker column added between `Action` and `IP` for better visibility.
 - Marker filter dropdown integrated into existing filters, maintaining logical order.
 - Supports responsive layout using flexbox, keeping filters and buttons aligned.
+- changed display time for ban unban and info messages to 7 seconds
 
 #### Implementation Notes
 - Marker calculation is based on the currently displayed dataset, not the full JSON.
