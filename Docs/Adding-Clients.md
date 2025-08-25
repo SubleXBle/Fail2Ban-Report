@@ -22,6 +22,11 @@ apt update -qq && apt install jq gawk curl -y -qq
 
 ## Backend scripts
 
+> Note: Credentials:
+> Username and Servername are basically the same thing.
+> The Client will show up on the Server by it's Username
+> So if you have your testserver (testing.yourodmain.tld) as Client and you are using the "UserName" "TestServer" it will show up in the UI as TestServer (Case-Sensitive)
+
 In /opt/Fail2Ban-Report/Backend/ create the following scripts:
 
 - fail2ban_log2json.sh ← insert client login credentials
