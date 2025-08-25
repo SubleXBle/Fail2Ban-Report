@@ -1,20 +1,20 @@
 #!/bin/bash
 # generate-client-uuid.sh
-# Erstellt eine UUID für den Client und speichert sie unter /opt/Fail2Ban-Report/Settings/client-uuid.json
+# This will create a UUID for this Client that will get saved under the path: /opt/Fail2Ban-Report/Settings/client-uuid.json
 
 SETTINGS_DIR="/opt/Fail2Ban-Report/Settings"
 UUID_FILE="$SETTINGS_DIR/client-uuid.json"
 
-# Settings-Verzeichnis erstellen, falls es nicht existiert
+# create Settings directory if not exist
 mkdir -p "$SETTINGS_DIR"
 
-# UUID generieren
+# generate UUID
 UUID=$(cat /proc/sys/kernel/random/uuid)
 
-# JSON schreiben
+# write JSON
 echo "{\"uuid\": \"$UUID\"}" > "$UUID_FILE"
 
-# Berechtigungen setzen
+# Set ownership
 chown root:www-data "$UUID_FILE"
 chmod 0660 "$UUID_FILE"
 
