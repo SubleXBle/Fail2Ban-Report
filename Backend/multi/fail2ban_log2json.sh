@@ -1,19 +1,13 @@
 #!/bin/bash
 # fail2ban_log2json.sh
-# will send the logfile to the server when done creating
-
 set -euo pipefail
 
-# === Configuration ===
-LOGFILE="/var/log/fail2ban.log"
-OUTPUT_JSON_DIR="/var/www/Fail2Ban-Report/archive"
-CLIENT_USER="MyClientName"
-CLIENT_PASS="MyPassword"
-CLIENT_UUID="MyUUID"
-ENDPOINT_URL="https://my.server.tld/Fail2Ban-Report/endpoint/index.php"
-CLIENT_LOG="/var/log/fail2ban-report-client.log"
+# === Config laden ===
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config.env"
 
-# === create JSON  ===
+# === Lokale Variablen ===
+LOGFILE="/var/log/fail2ban.log"
 TODAY=$(date +"%Y-%m-%d")
 TODAY_SHORT=$(date +"%Y%m%d")
 OUTPUT_JSON_FILE="$OUTPUT_JSON_DIR/fail2ban-events-$TODAY_SHORT.json"
@@ -34,11 +28,11 @@ grep -E "(Ban|Unban)" "$LOGFILE" | awk -v today="$TODAY" '
         if (m[1]) ip = m[1];
     } else if ($0 ~ /Ban/) {
         action = "Ban";
-        match($0, /Ban ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/, m);
+        match($0, /Ban ([0-9]+\.[0-9]+\.[0-9]+)/, m);
         if (m[1]) ip = m[1];
     } else if ($0 ~ /Unban/) {
         action = "Unban";
-        match($0, /Unban ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/, m);
+        match($0, /Unban ([0-9]+\.[0-9]+)/, m);
         if (m[1]) ip = m[1];
     }
 
@@ -109,7 +103,5 @@ upload_file() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') ✅ Upload succeeded for $file" | tee -a "$CLIENT_LOG"
 }
 
-# Upload JSON
 upload_file "$OUTPUT_JSON_FILE"
-
 echo "✅ Upload completed."
