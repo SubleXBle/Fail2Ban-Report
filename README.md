@@ -286,14 +286,14 @@ Pull requests, feature ideas and bug reports are very welcome!
 ### Blocklist View
 ![Blocklist](screenshots/Block-List-050-2.png)
 
+### Information Message
+![Info-Message](screenshots/Info-050-2.png)
+
 ### Security Message (new)
 ![Admin-Message](screenshots/admin-msg-050-2.png)
 
 ### Ban Message
 ![Ban-Message](screenshots/Ban-Msg-050-2.png)
-
-### Information Message
-![Info-Message](screenshots/Info-050-2.png)
 
 
 ---
