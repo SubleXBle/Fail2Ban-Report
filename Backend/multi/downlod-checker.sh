@@ -10,7 +10,7 @@ DEST_DIR="/path/to/downloaded/blocklists"
 
 mkdir -p "$DEST_DIR"
 
-# --- 1) Update-Check ---
+# --- Update-Check ---
 response=$(curl -s -X POST "$UPDATE_URL" \
   -F "username=$USERNAME" \
   -F "password=$PASSWORD" \
@@ -28,7 +28,7 @@ fi
 
 echo "✅ Updates available: $updates blocklist(s)."
 
-# --- 2) Blocklists herunterladen ---
+# --- download Blocklists ---
 for FILE in $(echo "$response" | jq -r '.updates[]'); do
   echo "⬇️ Downloading $FILE ..."
   curl -s -X POST "$DOWNLOAD_URL?file=$FILE" \
