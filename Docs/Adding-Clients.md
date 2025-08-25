@@ -66,7 +66,7 @@ Optional: Cron jobs
 
 ---
 
-# On the server
+# On the UI-Server
 
 ## Go to Helper-Scripts:
 
