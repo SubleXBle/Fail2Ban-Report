@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# you can run this as a cron on your webserver to add all paths for your Clients
 # once a Client did his first Sync it creates a fail2ban folder inside his directory
-# this can create the folders for blocklists if you want to automate it.
+# this Script creates the folders for blocklists if you want to automate it.
 
 # Set the base path here
 BASE_PATH="/path/to/your/archive"
