@@ -1,16 +1,10 @@
 #!/bin/bash
-# backsync-upload.sh
-# Upload all *.blocklist.json files to backsync.php endpoint
-
+# syncback.sh
 set -euo pipefail
 
-# === Configuration ===
-BLOCKLIST_DIR="/opt/Fail2Ban-Report/archive/blocklists"
-CLIENT_USER="MyClientName"
-CLIENT_PASS="MyPassword"
-CLIENT_UUID="MyUUID"
-BACKSYNC_URL="https://my.server.tld/Fail2Ban-Report/endpoint/backsync.php"
-CLIENT_LOG="/var/log/fail2ban-report-client.log"
+# === Config laden ===
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config.env"
 
 # === Logging function ===
 log() {
