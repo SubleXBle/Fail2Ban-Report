@@ -41,7 +41,7 @@ Please read the ![Setup Instructions](Docs/Setup-Instructions.md) carefully and 
 > Have in mind, that you are installing Beta Software that could contain bugs or can change with next release.
 
 ### Existing Installations : UI and local Fail2Ban Events
-Read the ![]() carefully.
+Read the ![Setup Instructions]() carefully.
 > Have in mind, that you are installing Beta Software that could contain bugs or can change with next release.
 
 ### Adding Sync-Clients
