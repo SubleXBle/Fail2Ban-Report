@@ -2,6 +2,14 @@
 ![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20-_🕵️_V0.5.0_(Beta_5)-gold?style=flat&logoColor=black)
 
 
+## 🖥️ Demo
+👀 Want to try out the look & feel?
+There's a simple demo version available here – no backend, no real data:
+👉 https://demo.suble.net/ 🔗
+
+---
+
+
 > A lightweight web-based multi-server dashboard that transforms daily Fail2Ban logs into searchable and filterable JSON reports, while also providing centralized UFW IP blocklist management across all your servers through a pull-based client-side synchronization via secure HTTPS endpoints.
 
 
@@ -279,14 +287,6 @@ Fail2Ban-Report maintains fast performance and reliable data synchronization, pr
 > As I am using Fail2Ban-Report I think it has a lot of potential to become something nice for not just myself.
 
 > Suggestions and Ideas still welcome at any time (see Discussions) - When you are using Fail2Ban-Report and you think "I would need to see .. " tell me, I am happy to see your Ideas!
-
----
-
-
-## 🖥️ Demo
-👀 Want to try out the look & feel?
-There's a simple demo version available here – no backend, no real data:
-👉 https://demo.suble.net/ 🔗
 
 ---
 
