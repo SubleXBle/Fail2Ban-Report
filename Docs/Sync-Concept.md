@@ -65,5 +65,6 @@ Once the blocklist is synced back to the server, the entry is no longer shown as
 - The server only communicates with authenticated clients.  
 - No direct access to `.json` files is possible.  
 - No direct download of blocklists is allowed.  
-- Although “basic authentication” (server name, password, UUID) is sufficient, it is **strongly recommended** to also restrict client IP addresses for additional security.  
+- Although application-level authentication (server name, password, UUID) is sufficient, it is strongly recommended to also restrict client IP addresses for additional security.
+- For web access, an additional .htaccess protection (or comparable server-level restriction) is highly recommended.  
 - An additional **AllowList** in `.htaccess` is highly recommended.  
