@@ -8,7 +8,7 @@ echo "----- cronrun start ------ $(date '+%Y-%m-%d %H:%M:%S')" >> "$LOGFILE"
 # Step 1: JSON generation
 echo "📝 Step 1: Generating JSON from Fail2Ban logs..." >> "$LOGFILE"
 ./fail2ban_log2json.sh >> "$LOGFILE" 2>&1
-sleep 5
+sleep 1
 
 # Step 2: Check for updates
 echo "🔎 Step 2: Checking for updates..." >> "$LOGFILE"
