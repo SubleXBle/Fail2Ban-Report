@@ -86,7 +86,7 @@ AuthUserFile /etc/apache2/htpasswd/.htpasswd
   ```
 
 * Store only **bcrypt-hashed passwords**, never plain text.
-  You can use the built-in Apache `htpasswd` tool (recommended) or an external generator (e.g. [bcrypt generator](https://suble.net/htpasswd.php)).
+  You can use the built-in Apache `htpasswd` tool (strongly recommended) or an external generator (e.g. my tool: [bcrypt generator](https://suble.net/htpasswd.php)).
 
 > Note, that you need your Sync Clients to allow access via IP also to get over password restrictions
 
