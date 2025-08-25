@@ -172,6 +172,7 @@ defaultserver=
 ```
 
 * **Reports**: If enabled (`report=true`), you need API keys for [AbuseIPDB](https://www.abuseipdb.com/) and [IPInfo](https://ipinfo.io/).
+* **report_types**: can be configured with `report_types=``abuseipdb`,`ipinfo` (you can set none, one or both - seperate them with `,`)
 * **Warnings**: Threshold `5:20` means “Warning” at 5 bans/minute per jail, “Critical” at 20.
 * **Default Server**: Define the default server name (folder name) shown in the Web-UI.
 
