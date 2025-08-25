@@ -1,6 +1,9 @@
 #!/bin/bash
 # Fail2Ban-Report-cronscript.sh
 
+# change dir for cronjobs
+cd /opt/Fail2Ban-Report/Backend
+
 LOGFILE="/opt/Fail2Ban-Report/cronjobs.log"
 
 echo "----- cronrun start ------ $(date '+%Y-%m-%d %H:%M:%S')" >> "$LOGFILE"
