@@ -351,10 +351,10 @@ Pull requests, feature ideas and bug reports are very welcome!
 ## 🖼️ Screenshots
 
 ### Main List
-![Main-List](screenshots/Main-List-050-2.png)
+![Main-List](screenshots/Main-List-050-3.png)
 
 ### Blocklist View
-![Blocklist](screenshots/Block-List-050-2.png)
+![Blocklist](screenshots/Block-List-050-3.png)
 
 ### Information Message
 ![Info-Message](screenshots/Info-050-2.png)
