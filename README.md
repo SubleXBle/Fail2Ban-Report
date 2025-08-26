@@ -154,7 +154,6 @@ It provides optional tools to:
 - UFW (for firewall integration)    
 - PHP 7.4+ with JSON support  
 - HTTPS-capable web server (Apache or Nginx)  
-- `bash` - (https://en.wikipedia.org/wiki/Bash_(Unix_shell))
 - `jq`   - (https://jqlang.org/)
 - `awk`  - (https://en.wikipedia.org/wiki/AWK)
 - `curl` - (https://curl.se/)
@@ -162,7 +161,6 @@ It provides optional tools to:
 ### 📡 Sync-Client
 - Fail2Ban with logging enabled  
 - UFW (for firewall integration)    
-- `bash` - (https://en.wikipedia.org/wiki/Bash_(Unix_shell))
 - `jq`   - (https://jqlang.org/)
 - `awk`  - (https://en.wikipedia.org/wiki/AWK)
 - `curl` - (https://curl.se/)
