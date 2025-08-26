@@ -29,7 +29,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
   - [📡 Sync-Client](#-sync-client)
 - [📦 Features](#-features)
 - [🆕 What's New in v0.5.0](#-whats-new-in-v050)
-- [🆚 Comparison: v0.4.0 vs. v0.5.0](#-Comparison-v0.4.0-vs.-v0.5.0)
+- [🆚 Version Comparison](#-Version-Comparison)
 - [🪳 Bugfixes (History)](#-bugfixes-history)
 - [👀 Outlook](#-outlook)
 - [👥 Discussions](#-discussions)
@@ -208,7 +208,7 @@ It provides optional tools to:
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
-## 🆚 Comparison: v0.4.0 vs. v0.5.0
+## 🆚 Version Comparison
 
 | Area                   | v0.4.0                                     | v0.5.0                                                              |
 |------------------------|--------------------------------------------|---------------------------------------------------------------------|
