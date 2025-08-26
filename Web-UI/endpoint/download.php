@@ -1,11 +1,11 @@
 <?php
-// download.php – Authentifizierter Blocklist-Download (eine Datei pro Request)
+// download.php – Authenticated Blocklist-Download (one File per Request)
 
-// === Konfiguration ===
+// === Configuration ===
 $CLIENTS_FILE   = "/opt/Fail2Ban-Report/Settings/client-list.json";
 $BLOCKLIST_BASE = __DIR__ . "/"; // Basis-Pfad zu den Blocklists
 
-// --- Hilfsfunktion für JSON-Antworten ---
+// --- Helpfunction for JSON-Answer ---
 function respond($statusCode, $data) {
     http_response_code($statusCode);
     header('Content-Type: application/json');
@@ -13,7 +13,7 @@ function respond($statusCode, $data) {
     exit;
 }
 
-// === 1) Clients laden ===
+// === 1) load Clients  ===
 if (!file_exists($CLIENTS_FILE)) {
     respond(500, ["success" => false, "message" => "Client list not found."]);
 }
@@ -22,7 +22,7 @@ if (!is_array($clients)) {
     respond(500, ["success" => false, "message" => "Client list corrupted."]);
 }
 
-// === 2) Authentifizierung ===
+// === 2) Authentication ===
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 $uuid     = $_POST['uuid'] ?? '';
@@ -45,7 +45,7 @@ if (isset($client['ip']) && $client['ip'] !== $remoteIp) {
     respond(403, ["success" => false, "message" => "Authentication failed (ip mismatch)."]);
 }
 
-// === 3) Datei bestimmen ===
+// === 3) set file ===
 $fileToDownload = $_GET['file'] ?? '';
 if (!$fileToDownload) {
     respond(400, ["success" => false, "message" => "Missing 'file' parameter."]);
@@ -58,13 +58,13 @@ if (!$fullPath || strpos($fullPath, realpath($userBlocklistDir)) !== 0 || !file_
     respond(404, ["success" => false, "message" => "Requested blocklist not found."]);
 }
 
-// === 4) Datei ausliefern ===
+// === 4) deliver file ===
 header('Content-Type: application/json');
 header('Content-Disposition: attachment; filename="' . basename($fullPath) . '"');
 header('Content-Length: ' . filesize($fullPath));
 readfile($fullPath);
 
-// === 5) Datei löschen nach Auslieferung ===
+// === 5) delete file when downloaded ===
 unlink($fullPath);
 
 exit;
