@@ -106,7 +106,9 @@ Server URLs
 
 change `my.server.tld/` to fit your envoirement
 
-If you are curious why so many sync urls read the [Syncronisation-Concept](Sync-Concept.md)
+---
+
+> If you are curious why so many sync urls read the [Syncronisation-Concept](Sync-Concept.md)
 
 ---
 
