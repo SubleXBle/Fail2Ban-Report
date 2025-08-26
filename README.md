@@ -16,7 +16,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 
 ## 🆚 Comparison: v0.4.0 vs. v0.5.0
 
-| Area                   | v0.4.0 (current)                           | v0.5.0 (upcoming)                                                   |
+| Area                   | v0.4.0                                     | v0.5.0                                                              |
 |------------------------|--------------------------------------------|---------------------------------------------------------------------|
 | Multi-Server Support   | ❌ Local logs only                         | ✅ Centralized management of multiple servers via HTTPS sync       |
 | User Roles             | ❌ No login system                         | ✅ Admin & Viewer with login and session handling                  |
