@@ -1,5 +1,5 @@
 <?php
-// index.php – Endpoint für Fail2Ban-Report
+// index.php – Endpoint für Fail2Ban-Report Event-Lists
 
 // === Config ===
 $CLIENTS_FILE = "/opt/Fail2Ban-Report/Settings/client-list.json";
