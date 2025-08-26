@@ -211,8 +211,8 @@ crontab -e
 Example (run every 5 minutes):
 
 ```bash
-*/5 * * * * /opt/Fail2Ban-Report/Backend/fail2ban_log2json.sh >> /var/log/f2br_backend.log 2>&1
-*/5 * * * * /opt/Fail2Ban-Report/Backend/firewall-update.sh >> /var/log/f2br_backend.log 2>&1
+*/5 * * * * /opt/Fail2Ban-Report/Backend/fail2ban_log2json.sh
+*/5 * * * * /opt/Fail2Ban-Report/Backend/firewall-update.sh
 ```
 
 * `*/5` = every 5 minutes
