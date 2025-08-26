@@ -14,11 +14,6 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 
 ---
 
-## 🐳 Docker Version
-> Development of [Docker Version of Fail2Ban-Report](https://github.com/SubleXBle/Fail2Ban-Report-Docker) will start when native Version is released
-
----
-
 
 ## 📑 Table of Contents
 
@@ -26,6 +21,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
   - [Syncronisation-Concept](Docs/Sync-Concept.md)
   - [Chain of Trust](Docs/chain-of-trust.md)
 - [🖥️ Demo](#️-demo)
+- [🐳 Docker Version](#-Docker-Version)
 - [🛠️ Installation](#️-installation)
 - [📚 What It Does](#-what-it-does)
 - [🧱 Architecture Overview](#-architecture-overview)
@@ -76,6 +72,12 @@ There's a simple demo version available here – no backend, no real data:
 👉 https://demo.suble.net/ 🔗
 Username and Password for Website Access is : `admin`:`admin`
 Username and Password for Blocklist manipulation is `admin`:`admin`
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+## 🐳 Docker Version
+> Development of [Docker Version of Fail2Ban-Report](https://github.com/SubleXBle/Fail2Ban-Report-Docker) will start when native Version is released
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
