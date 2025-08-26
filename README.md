@@ -213,17 +213,17 @@ It provides optional tools to:
 | Area                   | v0.4.0                                     | v0.5.0                                                              |
 |------------------------|--------------------------------------------|---------------------------------------------------------------------|
 | Multi-Server Support   | ❌ Local logs only                         | ✅ Centralized management of multiple servers via HTTPS sync       |
-| User Roles             | ❌ No login system                         | ✅ Admin & Viewer with login and session handling                  |
 | Synchronization        | ❌ None                                    | ✅ Pull-based via HTTPS endpoints                                  |
+| Authentication         | ❌ No login system                         | ✅ Role Based (Admin/Viewer) with login and session handling       |
 | Security               | 🔐 .htaccess, no external assets           | 🔐 bcrypt passwords, UUIDs, IP checks, improved authentication     |
-| Frontend               | 📊 Single-server view, marker function     | 📊 Server dropdown, markers with counting, improved UI             |
-| Blocklists             | 📂 Per jail, local                         | 📂 Per jail & server, with status (active, pending)                |
-| Firewall Integration   | ✅ UFW                                     | ✅ UFW (more firewalls planned)                                    |
-| Docker Support         | 🐳 First version available                 | 🐳 Docker version will be updated after release                    |
-| Performance            | ⚡ Good for small setups                   | ⚡ Tested with >13,000 events, fast loading times                  |
-| Installation           | 🛠️ Manual or installer                     | 🛠️ Structured installer, better path management                    |
+| Frontend               | 📊 Single-server view, marker, warnings    | 📊 Server dropdown, markers with counting, warnings                |
+| Blocklists             | 📂 Per jail, local with status             | 📂 Per jail & server, with status (active, pending)                |
+| Firewall Integration   | ✅ UFW                                     | ✅ UFW                                                             |
+| Docker Support         | 🐳 First version available                 | 🐳 Docker version will be updated [See here](https://github.com/SubleXBle/Fail2Ban-Report-Docker)                     |
+| Performance            | ⚡ Good for single setups                  | ⚡ Tested with >13,000 events, fast loading times                  |
+| Installation           | 🛠️ Manual Installation or installer        | 🛠️ Maual Installation                                              |
 | Statistics & Markers   | 🔴/🟡 Markers for IPs                      | 🔴 Repeated bans, 🟡 Ban increases with counting                  |
-| Future Plans           | 🔜 Docker, jail integration                | 🔜 Firewall expansion, statistics, jail management                 |
+
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
