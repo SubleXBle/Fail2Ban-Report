@@ -1,5 +1,5 @@
 <?php
-// update.php – Prüft Blocklist-Updates für Client-Server und stellt Blocklists zum Download bereit
+// update.php – Checks Blocklist-Updates for Sync-Client and provides Blocklists for Download
 
 header('Content-Type: application/json');
 
@@ -15,7 +15,7 @@ function respond($statusCode, $data) {
     exit;
 }
 
-// === 1) Authentifizierung ===
+// === 1) Authentication ===
 if (!file_exists($CLIENTS_FILE)) {
     respond(500, ["success" => false, "message" => "Client list not found."]);
 }
@@ -25,13 +25,13 @@ if (!is_array($clients)) {
     respond(500, ["success" => false, "message" => "Client list corrupted."]);
 }
 
-// POST-Daten
+// POST-Data
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 $uuid     = $_POST['uuid'] ?? '';
 $remoteIp = $_SERVER['REMOTE_ADDR'] ?? '';
 
-// Client suchen
+// search Client
 $client = null;
 foreach ($clients as $c) {
     if ($c['username'] === $username && $c['uuid'] === $uuid) {
@@ -52,7 +52,7 @@ if (isset($client['ip']) && $client['ip'] !== $remoteIp) {
     respond(403, ["success" => false, "message" => "Authentication failed (ip mismatch)."]);
 }
 
-// === 2) Prüfen, ob Updates für diesen Client vorliegen ===
+// === 2) Check if Updates are available for this Client ===
 $updateFile = $ARCHIVE_ROOT . 'update.json';
 $update_data = [];
 if (file_exists($updateFile)) {
@@ -67,29 +67,29 @@ if (empty($updatesToSend)) {
     respond(200, ["success" => true, "updates" => []]);
 }
 
-// === 3) Temporären Download-Pfad vorbereiten ===
+// === 3) Preparing temporary download path ===
 $tempDir = $DOWNLOAD_ROOT . "/{$username}/blocklists/";
 if (!is_dir($tempDir)) mkdir($tempDir, 0770, true);
 
-// === 4) Blocklists bereitstellen & Status auf false setzen ===
+// === 4) provide Blocklists & set Status to false ===
 $sentLists = [];
 
 foreach ($updatesToSend as $listName => $_) {
     $sourceFile = $ARCHIVE_ROOT . "$username/blocklists/$listName";
     $destFile   = $tempDir . $listName;
 
-    // Lock auf die Blocklist selbst
+    // Lock Blocklist
     $blockLock = "/tmp/{$listName}.lock";
     $blockHandle = fopen($blockLock, 'c');
     if (!$blockHandle || !flock($blockHandle, LOCK_EX)) {
-        continue; // evtl. loggen
+        continue; // logging ?
     }
 
     if (file_exists($sourceFile)) {
         copy($sourceFile, $destFile);
         $sentLists[] = $listName;
 
-        // Status in update.json auf false → Lock nur beim Schreiben
+        // Status in update.json to false → Lock only at write operations
         $updateLock = "/tmp/update.json.lock";
         $updateHandle = fopen($updateLock, 'c');
         if ($updateHandle && flock($updateHandle, LOCK_EX)) {
@@ -104,7 +104,7 @@ foreach ($updatesToSend as $listName => $_) {
     fclose($blockHandle);
 }
 
-// === 5) Antwort an Client ===
+// === 5) answer to Sync-Client ===
 respond(200, [
     "success" => true,
     "updates" => $sentLists
