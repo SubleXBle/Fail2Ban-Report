@@ -100,8 +100,8 @@ foreach ($updatesToSend as $listName => $_) {
         }
     }
 
-    flock($blockHandle, LOCK_UN);
-    fclose($blockHandle);
+    // flock($blockHandle, LOCK_UN); 
+    // fclose($blockHandle);
 }
 
 // === 5) answer to Sync-Client ===
