@@ -225,7 +225,7 @@ It provides optional tools to:
 | Statistics & Markers   | 🔴/🟡 Markers for IPs                      | 🔴 Repeated bans, 🟡 Ban increases with counting                  |
 | Future Plans           | 🔜 Docker, jail integration                | 🔜 Firewall expansion, statistics, jail management                 |
 
-
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
 ## 🪳 Bugfixes (History)
