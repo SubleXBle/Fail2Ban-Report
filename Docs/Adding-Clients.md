@@ -1,6 +1,6 @@
 # Manual Client Installation – Fail2Ban-Report v0.5.0
 
-> <span style="color:red">Username of the Client and Displayed Servername in Web-UI are the same.</span>
+<span style="color:red">Username of the Client and Displayed Servername in Web-UI are the same.</span>
 
 > Wanna know more about ![Chain of Trust](chain-of-trust.md) or ![Syncronisation Concept](Sync-Concept.md) ?
 
