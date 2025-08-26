@@ -38,28 +38,33 @@ if (!isset($_SESSION['user_role'])) {
 </head>
 <body>
 
-<div class="inline-headlines">
+<div class="sessionheader">
 
   <div>
     <h1>Fail2Ban-Report</h1>
     <h2>Let's catch the bad guys!</h2>
   <div>
-    <span title="Beta 5.0"><small>Version : 0.5.0</small></span></div>
+    <span title="Beta 5.0"><small>Version : 0.5.0</small> 🕵️</span></div>
   </div>
 
+
+<!-- Show User and Server -->
+<!--
 <div>
 <?php
 if (isset($_SESSION['username'])) {
-    echo "<h2>╩★╩".$_SESSION['username']."★on★".$activeServer."╩★╩</h2>";
+    echo "<h3>".$_SESSION['username']." @ ".$activeServer."</h3>";
 } else {
-    //echo "Viewer";
-    echo "<h2>╩★╩Viewer★on★".$activeServer."╩★╩</h2>";
+    echo "<h4>viewer @ ".$activeServer."</h4>";
 }
 ?>
 </div>
+-->
+<!-- Show User and Server -->
 
 
 <!-- Log in/out -->
+
 <div>
 <form method="post" action="">
   <small>
@@ -76,13 +81,22 @@ if (isset($_SESSION['username'])) {
   <button class="button-reset" type="submit" name="logout" value="1">Logout</button>
 </form>
 </div>
-<!-- Log in/out
+
+<!-- Log in/out -->
 
 
 <!-- Serverselect -->
-
+<div>
 <form method="post" style="margin-bottom: 1em;">
-    <label for="server">Server: </label>
+    <label for="server">
+<?php
+if (isset($_SESSION['username'])) {
+    echo "<span style='color: #d4af37;'>".$_SESSION['username']." @</span>";
+} else {
+    echo "viewer @";
+}
+?>
+    </label>
     <select name="server" id="server" onchange="this.form.submit()">
         <?php
         foreach ($SERVERS as $key => $name) {
@@ -92,7 +106,7 @@ if (isset($_SESSION['username'])) {
         ?>
     </select>
 </form>
-
+</div>
 <!-- Serverselect -->
 </div>
 
