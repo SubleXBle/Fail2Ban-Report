@@ -14,6 +14,12 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 
 ---
 
+## 🐳 Docker Version
+> Development of [Docker Version of Fail2Ban-Report](https://github.com/SubleXBle/Fail2Ban-Report-Docker) will start when native Version is released
+
+---
+
+
 ## 📑 Table of Contents
 
 - [⚠️ Status of the Project](#️-status-of-the-project)
