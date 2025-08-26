@@ -40,20 +40,6 @@ archive/
 
 Standardserver has to be set in config
 
-### Updated PHP files
-- `block-ip.php` → path updated to `archive/%server%/blocklists/`
-- `blocklist-stats.php` → path updated to `archive/%server%/blocklists/`
-- `fail2ban-logstats.php` → path updated to `archive/%server%/fail2ban/`
-- `get-blocklist.php` → path updated to `archive/%server%/blocklists/`
-- `get-json.php` → path updated to `archive/%server%/fail2ban/` (2x)
-- `list-files.php` → path updated to `archive/%server%/fail2ban/`
-- `ufw-report.php` → paths updated to `archive/%server%/blocklists/` and `archive/%server%/ufw/`
-- `unblock-ip.php` → path updated to `archive/%server%/blocklists/`
-- `warnings.php` → path updated to `archive/%server%/fail2ban/`
-
-### Updated JS files
-- `action-collector.js`
-
 ### Centralized Path Configuration
 
 **Dynamic Path Management**
@@ -65,6 +51,11 @@ Standardserver has to be set in config
 require_once __DIR__ . "/paths.php";
 $NEEDED_PATH = $PATHS["blocklists"];
 ```
+
+> Last 3 Hardcoded Paths are in:
+> - `paths.php` → To avoid circular reference
+> - `auth.php` → To avoid circular reference
+> - `action_report-ip.php` → not integrated in multiserver logic for now (_no need to function propper_)
 
 ### UI
 
@@ -161,8 +152,8 @@ endpoint/
 
 ```
 
-### 1. Endpoint (`/endpoint/index.php`)
-- New HTTPS endpoint for clients to send JSON data (`fail2ban-events-*.json` and `*.blocklist.json`).  
+### 1. Endpoint (`/endpoint/`)
+- New HTTPS endpoint for clients to send JSON data (`fail2ban-events-*.json` and `*.blocklist.json`).
 - Authentication using:
   - Username  
   - Password (bcrypt)  
@@ -173,6 +164,7 @@ endpoint/
   - **\*.blocklist.json:** locked via `flock`; existing entries are updated (`pending=false`) or deleted depending on transmitted status  
 - Automatic creation of client folders in `archive/` on first upload  
 - Correct permissions set for web server (`root:www-data`)  
+
 
 ---
 
