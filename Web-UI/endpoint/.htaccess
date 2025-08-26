@@ -6,11 +6,11 @@
 Options -Indexes
 
 # Block all but index.php and update.php
-<FilesMatch "^(?!index\.php$)(?!download\.php$)(?!backsync\.php$)(?!update\.php$).*">
+<FilesMatch "^(?!(?:index|update|download|backsync)\.php$).*">
   Require all denied
 </FilesMatch>
 
-# Optional: IP-Whitelist
+# Optional: IP-Whitelist for Sync-Clients
 # --------------------------------
 # 
 # <RequireAny>
