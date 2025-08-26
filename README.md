@@ -184,10 +184,10 @@ It provides optional tools to:
 
 - 🌐 **Multi-server support** with HTTPS sync backend  
 - 🔐 **User authentication** with roles (Admin / Viewer)  
-- ⚙️ **Reorganized backend**:  
-  - `archive/` separated per server (fail2ban / blocklists)  
-  - `/opt/Fail2Ban-Report/` cleaned and structured  
+- ⚙️ **Reorganized backend**:
   - Centralized path handling, less hardcoding  
+  - `archive/` separated per server (fail2ban / blocklists)  
+  - `/opt/Fail2Ban-Report/` cleaned and structured    
 - 🌐 **Frontend updates**:  
   - Server selection dropdown  
   - Admin login + logout (session handling)
