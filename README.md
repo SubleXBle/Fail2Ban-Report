@@ -14,6 +14,25 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 
 ---
 
+## 🆚 Comparison: v0.4.0 vs. v0.5.0
+
+| Area                | v0.4.0 (current)                              | v0.5.0 (upcoming)                                                                 |
+|---------------------|-----------------------------------------------|-----------------------------------------------------------------------------------|
+| Multi-Server Support| ❌ Local logs only                            | ✅ Centralized management of multiple servers via HTTPS sync                     |
+| User Roles          | ❌ No login system                            | ✅ Admin & Viewer with login and session handling                                |
+| Synchronization     | ❌ None                                       | ✅ Pull-based via HTTPS endpoints                                                |
+| Security            | 🔐 .htaccess, no external assets              | 🔐 bcrypt passwords, UUIDs, IP checks, improved authentication                   |
+| Frontend            | 📊 Single-server view, marker function        | 📊 Server dropdown, markers with counting, improved UI                           |
+| Blocklists          | 📂 Per jail, local                            | 📂 Per jail & server, with status (active, pending, source)                      |
+| Firewall Integration| ✅ UFW                                        | ✅ UFW (more firewalls planned)                                                  |
+| Docker Support      | 🐳 First version available                    | 🐳 Docker version will be updated after release                                  |
+| Performance         | ⚡ Good for small setups                      | ⚡ Tested with >13,000 events, fast loading times                                |
+| Installation        | 🛠️ Manual or installer                        | 🛠️ Structured installer, better path management                                  |
+| Statistics & Markers| 🔴/🟡 Markers for IPs                         | 🔴 Repeated bans, 🟡 Ban increases with counting                                |
+| Future Plans        | 🔜 Docker, jail integration                   | 🔜 Firewall expansion, statistics, jail management                               |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+---
 
 ## 📑 Table of Contents
 
