@@ -39,7 +39,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 - [🛣️ Roadmap or "Things I will have to do - but I do them later"](#️-roadmap-or-things-i-will-have-to-do---but-i-do-them-later)
 - [✅ What It Is](#-what-it-is) and [❌ What It Is Not](#-what-it-is-not)
 - [🤝 Contributing](#-contributing)
-- [🖼️ Screenshots](#-screenshots)
+- [🖼️ Screenshots](#-Screenshots)
 
 
 ---
