@@ -17,7 +17,7 @@ During data transfer from client to server, the following information is verifie
 Uploads are performed via a PHP script that additionally validates file names and structure.
 This ensures that the JSON data comes from a **trusted source**.
 
-#### ➡️ The ownership of Fail2Ban event data is transferred from the client to the server.
+### ➡️ The ownership of Fail2Ban event data is transferred from the client to the server.
 
 ---
 
