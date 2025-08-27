@@ -24,6 +24,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
   - [Syncronisation-Concept](Docs/Sync-Concept.md)
   - [Chain of Trust](Docs/chain-of-trust.md)
 - [📚 What It Does](#-what-it-does)
+- [📦 Features](#-features)
 - [🖥️ Demo](#️-demo)
 - [🐳 Docker Version](#-Docker-Version)
 - [🛠️ Installation](#️-installation)
@@ -31,7 +32,6 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 - [⚙️ Requirements](#️-requirements)
   - [🗄️ Server](#️-server)
   - [📡 Sync-Client](#-sync-client)
-- [📦 Features](#-features)
 - [🆕 What's New in v0.5.0](#-whats-new-in-v050)
 - [🆚 Version Comparison](#-Version-Comparison)
 - [🪳 Bugfixes (History)](#-bugfixes-history)
@@ -91,6 +91,24 @@ It provides optional tools to:
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
+
+## 📦 Features
+
+- 🔍 Searchable & filterable event reports  
+- 📊 Aggregated statistics (today, yesterday, 7 days, 30 days)  
+- 📂 Jail- and server-specific blocklists  
+- 🔄 Firewall sync with UFW  
+- 🔐 Authentication with role separation  
+- ⚡ Lightweight: no database, no frameworks  
+- 🛠️ Setup scripts for installation, permissions, and user management  
+- 🧩 Modular structure 
+- 🪵 Optional backend logging for ban/unban actions  
+
+> 🧰 Works even on small setups (Raspberry Pi, etc.)
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
 
 ## 🖥️ Demo
 👀 Want to try out the look & feel?
@@ -172,23 +190,6 @@ Read the [Instructions to add a Sync-Client for Fail2Ban-Report](Docs/Adding-Cli
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
-## 📦 Features
-
-- 🔍 Searchable & filterable event reports  
-- 📊 Aggregated statistics (today, yesterday, 7 days, 30 days)  
-- 📂 Jail- and server-specific blocklists  
-- 🔄 Firewall sync with UFW  
-- 🔐 Authentication with role separation  
-- ⚡ Lightweight: no database, no frameworks  
-- 🛠️ Setup scripts for installation, permissions, and user management  
-- 🧩 Modular structure 
-- 🪵 Optional backend logging for ban/unban actions  
-
-> 🧰 Works even on small setups (Raspberry Pi, etc.)
-
-##### [↑ Table of Contents ↑](#-Table-of-Contents)
----
-
 
 ## 🆕 What's New in v0.5.0
 
@@ -210,25 +211,6 @@ Read the [Instructions to add a Sync-Client for Fail2Ban-Report](Docs/Adding-Cli
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
-## 🆚 Version Comparison
-
-| Area                   | v0.4.0                                     | v0.5.0                                                              |
-|------------------------|--------------------------------------------|---------------------------------------------------------------------|
-| Multi-Server Support   | ❌ Local logs only                         | ✅ Centralized management of multiple servers via HTTPS sync       |
-| Synchronization        | ❌ None                                    | ✅ Pull-based via HTTPS endpoints                                  |
-| Authentication         | ❌ No login system                         | ✅ Role Based (Admin/Viewer) with login and session handling       |
-| Security               | 🔐 .htaccess, no external assets           | 🔐 bcrypt passwords, UUIDs, IP checks, improved authentication     |
-| Frontend               | 📊 Single-server view, marker, warnings    | 📊 Server dropdown, markers with counting, warnings                |
-| Blocklists             | 📂 Per jail, local with status             | 📂 Per jail & server, with status (active, pending)                |
-| Firewall Integration   | ✅ UFW                                     | ✅ UFW                                                             |
-| Docker Support         | 🐳 First version available                 | 🐳 [Docker version](https://github.com/SubleXBle/Fail2Ban-Report-Docker) |
-| Performance            | ⚡ Good for single setups                  | ⚡ Tested with >13,000 events, fast loading times                  |
-| Installation           | 🛠️ Manual Installation or installer        | 🛠️ Maual Installation                                              |
-| Statistics & Markers   | 🔴/🟡 Markers for IPs                      | 🔴 Repeated bans, 🟡 "Increase Ban" -Events with counting         |
-
-
-##### [↑ Table of Contents ↑](#-Table-of-Contents)
----
 
 ## 🪳 Bugfixes (History)
 
