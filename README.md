@@ -33,7 +33,6 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
   - [🗄️ Server](#️-server)
   - [📡 Sync-Client](#-sync-client)
 - [🆕 What's New in v0.5.0](#-whats-new-in-v050)
-- [🆚 Version Comparison](#-Version-Comparison)
 - [🪳 Bugfixes (History)](#-bugfixes-history)
 - [👀 Outlook](#-outlook)
 - [👥 Discussions](#-discussions)
