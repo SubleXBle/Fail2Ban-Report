@@ -36,6 +36,6 @@ This version introduces a **user-based authentication system** to secure access 
 - Protects the Fail2Ban-Report web interface from unauthorized access.  
 - Hardened against session hijacking and fixation attacks.  
 - Supports Fail2Ban by logging failed login attempts.  
-- Provides a foundation for future improvements (e.g., CSRF protection [Login Page], additional roles, additional admin features).
+- Provides a foundation for future improvements (e.g., CSRF protection [_Login Page_], additional roles, additional admin features).
 
 ---
