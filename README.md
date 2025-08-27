@@ -26,7 +26,6 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 - [📚 What It Does](#-what-it-does)
 - [📦 Features](#-features)
 - [🖥️ Demo](#️-demo)
-- [🐳 Docker Version](#-Docker-Version)
 - [🛠️ Installation](#️-installation)
 - [🧱 Architecture Overview](#-architecture-overview)
 - [⚙️ Requirements](#️-requirements)
@@ -40,6 +39,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 - [📄 Changelog](#-changelog)
 - [⚡ Performance & Stress Test](#-performance--stress-test)
 - [🛣️ Roadmap or "Things I will have to do - but I do them later"](#️-roadmap-or-things-i-will-have-to-do---but-i-do-them-later)
+- [🐳 Docker Version](#-Docker-Version)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 
@@ -114,12 +114,6 @@ There's a simple demo version available here – no backend, no real data:
 👉 https://demo.suble.net/ 🔗
 Username and Password for Website Access is : `admin`:`admin`
 Username and Password for Blocklist manipulation is `admin`:`admin`
-
-##### [↑ Table of Contents ↑](#-Table-of-Contents)
----
-
-## 🐳 Docker Version
-> Development of [Docker Version of Fail2Ban-Report](https://github.com/SubleXBle/Fail2Ban-Report-Docker) will start when native Version is released
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
@@ -303,6 +297,12 @@ Fail2Ban-Report maintains fast performance and reliable data synchronization, pr
 > As I am using Fail2Ban-Report I think it has a lot of potential to become something nice for not just myself.
 
 > Suggestions and Ideas still welcome at any time (see Discussions) - When you are using Fail2Ban-Report and you think "I would need to see .. " tell me, I am happy to see your Ideas!
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+## 🐳 Docker Version
+> Development of [Docker Version of Fail2Ban-Report](https://github.com/SubleXBle/Fail2Ban-Report-Docker) will start when native Version is released
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
