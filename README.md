@@ -236,6 +236,28 @@ Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/is
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
+
+## Screenshots
+
+### Main List
+![Main-List](screenshots/Main-List-050-3.png)
+
+### Blocklist View
+![Blocklist](screenshots/Block-List-050-3.png)
+
+### Information Message
+![Info-Message](screenshots/Info-050-2.png)
+
+### Security Message (new)
+![Admin-Message](screenshots/admin-msg-050-2.png)
+
+### Ban Message
+![Ban-Message](screenshots/Ban-Msg-050-2.png)
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+
 ## 👥 Discussions
 
 > If you want to join the conversation or have questions or ideas, visit the 💬 [Discussions page](https://github.com/SubleXBle/Fail2Ban-Report/discussions).
@@ -256,26 +278,6 @@ This is especially useful if you want to manually patch or update individual fil
 
 This project is licensed under the **GPLv3**.  
 Feel free to use, modify and share — but please respect the license terms.
-
-##### [↑ Table of Contents ↑](#-Table-of-Contents)
----
-
-## 🖼️ Screenshots
-
-### Main List
-![Main-List](screenshots/Main-List-050-3.png)
-
-### Blocklist View
-![Blocklist](screenshots/Block-List-050-3.png)
-
-### Information Message
-![Info-Message](screenshots/Info-050-2.png)
-
-### Security Message (new)
-![Admin-Message](screenshots/admin-msg-050-2.png)
-
-### Ban Message
-![Ban-Message](screenshots/Ban-Msg-050-2.png)
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
