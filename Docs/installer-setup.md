@@ -32,59 +32,42 @@ sudo ./install.sh
 
 ## ⚙️ What the Installer Does
 
-### Checks requirements
-Ensures you are root and verifies required commands (awk, jq, curl, git).
+### ✅ Checks requirements
+Ensures you are root and verifies required commands (`awk`, `jq`, `curl`, `git`).
 
-### Collects user input
+### 📝 Collects user input
+- Where to download/clone the source (default: `~/Fail2Ban-Report-latest`)  
+- Where to install the Web-UI (default: `/var/www/html/Fail2Ban-Report/`)
 
-Where to download/clone the source (default: ~/Fail2Ban-Report-latest)
+### ⬇️ Downloads the latest source
+Uses `git` to clone or update the repository from GitHub.
 
-Where to install the Web-UI (default: /var/www/html/Fail2Ban-Report/)
+### 🌐 Installs the Web-UI
+- Copies files to the chosen web directory.  
+- Sets ownership to `www-data:www-data`.
 
-### Downloads the latest source
+### 🛠 Installs the Backend
+- Creates required directories in `/opt/Fail2Ban-Report/`.  
+- Copies backend scripts and configuration files.  
+- Adjusts paths in scripts for JSON logs and blocklists.  
+- Makes scripts executable.
 
-Uses git to clone or update the repository from GitHub.
+### ⏰ Sets up cronjobs (optional)
+- Asks if you want cronjobs for backend automation.  
+- Lets you choose the interval (5, 10, 15, or 30 minutes).  
+- Installs cronjobs for:
+  - `fail2ban_log2json.sh`  
+  - `firewall-update.sh`
 
-### Installs the Web-UI
-
-Copies files to the chosen web directory.
-
-Sets ownership to www-data:www-data.
-
-### Installs the Backend
-
-Creates required directories in /opt/Fail2Ban-Report/.
-
-Copies backend scripts and configuration files.
-
-Adjusts paths in scripts for JSON logs and blocklists.
-
-Makes scripts executable.
-
-Sets up cronjobs (optional)
-
-Asks if you want cronjobs for backend automation.
-
-Lets you choose the interval (5, 10, 15, or 30 minutes).
-
-Installs cronjobs for:
-
-fail2ban_log2json.sh
-
-firewall-update.sh
-
-### Final Summary
+### 📊 Final Summary
 At the end, you’ll see:
+- ✔ Source directory  
+- ✔ Web-UI path  
+- ✔ Backend path  
+- ✔ Cronjob status  
 
-✔ Source directory
 
-✔ Web-UI path
-
-✔ Backend path
-
-✔ Cronjob status
-
-✅ Example Installer Output
+## ✅ Example Installer Output
 
 After a successful run, you will see:
 
