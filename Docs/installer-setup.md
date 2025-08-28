@@ -1,7 +1,5 @@
 # ✅ Fail2Ban-Report v0.5.0 – Installer
 
-# 🚀 Fail2Ban-Report v0.5.0 – Installer Guide
-
 This guide explains how to use the automated installer script for **Fail2Ban-Report v0.5.0**.  
 The installer sets up the **Web-UI**, the **Backend**, and (optionally) configures cronjobs.  
 It is designed for **Debian/Ubuntu-like systems**.
