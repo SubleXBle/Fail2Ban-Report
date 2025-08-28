@@ -5,19 +5,19 @@
 ---
 
 
-# ✅ Fail2Ban-Report v0.5.0 – Post-Installation Checklist
+## ✅ Fail2Ban-Report v0.5.0 – Post-Installation Checklist
 
-## 🔐 1. Secure the Web-UI
+### 🔐 1. Secure the Web-UI
 **Goal:** Prevent unauthorized access  
 
-### 🔒 Enforce HTTPS
+#### 🔒 Enforce HTTPS
 ```apache
 RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 ```
 
-🔑 Enable Basic Authentication
+#### 🔑 Enable Basic Authentication
 
 ```
 AuthType Basic
@@ -29,13 +29,13 @@ AuthUserFile /etc/apache2/htpasswd/.htpasswd
 </RequireAny>
 ```
 
-Create password file:
+#### Create password file:
 
 ```
 sudo htpasswd -c -B /etc/apache2/htpasswd/.htpasswd admin
 ```
 
-🛡️ Optional: IP Restriction
+#### 🛡️ Optional: IP Restriction
 
 ```
 <RequireAny>
@@ -45,7 +45,7 @@ sudo htpasswd -c -B /etc/apache2/htpasswd/.htpasswd admin
 </RequireAny>
 ```
 
-⚙️ 2. Set Up User Management
+### ⚙️ 2. Set Up User Management
 
 Goal: Role-based access to blocklists
 
@@ -54,14 +54,13 @@ cd /opt/Fail2Ban-Report/Helper-Scripts/
 ./manage-users.sh
 ```
 
-Assign roles:
+#### Assign roles:
 
-Admin – can modify blocklists
+- Admin – can modify blocklists
+- Viewer – read-only access
 
-Viewer – read-only access
 
-
-🧩 3. Review and Customize Configuration
+### 🧩 3. Review and Customize Configuration
 
 Goal: Optimize reporting and thresholds
 
@@ -82,7 +81,7 @@ threshold=5:20
 
 ```
 
-🔄 4. Adjust Script Paths for Server Names
+### 🔄 4. Adjust Script Paths for Server Names
 
 Goal: Proper log and blocklist mapping
 
@@ -95,7 +94,7 @@ BLOCKLIST_PATH="/var/www/html/Fail2Ban-Report/archive/<SERVERNAME>/blocklists/"
 
 ```
 
-🧪 5. Enable Logging for Cronjobs (Optional)
+### 🧪 5. Enable Logging for Cronjobs (Optional)
 
 Goal: Easier debugging
 
@@ -104,7 +103,7 @@ Goal: Easier debugging
 */5 * * * * /opt/Fail2Ban-Report/Backend/firewall-update.sh >> /var/log/f2b-report-fw.log 2>&1
 ```
 
-📡 6. Test the Web-UI
+### 📡 6. Test the Web-UI
 
 Goal: Verify functionality
 
@@ -115,5 +114,7 @@ Check log display
 Verify access protection
 
 Confirm user roles
+
+
 
 
