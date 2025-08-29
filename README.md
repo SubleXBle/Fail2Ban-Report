@@ -125,8 +125,10 @@ Username and Password for Blocklist manipulation is `admin`:`admin`
 ### Manual Installations:
 
 > - [New Installation](Docs/Setup-Instructions.md)
-> - [Upgrading fom 0.4.0](Docs/update-existing-installation.md)
+> - [Upgrading fom 0.3.3 or above](Docs/update-existing-installation.md)
 > - [Add Sync-Client](Docs/Adding-Clients.md)
+
+> when your existing installation is older than Version 0.3.3 you can still do the upgrade installation, your Daily json Files will be fully compatible, you would have to rename you blockfile to *.blockfile.json to further use it.
 
 ### Auto-Installer
 
