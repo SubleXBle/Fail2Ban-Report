@@ -14,7 +14,7 @@ Options -Indexes
 # --------------------------------
 # 
 # <RequireAny>
-#   Require ip 192.168.1.10
-#   Require ip 203.0.113.0/24
+#   Require ip 192.168.1.10  # Singe Address
+#   Require ip 203.0.113.0/24  # Network
 # </RequireAny>
 
