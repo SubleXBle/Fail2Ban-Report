@@ -101,3 +101,6 @@ run the manage-users script to create your admin user
 Overwrite all your Files in your Web-UI Directory (eg.: `/var/www/html/Fail2Ban-Report/`) with the Files in Web-UI Folder in this Project
 
 you are done - you have upgraded Fail2Ban-Report to it's new version
+> if you want to use a checklist, you can use the document for new installation.
+
+
