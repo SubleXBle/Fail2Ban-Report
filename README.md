@@ -130,7 +130,11 @@ Username and Password for Blocklist manipulation is `admin`:`admin`
 
 ### Auto-Installer
 
+> - expected with 0.5.1
 
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
 
 ## 🧱 Architecture Overview
 
