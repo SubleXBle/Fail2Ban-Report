@@ -3,7 +3,7 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-$config = parse_ini_file('/opt/Fail2Ban-Report/fail2ban-report.config');
+$config = parse_ini_file('/opt/Fail2Ban-Report/Settings/fail2ban-report.config');
 
 $ips = $_POST['ip'] ?? null;
 if (!$config['report'] || !$config['report_types'] || !$ips) {
