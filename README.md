@@ -12,7 +12,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 
 ## 🛡️ **Note**: This tool is a visualization and management layer — it does **not** replace proper intrusion detection or access control. Deploy it behind IP restrictions or HTTP authentication only!
 
-> ### ❗This version introduces **Authentication** and **Multi-Server Support** as core features.❗
+> ### ❗This version introduces **Authentication** and **Multi-Server Support** as core features.
 >
 >To enable these, significant parts of the application have been reworked to align with the new multi-server architecture and integrated authentication system. A new `/endpoint/` has also been added to synchronize your Fail2Ban servers with Fail2Ban-Report. If anything not working as expected, feel free to open an discussion or issue.
  
