@@ -14,9 +14,9 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 
 > ### This version introduces **Authentication** and **Multi-Server Support** as core features.
 >
->To enable these, significant parts of the application have been reworked to align with the new multi-server architecture and integrated authentication system. A new `/endpoint/` has also been added to synchronize your Fail2Ban servers with Fail2Ban-Report.  
+>To enable these, significant parts of the application have been reworked to align with the new multi-server architecture and integrated authentication system. A new `/endpoint/` has also been added to synchronize your Fail2Ban servers with Fail2Ban-Report. If anything not working as expected, feel free to open an discussion or issue.
  
-> For more details, see the [Syncronisation-Concept](Docs/Sync-Concept.md) and the [Chain of Trust](Docs/chain-of-trust.md) or the [Authentication System](Docs/Authentication-System.md) Documentations.
+> For further details, see the [Syncronisation-Concept](Docs/Sync-Concept.md) and the [Chain of Trust](Docs/chain-of-trust.md) or the [Authentication System](Docs/Authentication-System.md) Documentations.
 
 ---
 
