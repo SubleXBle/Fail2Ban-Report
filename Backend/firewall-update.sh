@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#
+# This is the Firewall-Update Script for the local installation - you you would have to edit the BLOCKLIST_DIR to fit your Installation
+#
 set -euo pipefail
 
 # --- Configuration ---
