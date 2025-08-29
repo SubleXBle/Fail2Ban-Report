@@ -102,7 +102,10 @@ It provides optional tools to:
 - ⚡ Lightweight: no database, no frameworks  
 - 🛠️ Setup scripts for installation, permissions, and user management  
 - 🧩 Modular structure 
-- 🪵 Optional backend logging for ban/unban actions  
+- 🪵 Optional backend logging for ban/unban actions
+- 🔍 Optional integrations: (_Free API-KEYS_)
+  - [AbuseIPDB](https://www.abuseipdb.com/) for reputation lookups
+  - [IP-Info.io](https://ipinfo.io/) for region/provider checks  
 
 > 🧰 Works even on small setups (Raspberry Pi, etc.)
 
