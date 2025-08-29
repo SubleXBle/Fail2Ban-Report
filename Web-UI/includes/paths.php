@@ -7,10 +7,10 @@ if (session_status() === PHP_SESSION_NONE) {
 // Config Pfad
 $CONFIG_ROOT = "/opt/Fail2Ban-Report/Settings/";
 
-// Basepath
+// Basispfad
 $ARCHIVE_ROOT = __DIR__ . "/../archive/";
 
-// generate serverlist
+// Serverliste automatisch aus archive/ generieren
 $SERVERS = [];
 if (is_dir($ARCHIVE_ROOT)) {
     foreach (scandir($ARCHIVE_ROOT) as $entry) {
@@ -24,14 +24,14 @@ if (is_dir($ARCHIVE_ROOT)) {
     }
 }
 
-// read config
+// Config einlesen
 $configFile = $CONFIG_ROOT . 'fail2ban-report.config';
 $config = parse_ini_file($configFile, true);
 
-// set standard from config
+// Standardserver aus Config lesen
 $configDefault = $config['Default Server']['defaultserver'] ?? null;
 
-// fallback if no standardserver is set in config
+// Validierung Default: aus Config, sonst erster gefundener Server
 if ($configDefault && array_key_exists($configDefault, $SERVERS)) {
     $DEFAULT_SERVER = $configDefault;
 } else {
@@ -49,7 +49,7 @@ $activeServer = (isset($_SESSION['active_server']) && array_key_exists($_SESSION
     : $DEFAULT_SERVER;
 
 /**
- * get paths for the currently active server
+ * Pfade für den aktuell aktiven Server zurückgeben
  */
 function getPaths($server) {
     global $ARCHIVE_ROOT;
@@ -61,6 +61,6 @@ function getPaths($server) {
     ];
 }
 
-// Global PATHS-Variable
+// Globale PATHS-Variable setzen
 $PATHS = getPaths($activeServer);
 $PATHS['config'] = $CONFIG_ROOT;
