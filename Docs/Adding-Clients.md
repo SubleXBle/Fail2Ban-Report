@@ -1,4 +1,4 @@
-# Manual Client Installation – Fail2Ban-Report v0.5.0
+# Manual Sync-Client Installation – Fail2Ban-Report v0.5.0
 
 > ### Username of the Client and Displayed Servername in Web-UI are the same.
 
