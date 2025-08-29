@@ -18,7 +18,6 @@ if (isset($config['Fail2Ban-Daily-List-Settings']['max_display_days'])) {
 }
 
 $jsonDir = $PATHS["fail2ban"];
-//$jsonDir = dirname(__DIR__) . '/archive/swsrv/fail2ban/';
 
 // Collect all matching JSON files with their dates extracted from filenames
 $matchedFiles = [];
