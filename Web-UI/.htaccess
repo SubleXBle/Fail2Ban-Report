@@ -76,12 +76,12 @@ RewriteEngine On
 #SetEnvIf X-Forwarded-Proto https HTTPS=1
 
 # Security headers (set only when HTTPS is active)
-#<IfModule mod_headers.c>
+<IfModule mod_headers.c>
 #  Header always set X-Content-Type-Options "nosniff"
 #  Header always set X-Frame-Options "SAMEORIGIN"
 #  Header always set X-XSS-Protection "1; mode=block"
 #  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
-#</IfModule>
+</IfModule>
 
 # ----------------------------------------------------
 # Set Basic Auth
