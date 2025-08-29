@@ -91,9 +91,9 @@ if (isset($_SESSION['username'])) {
     <label for="server">
 <?php
 if (isset($_SESSION['username'])) {
-    echo "<span style='color: #d4af37;'>".$_SESSION['username']." @</span>";
+    echo "<span style='color: #d4af37; font-weight: bold;'>".$_SESSION['username']."</span> @";
 } else {
-    echo "viewer @";
+    echo "guest @";
 }
 ?>
     </label>
