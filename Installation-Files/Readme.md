@@ -7,15 +7,19 @@
 
 ## New Installations
 
-use the `installer.sh` File and the [Docs/installer-setup.md](Docs/installer-setup.md)
+use the `installer.sh` File and the [installer.md](installer.md)
 
 ---
 
 ## Existing Installations
 
+use the '' File and the []()
+
 ---
 
 ## Sync-Client Installations
+
+use the '' File and the []()
 
 ---
 
