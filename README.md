@@ -1,151 +1,266 @@
 # Fail2Ban-Report
-> Beta 4.0 | Version 0.4.0
+![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20-_🕵️_V0.5.0_(Beta_5)-gold?style=flat&logoColor=black)
 
-> A simple and clean web-based dashboard to turn your daily Fail2Ban logs into searchable and filterable JSON reports — with optional IP blocklist management for UFW.
 
-> This version brings more stability and performance, as well as improved visibility into Fail2Ban events.
+A lightweight web-based "multi-server dashboard" that transforms daily Fail2Ban logs into searchable and filterable JSON reports, while also providing centralized UFW IP blocklist management across all your servers through a pull-based client-side synchronization via secure HTTPS endpoints.
+
 
 **Integration**
 >Designed for easy integration on a wide range of Linux systems — from small Raspberry Pis to modest business setups — though it’s not (yet) targeted at large-scale enterprise environments.
-Flexibility comes from the two backend shell scripts, which you can adapt to your specific environment or log sources to provide the JSON data the web interface needs (daily JSON event files).
+High flexibility comes from the backend shell scripts, which you can adapt to your specific environment or log sources to provide the JSON data the web interface needs (daily JSON event files).
 
-🛡️ **Note**: This tool is a visualization and management layer — it does **not** replace proper intrusion detection or access control. Deploy it behind IP restrictions or HTTP authentication.
 
-🔐 Security Notice
+## 🛡️ **Note**: This tool is a visualization and management layer — it does **not** replace proper intrusion detection or access control. Deploy it behind IP restrictions or HTTP authentication only!
+
+> ### ❗This version introduces **Authentication** and **Multi-Server Support** as core features.
+>
+>To enable these, significant parts of the application have been reworked to align with the new multi-server architecture and integrated authentication system. A new `/endpoint/` has also been added to synchronize your Fail2Ban servers with Fail2Ban-Report. If anything not working as expected, feel free to open an discussion or issue. As usual see the [changelog](changelog.md) for more detailed change information.
+ 
+> For further details, see the [Syncronisation-Concept](Docs/Sync-Concept.md) and the [Chain of Trust](Docs/chain-of-trust.md) or the [Authentication System](Docs/Authentication-System.md) Documentations.
+
+---
+
+## 📑 Table of Contents
+
+- [⚠️ Status of the Project](#️-status-of-the-project)
+  - [Syncronisation-Concept](Docs/Sync-Concept.md)
+  - [Chain of Trust](Docs/chain-of-trust.md)
+- [📚 What It Does](#-what-it-does)
+- [📦 Features](#-features)
+- [🖥️ Demo](#️-demo)
+- [🛠️ Installation](#️-installation)
+- [🧱 Architecture Overview](#-architecture-overview)
+- [⚙️ Requirements](#️-requirements)
+  - [🗄️ Server](#️-server)
+  - [📡 Sync-Client](#-sync-client)
+- [🆕 What's New in v0.5.0](#-whats-new-in-v050)
+- [🪳 Bugfixes (History)](#-bugfixes-history)
+- [👀 Outlook](#-outlook)
+- [🖼️ Screenshots](#-screenshots)
+- [👥 Discussions](#-discussions)
+- [📄 Changelog](#-changelog)
+- [⚡ Performance & Stress Test](#-performance--stress-test)
+- [🛣️ Roadmap or "Things I will have to do - but I do them later"](#️-roadmap-or-things-i-will-have-to-do---but-i-do-them-later)
+- [🐳 Docker Version](#-Docker-Version)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+
+
+---
+
+## ⚠️ Status of the Project
 
 **Current Status:**  
-> Fail2Ban-Report currently manages bans and unbans through **UFW**, serving as a safe **intermediate solution**.  
-It does **not** directly modify Fail2Ban jails or change existing fail2ban configurations.
+> Fail2Ban-Report currently manages bans and unbans via UFW, providing a safe and persistent solution.
+It does not modify Fail2Ban jails or existing Fail2Ban configurations directly, instead using UFW for its own "permanent jails".
+
+> **Version 0.5.0 introduces multi-server support and role-based access:** Viewer accounts are read-only, while Admins can manage bans/unbans and blocklists across all connected servers via the dashboard.
 
 **Future Direction:**  
 > A potential long-term enhancement could include **direct interaction with Fail2Ban jails** — for example, user-controlled bans and unbans per jail.  
 The existing structured `*.blocklist.json` format is already designed to support this, ensuring that any future manual ban management can remain "persistent", reviewable, and fully auditable.
 
-Please read the [Installation Instructions](Setup-Instructions.md) carefully and secure your deployment with the provided `.htaccess`.
-> still a little experimental feature : Use the Installer ![Installer Setup Documentation](installer-setup.md) It would be great if you tell me if the installer worked for your needs.
+**Syncronisation-Concept and Chain of Trust**
+> you can read about the Syncronisation Concept in this Document [Sync-Concept](Docs/Sync-Concept.md) to get a better understanding of how it works
 
+> you can read about the "Chain of Trust" between Server and Clients in this Document: [Chain of Trust](Docs/chain-of-trust.md)
+
+Critical backend operations (like UFW updates) are executed via root cron scripts; ensure the server running Fail2Ban-Report is fully secured.
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
 ## 📚 What It Does
+
 Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports viewable via a responsive web dashboard.  
-It provides optional tools to:  
+It provides optional tools to:
 
-- 📊 Visualize **ban** and **unban** events, including per-jail statistics  
-- ⚡ Interact with IPs (e.g., manually block, unblock, get report from external services)  
-- 📂 Maintain **jail-specific** persistent blocklists (JSON) with `active` and `pending` status  
-- 🔄 Sync those lists with your system firewall using **ufw**  
-- 🚨 Show **warning indicators** when ban rates exceed configurable thresholds
-- 🚨 Show **Markers** when a IP Address is present more than once in one (yellow) or more (red) jails.
+- 📊 View **ban/unban events** and per-jail statistics
+- 🌐 Switch between multiple servers in a single dashboard
+- 🔐 Use authentication with **viewer** (read-only) and **admin** (block/unblock) roles
+- 📂 Maintain **persistent blocklists** (per jail and per server) with metadata (`active`, `pending`, `source`)
+  - no fire & forget
+- ⚡ Apply or remove firewall rules (currently via **ufw**)
+- 🚨 Get configureable warnings for unusual activity (DDoS, brute-force, scans)
+- 🚨 Mark IPs with 🔴 repeat bans or 🟡 ban increases
+- 🔍 Optional integrations: (_Free API-KEYS_)
+  - [AbuseIPDB](https://www.abuseipdb.com/) for reputation lookups
+  - [IP-Info.io](https://ipinfo.io/) for region/provider checks
 
-> **Note:** Direct integration with other firewalls or native Fail2Ban jail commands is not yet implemented.
+> **Note:** Viewer accounts are read-only. Direct integration with other firewalls or native Fail2Ban jail commands is not yet implemented.  
 
----
-
-## 🧱 Architecture Overview
-- **Backend Shell Scripts**:  
-  - Parse logs and generate daily JSON event files  
-  - Maintain and update `*.blocklist.json`  
-  - Apply or remove firewall rules based on blocklist entries (`ufw`)  
-
-- **Frontend Web Interface**:  
-  - Displays event timelines, statistics, and per-jail blocklists  
-  - Allows **multi-selection** for bulk ban/report actions  
-  - Shows **pending status** for unprocessed manual actions  
-  - Displays real-time warning indicators  
-
-- **JSON Blocklists**:  
-  - Stored per jail  
-  - Contain IP entries with metadata (`active`, `pending`, timestamps, jail name)  
-
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
 ## 📦 Features
 
-- 🔍 **Searchable + filterable** log reports (date, jail, IP)
-- 🔧 **Integrated JSON blocklist** for persistent Block-Overview
-- 🧱 **Firewall sync** using UFW (planned: nftables, firewalld)
-- ⚡ **Lightweight setup** — no DB, no frameworks
-- 🔐 **Compatible with hardened environments** (no external assets, strict headers)
-- 🛠️ **Installer script** to automate setup and permissions
-- 🧩 **Modular design** for easy extension
-- 🪵 Optional logging of block/unblock actions (set true/false and logpath in `firewall-update.sh`)
-- 🕵️ **Optional Feature :** IP reputation check via AbuseIPDB (manual lookup from web interface)
+- 🔍 Searchable & filterable event reports  
+- 📊 Aggregated statistics (today, yesterday, 7 days, 30 days)  
+- 📂 Jail- and server-specific blocklists  
+- 🔄 Firewall sync with UFW  
+- 🔐 Authentication with role separation  
+- ⚡ Lightweight: no database, no frameworks  
+- 🛠️ Setup scripts for installation, permissions, and user management  
+- 🧩 Modular structure 
+- 🪵 Optional backend logging for ban/unban actions
+- 🔍 Optional integrations: (_Free API-KEYS_)
+  - [AbuseIPDB](https://www.abuseipdb.com/) for reputation lookups
+  - [IP-Info.io](https://ipinfo.io/) for region/provider checks  
 
 > 🧰 Works even on small setups (Raspberry Pi, etc.)
 
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
+
+
+## 🖥️ Demo
+👀 Want to try out the look & feel?
+There's a simple demo version available here – no backend, no real data:
+👉 https://demo.suble.net/ 🔗
+Username and Password for Website Access is : `admin`:`admin`
+Username and Password for Blocklist manipulation is `admin`:`admin`
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+## 🛠️ Installation
+
+### Manual Installations:
+
+> - [New Installation](Docs/Setup-Instructions.md)
+> - [Upgrading fom 0.3.3 or above](Docs/update-existing-installation.md)
+> - [Add Sync-Client](Docs/Adding-Clients.md)
+
+> when your existing installation is older than Version 0.3.3 you can still do the upgrade installation, your Daily json Files will be fully compatible, you would have to rename you blockfile to *.blockfile.json to further use it. A fresh Install would be still recommended
+
+### Auto-Installer
+
+> - expected with 0.5.1
+
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+## 🧱 Architecture Overview
+
+**Backend (Shell scripts):**
+- Parse Fail2Ban logs → generate daily JSON event files
+- Maintain and update jail-specific blocklists (`*.blocklist.json`)
+- Sync blocklists with `ufw`
+- Provide HTTPS endpoint for multi-server synchronization
+
+**Frontend (PHP Web Interface):**
+- Event timeline with filtering and search
+- Per-jail blocklist view
+- Multi-server dropdown
+- Bulk actions (ban/unban/report)
+- Pending status for actions not yet applied
+- Warning/critical indicators for activity spikes
+- Authentication: viewer (read-only) / admin (ban/unban)
+
+**Blocklists (JSON):**
+- Stored per jail and per server
+- Include metadata: jail, status, timestamps, source
+- Modified only by authenticated admins
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+## ⚙️ Requirements
+
+### 🗄️ Server
+- Fail2Ban with logging enabled  
+- UFW (for firewall integration)
+- HTTPS-capable web server (Apache)
+- PHP 7.4+ with JSON support    
+- `jq`   - (https://jqlang.org/)
+- `awk`  - (https://en.wikipedia.org/wiki/AWK)
+- `curl` - (https://curl.se/)
+
+### 📡 Sync-Client
+- Fail2Ban with logging enabled  
+- UFW (for firewall integration)    
+- `jq`   - (https://jqlang.org/)
+- `awk`  - (https://en.wikipedia.org/wiki/AWK)
+- `curl` - (https://curl.se/)
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+
+## 🆕 What's New in v0.5.0
+
+- 🌐 **Multi-server support** with HTTPS sync backend  
+- 🔐 **User authentication** with roles (Admin / Viewer)  
+- ⚙️ **Reorganized backend**:
+  - Centralized path handling, less hardcoding  
+  - `archive/` separated per server (fail2ban / blocklists)  
+  - `/opt/Fail2Ban-Report/` cleaned and structured    
+- 🌐 **Frontend updates**:  
+  - Server selection dropdown  
+  - Admin login + logout (session handling)
+  - changed Marker Feature to show: - 🔴 repeat bans |🟡(1) ban increases with the number how often it happend ([see bug reports)](#-bugfixes-history))
+- 🔒 **Security updates**:  
+  - Bcrypt password storage  
+  - UUID and optional IP checks  
+  - Additional `.htaccess` IP whitelist
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+
+## 🪳 Bugfixes (History)
+
+Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
+
+> - ✅ **Date filter** now correctly limits displayed events (0.1.2)
+> - ✅ **Jail filter** now correctly shows only the jails present in the displayed event list. (0.2.1)
+> - ✅ **File date filtering** fix to include today's JSON logs and ensure latest files are listed correctly. (0.2.2)
+> - ✅ **Blocklist Path on unblocking** fixed a possible bug that could lead to not finding the blocklist.json when unblocking from the Blocklist view. (0.2.2)
+  → Hotfixed on 05.08.2025 at 13:10 (UTC+2) directly in latest (0.2.3)
+> - ✅ **Installer** should now ask if you want to delete and reclone repo when allready existing (0.3.1)
+> - ✅ **Added FLOCK** to lock json files to not loose data when several write processes write at the same time (0.3.2)
+- ✅ **Handling of "Increase Ban" Events** : will now processed correct by backend and is also visible in frontend via markers (0.4.0)
+  - Thanks to 👉 **`jbd7`** 👈 for reporting and debugging `issue #21` 👍.
+- ⏳ **Copy to Clipboard** cannot copy the list when filtered by markers (0.5.0)
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+## 👀 Outlook
+> next minor releases will focus on stability, security and usability, wider integration of authentication (Aka Loginpage) and smoother sync cycle, next major releases will focus more on statistics, integration of other firewalls and more fail2ban integration
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
+
+## 🖼️ Screenshots
+
+### Main List
+![Main-List](screenshots/Main-List-050-3.png)
+
+### Blocklist View
+![Blocklist](screenshots/Block-List-050-3.png)
+
+### Information Message
+![Info-Message](screenshots/Info-050-2.png)
+
+### Security Message (new)
+![Admin-Message](screenshots/admin-msg-050-2.png)
+
+### Ban Message
+![Ban-Message](screenshots/Ban-Msg-050-2.png)
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+
 
 ## 👥 Discussions
 
 > If you want to join the conversation or have questions or ideas, visit the 💬 [Discussions page](https://github.com/SubleXBle/Fail2Ban-Report/discussions).
 
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
-
-
-## 🆕 What's New in V 0.4.0
-
-### 🧱 Firewall & JSON
-- Optimized `firewall-update.sh` for faster batch processing of IPs.
-- Batch blocking per jail with a single `ufw reload`.
-- Safe unblocking with rule renumbering and reload after each deletion.
-- JSON updates and cleanup done once per jail, not per IP.
-- Core mechanisms, logging, and permissions unchanged.
-> This significantly reduces both the runtime and the lock duration of the blocklists, especially during ban events.
-
-### 🖥️ UI & Statistics
-- Minor visual improvements in:
-  - `header.php`, `fail2ban-logstats.php`, `fail2ban-logstats.js`
-  - `index.php` (IP sorting)
-  - `style.css`
-
-### 🟡🔴 Marker Feature
-- **IP Event Markers**: Highlights repeated events per IP (yellow) and IPs in multiple jails (red).
-- **Sortable & Filterable Mark Column**: New column `Mark` with dropdown filter.
-- **Dynamic Filtering**: Markers update live with Action, Jail, IP, or Date filters.
-- Marker column placed between Action and IP, responsive layout preserved.
-
-### ✨ New Feature: Copy Filtered Data to Clipboard
-
-- **Added** a new "Copy to Clipboard" button to export the currently **filtered table data**.
-- **Implemented** a dedicated JavaScript file `assets/js/table-export.js` for the copy functionality.
-- **Integration** with existing DataTables filtering logic to ensure only visible/filtered rows are copied.
-- **Output Format**: Tab-separated values (TSV) with all HTML tags removed for clean text export.
-- **User Feedback**: 
-  - Shows a warning if there’s no data to copy.
-  - Shows a success or error alert based on the clipboard operation result.
-
-> This Feature will only work with enabled https for security reasons
-
-
----
-
-### ⚠️ Upgrade Notice
-
-If you're upgrading from an existing installation : from 0.3.3 and later
-
-1. 📦 Replace all or changed files with the new version (overwrite).
-2. 👀 List of changed files: ![changelog.md#list-of-changed-files](changelog.md#list-of-changed-files)
-3. 📦 make sure new shellscripts are executable
-4. 🛠️ Control needed Paths
-5. 🛠️ Control .htaccess
-
-If you're upgrading from an existing installation : pre 0.3.2 and also from 0.3.2
-
-- ⚠️ **The new blocklist format is not compatible with the old `blocklist.json`.** and got new field `pending` is in json since 0.3.3
-- 🧹 To ensure a clean transition and avoid orphaned firewall entries, follow these steps:
-
-  1. **Empty your current blocklist** via the **Unblock** buttons in the UI.
-  2. 🔄 Trigger a **sync** using the `firewall-update.sh` to remove all Fail2Ban-Report-related rules from the firewall.
-  3. 🗑️ Delete the old `blocklist.json`.
-  4. 📦 Replace all files with the new version (overwrite).
-  5. ✅ Done! The new system will now build jail-specific blocklists automatically.
-
-- 🛠️ _Optional_ : Run the `installer.sh` again to get a fresh setup.
-
-> This ensures no leftover blocks remain in your firewall from the previous system.
-
----
-
 
 ## 📄 Changelog
 
@@ -153,89 +268,54 @@ Details about all new features, improvements, and changed files can be found in 
 
 This is especially useful if you want to manually patch or update individual files.
 
-
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
-## 🪳 Bugfixes
 
-> - Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
+## ⚡ Performance & Stress Test
 
-- ✅ **Date filter** now correctly limits displayed events
-- ✅ **Jail filter** now correctly shows only the jails present in the displayed event list.
-- ✅ **File date filtering** fix to include today's JSON logs and ensure latest files are listed correctly.
-- ✅ **Blocklist Path on unblocking** fixed a possible bug that could lead to not finding the blocklist.json when unblocking from the Blocklist view.  
-  → Hotfixed on 05.08.2025 at 13:10 (UTC+2) directly in latest
-- ✅ **Installer** should now ask if you want to delete and reclone repo when allready existing
-- ✅ **Added FLOCK** to lock json files to not loose data when several write processes write at the same time
+Fail2Ban-Report has been tested under high-load conditions to verify stability, responsiveness, and reliable synchronization across multiple servers.
 
+**Real Scenario:**
+
+- **Duration: ~10 minutes**
+- **Webserver events:** ~13,400 entries across several jails (mostly SSH)
+- **Data per event:** date, action, marker, IP, jail
+
+**Key Results:**
+
+- Since each ban is triggered after 4 failed attempts, the actual number of incoming requests corresponds to roughly 53,600 login attempts over 10 minutes → about 5,360 requests per minute (≈ 89 requests per second).
+- The WebUI loads all 13,480 daily JSON entries in about 1.5 seconds.
+- Connected clients consistently pulled and pushed blocklists without any delay. Even when a blocklist update included 80+ new IP entries, the synchronization completed in a blink of an eye, with changes applied in both directions instantly.
+- Switching between multiple servers in the dashboard remains smooth, typically under 2 seconds, even during attacks.
+
+**Takeaway:**
+
+Fail2Ban-Report maintains fast performance and reliable data synchronization, proving its suitability for multi-server setups and high-frequency event environments.
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
-## 🛣️ Roadmap
 
-### 🔧 Setup & Automation
-- ✅ Automated installer script 
-- ✅ Optional cron setup for log parsing and firewall sync
-- 🧩 More robust installer
-- ⏳ Secure-by-default deployments
+## 🛣️ Roadmap or "Things I will have to do - but I do them later"
 
-### 🔐 Security
-- ✅ Hardened `.htaccess` with best practices
-- ✅ add security layer between json and js
-- ⏳ Further improvements (ongoing goal)
+> I gave up the usual Roadmap - to have more freedom with development - Things like Multiserver was never on the Roadmap but allways in my mind.
 
-### 🔥 Active Defense
-- ✅ Manual IP blocking via UI in UFW 
-- ✅ IP reputation lookup via AbuseIPDB (optional)
-- ✅ IP GeoLoc and Provider Data with IP-Info (optional)
-- ✅ Bulk blocking of multiple IPs
-- ✅ Shows warnings/critical states threshold for Bans/Minute/Jail (setable in config)
-- ✅ Shows warning states for Ips that are more than once on List
-- ✅ Shows critical states for IPs that are in more than one Jail in List
-- 🧩 Support for nftables, firewalld
-- ⏳ LTG: Integration with external services (e.g. AbuseIPDB reporting)
-- ⏳ LTG: Integration with fail2ban-jails directly
+- ⏳ Rework Blocklist Overlay
+- ⏳ Rework Stylesheet
+- ⏳ Rework Info Notices
 
-### 🌿 User Interface
-- ⏳ Improve CSS and styling
+> As I am using Fail2Ban-Report I think it has a lot of potential to become something nice for not just myself.
 
-## 👀 Outlook
-- 📦 Further Improvements & Security Enhancements
-  - Moving `archive/` to `/opt` makes little sense if `www-data` still needs access.
-  - Working on a solution to authorize changes made to JSON files via the web interface. 
-- 🐳 A Docker image is expected probably around version v0.5.x
+> Suggestions and Ideas still welcome at any time (see Discussions) - When you are using Fail2Ban-Report and you think "I would need to see .. " tell me, I am happy to see your Ideas!
 
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
-## 🖼️ Screenshots
+## 🐳 Docker Version
+> Development of [Docker Version of Fail2Ban-Report](https://github.com/SubleXBle/Fail2Ban-Report-Docker) is expected with 0.5.1
 
-![Main interface with log overview](assets/images/Main-List-040.png)  
-![Blocklist interface with unblock actions](assets/images/Block-List-033.png)
-![Result after banning an IP](assets/images/Message-Toast-033.png)
-![Result after Info](assets/images/Info-Msg-033.png)
-
----
-
-## 🖥️ Demo
-👀 Want to try out the look & feel?
-There's a simple demo version available here – no backend, no real data:
-👉 https://suble.net/ 🔗
-
----
-
-## ✅ What It Is
-- A **read-only + action-enabled** web dashboard for Fail2Ban events  
-- A tool to **visualize** bans/unbans and **manually** manage blocked IPs  
-- A **log parser + JSON generator** that works alongside your existing Fail2Ban setup  
-- A way to **sync a persistent blocklist** with your firewall (currently **UFW only**)  
-- Designed for **sysadmins** who want quick insights without SSH-ing into the server  
-
-## ❌ What It Is Not
-- ❌ A replacement for **Fail2Ban** itself (it depends on Fail2Ban)  
-- ❌ A real-time IDS/IPS (data updates depend on log parsing intervals)  
-- ❌ A universal firewall manager (no native support for iptables/nftables, etc. — yet)  
-- ❌ A tool for **automatic** jail management (manual actions only for now)  
-- ❌ A heavy analytics platform — it’s lightweight and log-driven by design  
-
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
 
 ## 🤝 Contributing
@@ -249,10 +329,14 @@ Pull requests, feature ideas and bug reports are very welcome!
 > 💡 “Wouldn’t it be cool if it could also do XYZ?”  
 > Absolutely — I’m happy to hear your ideas.
 
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
-
 
 ## 📄 License
 
 This project is licensed under the **GPLv3**.  
 Feel free to use, modify and share — but please respect the license terms.
+
+##### [↑ Table of Contents ↑](#-Table-of-Contents)
+---
+

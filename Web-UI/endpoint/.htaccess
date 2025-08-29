@@ -1,0 +1,20 @@
+# ================================
+# Fail2Ban-Report Endpoint
+# ================================
+
+# Directory Listing
+Options -Indexes
+
+# Block all but index.php and update.php
+<FilesMatch "^(?!(?:index|update|download|backsync)\.php$).*">
+  Require all denied
+</FilesMatch>
+
+# Optional: IP-Whitelist for Sync-Clients
+# --------------------------------
+# 
+# <RequireAny>
+#   Require ip 192.168.1.10  # Singe Address
+#   Require ip 203.0.113.0/24  # Network
+# </RequireAny>
+

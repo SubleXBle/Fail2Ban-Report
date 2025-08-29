@@ -1,0 +1,112 @@
+# ----------------------------------------------------
+#                Fail2Ban-Report
+# ----------------------------------------------------
+
+# Do not modify up here !
+# Upper Section is for Basic Security of Fail2Ban-Report
+# you can edit the lower Section to meet your needs
+
+# ----------------------------------------------------
+# Disable directory listing
+# ----------------------------------------------------
+Options -Indexes
+
+# ----------------------------------------------------
+# Block direct access to sensitive file types
+# ----------------------------------------------------
+<FilesMatch "\.(sh|ini|log|json)$">
+  Require all denied
+</FilesMatch>
+
+# ----------------------------------------------------
+# Protect the .htaccess file itself
+# ----------------------------------------------------
+<Files .htaccess>
+  Require all denied
+</Files>
+
+# ----------------------------------------------------
+# Protect archive/
+# ----------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^archive/ - [F,L]
+</IfModule>
+
+
+# ----------------------------------------------------
+# Set UTF-8 as default charset and RewriteEngine on
+# ----------------------------------------------------
+AddDefaultCharset utf-8
+RewriteEngine On
+
+# End of default Configuration
+
+##########################################################
+##########################################################
+##########################################################
+
+# ----------------------------------------------------
+# Set your own Rules to fit your needs down here
+# Example for additonal configuration
+# This is mandatory for a save setup!
+# Never expose this to the internet without https and restrictions (auth / ip)
+# ----------------------------------------------------
+
+
+# ----------------------------------------------------
+# Security Headers
+# ----------------------------------------------------
+# Add your own security headers or overrides below
+
+# Header always set Referrer-Policy "no-referrer-when-downgrade"
+# Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline';"
+
+# ----------------------------------------------------
+# BASIC HTTPS HEADERS
+# ----------------------------------------------------
+# Redirect to HTTPS (also works behind reverse proxies using X-Forwarded-Proto)
+# If HTTPS is not on AND X-Forwarded-Proto is not https, redirect to https URL
+
+#RewriteCond %{HTTPS} !=on
+#RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Set environment variable HTTPS=1 if X-Forwarded-Proto is https (for header conditions)
+#SetEnvIf X-Forwarded-Proto https HTTPS=1
+
+# Security headers (set only when HTTPS is active)
+<IfModule mod_headers.c>
+#  Header always set X-Content-Type-Options "nosniff"
+#  Header always set X-Frame-Options "SAMEORIGIN"
+#  Header always set X-XSS-Protection "1; mode=block"
+#  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
+
+# ----------------------------------------------------
+# Set Basic Auth
+# ----------------------------------------------------
+# Enable Basic Authentication (uncomment and configure if needed)
+
+#AuthType Basic
+#AuthName "Restricted Area"
+#AuthUserFile /var/www/.htpasswd
+
+
+# Restrict access by IP address (adjust IP ranges accordingly)
+# If you want to restrict access by IP addresses only, you can use RequireAny instead of RequireAll
+# <RequireAny>
+#   Require valid-user
+#   Require ip 192.168.1.1 # Single IP (recommended)
+#   Require ip 192.168.1.0/24 # Network-Range
+# </RequireAny>
+
+# ----------------------------------------------------
+# Additional Settings
+# ----------------------------------------------------
+# Enable Basic Authentication (uncomment and configure if needed)
+
+# Block access to backup files (optional)
+# <FilesMatch "\.(bak|old|backup)$">
+#   Require all denied
+# </FilesMatch>

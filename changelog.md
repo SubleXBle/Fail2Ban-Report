@@ -1,5 +1,220 @@
 # changelog
 
+## Timeline (since 0.3.1)
+```
+
+0.3.1 ──► 0.3.2 ──► 0.3.3 ──► 0.3.4 ──► 0.4.0 ──► 0.5.0
+🔐🌐     ⚙️🌐     ⚙️🌐     ⚙️🌐     🌐🐳    ⚙️🔐🌐
+  │         │         │         │         │         │
+  │         │         │         │         │         └─ Multi-server with https endpoint & Admin Authentication
+  │         │         │         │         └─ Marker system, copy clipboard & Docker Version
+  │         │         │         └─ Warnings & pending status
+  │         │         └─ Jail-specific blocklists & filters
+  │         └─ Aggregated Fail2Ban stats
+  └─ Secure JSON proxy, daily logs, mobile, favicon
+
+
+##########  Legend #########
+
+🔐 Security
+🌐 UI
+⚙️ Backend
+🐳 Docker
+
+```
+
+# Detailed Changes for all Versions (since 0.3.1)
+
+## Changes made for 0.5.0
+
+### Restructuring `archive/` directory
+The archive structure has been reorganized for multi-server support:
+
+```
+archive/
+└── %server%/ <= Hostname or choosen Name for Host
+├── fail2ban/ <= daily json files from fail2ban
+├── blocklists/ <= blocklists
+└── ufw/ <= future feature
+```
+
+Standardserver has to be set in config
+
+### Centralized Path Configuration
+
+**Dynamic Path Management**
+- New `paths.php` introduced for centralized path management
+   - `$PATHS['config']` → `/opt/Fail2Ban-Report/Settings/`  
+   - `$PATHS['blocklists']` → server-specific blocklist paths  
+- Usage:
+```php
+require_once __DIR__ . "/paths.php";
+$NEEDED_PATH = $PATHS["blocklists"];
+```
+
+> Last 3 Hardcoded Paths are in:
+> - `paths.php` → To avoid circular reference
+> - `auth.php` → To avoid circular reference
+> - `action_report-ip.php` → not integrated in multiserver logic for now (_no need to function propper_)
+
+### UI
+
+- new dropdown for server-list to switch between servers
+
+## Authentication for Admin-Actions
+
+1. **Session-based Authentication**
+   - Secure sessions with `session_set_cookie_params`:  
+     - `HttpOnly = true`  
+     - `Secure = true` (HTTPS only)  
+     - `SameSite = Strict`  
+   - Session timeout set to 30 minutes  
+   - Session roles: `viewer` (default) / `admin`  
+
+2. **Login / Logout Functionality**
+   - Login form with username & password  
+   - Password verification using `password_verify()` (bcrypt)  
+   - Session regeneration after successful login (`session_regenerate_id(true)`)  
+   - Logout destroys the session and redirects back to login page  
+
+3. **User Management via JSON File**
+   - File: `users.json` located outside the web root (`/opt/Fail2Ban-Report/Settings/users.json`)  
+   - No default users – users must be created via shell script  
+   - File permissions: `chown root:www-data` + `chmod 0660`  
+   - All admin and viewer information loaded from this file  
+
+4. **Admin-only Actions**
+   - `block-ip.php` and `unblock-ip.php` check `is_admin()`  
+   - Viewers cannot execute these actions and receive clear error messages  
+
+5. **UI Adjustments**
+   - Role display, e.g., `Viewer` or `Admin`  
+   - Server selection preserved correctly across sessions
+   - Login Form in Header
+   - Logout button resets role to `Viewer`  
+
+#### Roles
+  - `Block` and `Unblock` Features need now Admin Role to work
+  - Users with Roles `Viewer` or `Admin` can be added with provided .sh Script `manage-users.sh`
+
+
+
+### fail2ban_log2json.sh
+
+**Changes:**
+- **Support for "Increase Ban" events:**  
+  - Added parsing logic for `Increase Ban` events in addition to `Ban` and `Unban`.
+  - Extracts the IP from `Increase Ban` lines separately.
+  - Ensures only lines with valid IPs are included in the JSON output.
+- **Updated grep pattern:**  
+  - From `grep -E "(^|[^A-Za-z])(Ban|Unban) "` to `grep -E "(Ban|Unban)"` to capture `Increase Ban`.
+- **Output path adjustment:**  
+  - `OUTPUT_JSON_DIR` updated from `/opt/Fail2Ban-Report/archive/YOUR-HOSTNAME/fail2ban` to `/var/www/Fail2Ban-Report/archive`.
+- **Minor cleanup:**  
+  - Last comma removal logic kept to ensure valid JSON.
+
+---
+
+### jsonreader.js
+
+**Changes:**
+- **Increase Ban handling in table:**
+  - `Increase Ban` events are no longer rendered as separate rows to avoid flooding the table.
+  - Counts `Increase Ban` events per IP and marks the corresponding `Ban`/`Unban` row with a yellow marker (`🟡`).
+  - Appends the count of `Increase Ban` events in parentheses next to the yellow marker.
+- **Marker logic updated:**
+  - Red marker (`🔴`) now indicates multiple `Ban`/`Unban` events per IP.
+  - Yellow marker (`🟡`) indicates that `Increase Ban` events exist for that IP, even if no repeated `Ban`/`Unban`.
+  - Combination of red and yellow markers can appear if both conditions apply.
+- **Filtering remains consistent:**
+  - Marker filter logic updated to respect new marker assignments.
+- **Step restructuring for clarity:**
+  - Added steps for counting `Increase Ban`, filtering, marker assignment, marker filtering, jail dropdown rebuild, sorting, and rendering.
+
+**Behavioral impact:**
+- Reduces duplicate rows caused by multiple `Increase Ban` events.
+- Highlights IPs with `Increase Ban` activity on the same day.
+- Table rendering and filtering continue to work as before with updated marker system.
+
+#### index.php
+changed the dropdown-list to match the new Marker assignment
+
+
+### Fail2Ban-Report 0.5.0 – Backend / Endpoint Updates
+
+```
+endpoint/
+├── index.php       # Responsible for generating and serving daily JSON logs (Fail2Ban events)
+├── update.php      # Endpoint for clients to request which blocklists have updates
+├── download.php    # Endpoint for clients to download updated blocklists for syncing
+├── backsync.php    # Endpoint for clients to upload updated blocklists; replaces server-side blocklists
+└── .htaccess       # Security: IP allowlist to restrict access to trusted clients only
+
+```
+
+### 1. Endpoint (`/endpoint/`)
+- New HTTPS endpoint for clients to send JSON data (`fail2ban-events-*.json` and `*.blocklist.json`).
+- Authentication using:
+  - Username  
+  - Password (bcrypt)  
+  - UUID  
+  - IP address (optional whitelist via `.htaccess`)  
+- File type handling:
+  - **fail2ban-events-*.json:** overwrites existing file in `archive/<username>/fail2ban/`  
+  - **\*.blocklist.json:** locked via `flock`; existing entries are updated (`pending=false`) or deleted depending on transmitted status  
+- Automatic creation of client folders in `archive/` on first upload  
+- Correct permissions set for web server (`root:www-data`)  
+
+
+---
+
+### 2. Client Script for JSON Creation & Upload (`fail2ban_log2json.sh`)
+- Generates daily JSON from Fail2Ban logs (`fail2ban-events-YYYYMMDD.json`).  
+- Uploads the JSON directly to the endpoint using `curl` with authentication (Username + Password + UUID).  
+- Logs upload results locally.  
+- All key settings (log file, output directory, endpoint URL, auth credentials) configurable at the top of the script.  
+
+---
+
+### 3. Client List Management Helper (`manage-clients.sh`)
+- CLI tool to add, edit, or delete client entries.  
+- Each client has:
+  - Username  
+  - Password (bcrypt, server-side hash)  
+  - UUID  
+  - IP address  
+- Stored in `client-list.json` (`/opt/Fail2Ban-Report/Settings/`).  
+- Password hash generated via PHP `password_hash()`.  
+
+---
+
+### 4. Client UUID Generation (`create-client-uuid.sh`)
+- Script to generate a client UUID for installation or rotation.  
+- Stores UUID in `/opt/Fail2Ban-Report/Settings/client-uuid`.  
+- Lightweight, intended for initialization or rotation only.  
+
+---
+
+### 5. `.htaccess` for Endpoint
+- Separate `.htaccess` in the `endpoint/` folder to override global security rules.  
+- By default, only `index.php` is accessible; all other files blocked.  
+- Optional IP whitelist (`Require ip <IP>`) can be enabled.  
+- Optional Basic Auth can be added.  
+- Prevents directory listing and access to sensitive files.  
+
+---
+
+### Summary
+- Fully new endpoint infrastructure for client JSON push/pull.  
+- Client scripts for upload, UUID, and client list management created.  
+- Security enhanced through combined authentication and dedicated `.htaccess` for endpoint.  
+- Flexible file handling for Fail2Ban events and blocklists implemented.
+
+
+
+
+---
+
 ## Changes made for V 0.4.0
 
 ### Optimized `firewall-update.sh` for faster processing, improving performance with large JSON files.
@@ -67,6 +282,7 @@ small changes where made in the following files:
 - Marker column added between `Action` and `IP` for better visibility.
 - Marker filter dropdown integrated into existing filters, maintaining logical order.
 - Supports responsive layout using flexbox, keeping filters and buttons aligned.
+- changed display time for ban unban and info messages to 7 seconds
 
 #### Implementation Notes
 - Marker calculation is based on the currently displayed dataset, not the full JSON.
