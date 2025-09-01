@@ -166,7 +166,7 @@ tr:nth-child(even) {
   font-family: monospace;
   font-size: 14px;
   opacity: 0.95;
-  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 4s forwards;
+  animation: fadein 0.3s ease-out, fadeout 0.5s ease-in 20s forwards;
 }
 
 @keyframes fadein {
