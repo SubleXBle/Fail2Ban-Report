@@ -1,7 +1,7 @@
 <?php
 // includes/actions/reports/ipinfo.php
 
-require_once __DIR__ . '/../paths.php';
+require_once dirname(__DIR__, 2) . '/paths.php';
 
 // Config laden
 $config = parse_ini_file($PATHS['config'] . "fail2ban-report.config", true);
@@ -60,7 +60,15 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     return;
 }
 
-$msg = "IPInfo: {$json['ip'] ?? 'unknown'} - Hostname: {$json['hostname'] ?? 'N/A'}, Location: {$json['city'] ?? 'N/A'}, {$json['region'] ?? 'N/A'}, {$json['country'] ?? 'N/A'}, Org: {$json['org'] ?? 'N/A'}";
+$msg = sprintf(
+    "IPInfo: %s - Hostname: %s, Location: %s, %s, %s, Org: %s",
+    $json['ip']       ?? 'unknown',
+    $json['hostname'] ?? 'N/A',
+    $json['city']     ?? 'N/A',
+    $json['region']   ?? 'N/A',
+    $json['country']  ?? 'N/A',
+    $json['org']      ?? 'N/A'
+);
 
 echo json_encode([
     'success' => true,
