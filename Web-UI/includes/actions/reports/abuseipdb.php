@@ -1,7 +1,7 @@
 <?php
 // includes/actions/reports/abuseipdb.php
 
-require_once __DIR__ . '/../paths.php';
+require_once dirname(__DIR__, 2) . '/paths.php';
 
 // Config laden
 $config = parse_ini_file($PATHS['config'] . "fail2ban-report.config", true);
