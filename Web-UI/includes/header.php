@@ -8,7 +8,7 @@
   <title>Fail2Ban Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=0.8">
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="assets/css/favicon-32x32.png" type="image/png">
+  <link rel="icon" href="assets/images/favicon1.png" type="image/png">
   <script>
     const availableFiles = <?php echo $filesJson; ?>;
   </script>
