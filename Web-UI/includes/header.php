@@ -64,7 +64,7 @@ if (isset($_SESSION['username'])) {
 
 
 <!-- Log in/out -->
-
+<?php if (!isset($_SESSION['username'])) : ?>
 <div>
 <form method="post" action="">
   <small>
@@ -76,12 +76,13 @@ if (isset($_SESSION['username'])) {
   <button class="button-reset" type="submit">Login</button>
 </form>
 </div>
+<?php else : ?>
 <div>
 <form method="post" action="">
   <button class="button-reset" type="submit" name="logout" value="1">Logout</button>
 </form>
 </div>
-
+<?php endif; ?>
 <!-- Log in/out -->
 
 
