@@ -2,7 +2,7 @@
 // includes/actions/action_ban-ip.php
 
 header('Content-Type: application/json; charset=utf-8');
-require_once __DIR__ . '/../block-ip.php';
+require_once dirname(__DIR__) . '/block-ip.php';
 
 // Check if IP(s) were provided
 if (!isset($_POST['ip'])) {

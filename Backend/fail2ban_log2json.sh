@@ -1,5 +1,6 @@
 #!/bin/bash
-# This is the Logfile-Reader for the local installation - so you will have to edit the OUTPUT_JSON_DIR to fit your Webserver Installation
+# This is the Logfile-Reader for the local installation
+# You have to edit the OUTPUT_JSON_DIR to fit your Webserver Installation
 #
 LOGFILE="/var/log/fail2ban.log"
 OUTPUT_JSON_DIR="/var/www/html/Fail2Ban-Report/archive/<SERVERNAME>/fail2ban"
@@ -9,27 +10,35 @@ TODAY=$(date +"%Y-%m-%d")
 OUTPUT_JSON_FILE="$OUTPUT_JSON_DIR/fail2ban-events-$(date +"%Y%m%d").json"
 mkdir -p "$OUTPUT_JSON_DIR"
 
+# IPv4 regex: nnn.nnn.nnn.nnn (0-255 simplified to 0-999 for awk)
+IPv4='([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'
+# IPv6 regex: blocks of hex split by collon, allowed "::" short format
+IPv6='(([0-9A-Fa-f]{1,4}:){1,7}[0-9A-Fa-f]{1,4}|([0-9A-Fa-f]{1,4}:){1,7}:|:([0-9A-Fa-f]{1,4}:){1,7}[0-9A-Fa-f]{1,4}|::)'
+# complete IPv4 and IPv6 pattern
+IP_PATTERN="($IPv4|$IPv6)"
+
 echo "[" > "$OUTPUT_JSON_FILE"
 
 # Grep all relevant Events
-grep -E "(Ban|Unban)" "$LOGFILE" | awk -v today="$TODAY" '
+grep -E "(Ban|Unban)" "$LOGFILE" | awk -v today="$TODAY" -v ip_pattern="$IP_PATTERN" '
 {
     timestamp = $1 " " $2;
     if (index(timestamp, today) != 1) next;
 
     action = "";
     ip = "";
+
     if ($0 ~ /Increase Ban/) {
         action = "Increase Ban";
-        match($0, /Increase Ban ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/, m);
+        match($0, action " " ip_pattern, m);
         if (m[1]) ip = m[1];
     } else if ($0 ~ /Ban/) {
         action = "Ban";
-        match($0, /Ban ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/, m);
+        match($0, action " " ip_pattern, m);
         if (m[1]) ip = m[1];
     } else if ($0 ~ /Unban/) {
         action = "Unban";
-        match($0, /Unban ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/, m);
+        match($0, action " " ip_pattern, m);
         if (m[1]) ip = m[1];
     }
 

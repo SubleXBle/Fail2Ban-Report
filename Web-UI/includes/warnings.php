@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 require_once __DIR__ . "/paths.php";
 
 // read Config
-$configPath = '/opt/Fail2Ban-Report/fail2ban-report.config';
+$configPath = '/opt/Fail2Ban-Report/Settings/fail2ban-report.config';
 if (!file_exists($configPath)) {
     echo json_encode(['status' => 'disabled', 'reason' => 'No config found']);
     exit;

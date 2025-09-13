@@ -3,7 +3,7 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-require_once __DIR__ . '/../unblock-ip.php';
+require_once dirname(__DIR__) . '/unblock-ip.php';
 
 // Validate input
 if (!isset($_POST['ip']) || !isset($_POST['jail'])) {
