@@ -25,7 +25,6 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 - [⚠️ Status of the Project](#️-status-of-the-project)
   - [Syncronisation-Concept](Docs/Sync-Concept.md)
   - [Chain of Trust](Docs/chain-of-trust.md)
-- [📚 What It Does](#-what-it-does)
 - [📦 Features](#-features)
 - [🖥️ Demo](#️-demo)
 - [🛠️ Installation](#️-installation)
@@ -66,28 +65,6 @@ The existing structured `*.blocklist.json` format is already designed to support
 > you can read about the "Chain of Trust" between Server and Clients in this Document: [Chain of Trust](Docs/chain-of-trust.md)
 
 Critical backend operations (like UFW updates) are executed via root cron scripts; ensure the server running Fail2Ban-Report is fully secured.
-
-##### [↑ Table of Contents ↑](#-Table-of-Contents)
----
-
-## 📚 What It Does
-
-Fail2Ban-Report parses your `fail2ban.log` and generates JSON-based reports viewable via a responsive web dashboard.  
-It provides optional tools to:
-
-- 📊 View **ban/unban events** and per-jail statistics
-- 🌐 Switch between multiple servers in a single dashboard
-- 🔐 Use authentication with **viewer** (read-only) and **admin** (block/unblock) roles
-- 📂 Maintain **persistent blocklists** (per jail and per server) with metadata (`active`, `pending`, `source`)
-  - no fire & forget
-- ⚡ Apply or remove firewall rules (currently via **ufw**)
-- 🚨 Get configureable warnings for unusual activity (DDoS, brute-force, scans)
-- 🚨 Mark IPs with 🔴 repeat bans or 🟡 ban increases
-- 🔍 Optional integrations: (_Free API-KEYS_)
-  - [AbuseIPDB](https://www.abuseipdb.com/) for reputation lookups
-  - [IP-Info.io](https://ipinfo.io/) for region/provider checks
-
-> **Note:** Viewer accounts are read-only. Direct integration with other firewalls or native Fail2Ban jail commands is not yet implemented.  
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
