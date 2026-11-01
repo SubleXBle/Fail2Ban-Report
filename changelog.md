@@ -25,6 +25,14 @@
 
 # Detailed Changes for all Versions (since 0.3.1)
 
+## Changes made for 0.5.1
+
+Web-UI => assets => js => blocklist-overlay.js
+Web-UI => endpoint => backsync.php
+
+CVE Nr.: <as soon as i get it>
+
+
 ## Changes made for 0.5.0
 
 ### Restructuring `archive/` directory
