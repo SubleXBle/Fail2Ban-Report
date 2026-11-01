@@ -62,6 +62,37 @@ foreach ($_FILES['file']['name'] as $index => $name) {
 
     $destPath = $userTempDir . basename($name);
     if (!move_uploaded_file($tmpName, $destPath)) continue;
+
+    // --- START SECURITY VALIDATION ---
+    $jsonData = file_get_contents($destPath);
+    $data = json_decode($jsonData, true);
+
+    // Verify it is valid JSON and contains an array
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+        unlink($destPath); // Delete invalid file immediately
+        continue;
+    }
+
+    $fileValid = true;
+    foreach ($data as $entry) {
+        // 1. Validate IP address format
+        if (!isset($entry['ip']) || !filter_var($entry['ip'], FILTER_VALIDATE_IP)) {
+            $fileValid = false;
+            break;
+        }
+        // 2. Validate jail name (alphanumeric, dashes, and underscores only)
+        if (!isset($entry['jail']) || !preg_match('/^[a-z0-9_-]+$/i', $entry['jail'])) {
+            $fileValid = false;
+            break;
+        }
+    }
+
+    if (!$fileValid) {
+        unlink($destPath); // Delete manipulated file immediately
+        continue;
+    }
+    // --- END SECURITY VALIDATION ---
+
     $uploadedFiles[] = $name;
 }
 
