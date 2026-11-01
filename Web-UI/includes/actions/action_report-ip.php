@@ -3,10 +3,11 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
-$config = parse_ini_file('/opt/Fail2Ban-Report/Settings/fail2ban-report.config');
+// Read config to flat array $infoConfig (to avoid overwrite from included $script)
+$infoConfig = parse_ini_file('/opt/Fail2Ban-Report/Settings/fail2ban-report.config');
 
 $ips = $_POST['ip'] ?? null;
-if (!$config['report'] || !$config['report_types'] || !$ips) {
+if (!$infoConfig['report'] || !$infoConfig['report_types'] || !$ips) {
     echo json_encode([
         'success' => false,
         'message' => 'Reporting not enabled or invalid IP(s).',
@@ -19,7 +20,7 @@ if (!is_array($ips)) {
     $ips = [$ips]; // Convert single IP to array
 }
 
-$services = array_map('trim', explode(',', $config['report_types']));
+$services = array_map('trim', explode(',', $infoConfig['report_types']));
 $results = [];
 $allMessages = [];
 $overallSuccess = true;
@@ -34,7 +35,7 @@ foreach ($ips as $ip) {
         $script = __DIR__ . "/reports/$service.php";
 
         // Check API keys for services that require them
-        if ($service === 'abuseipdb' && empty($config['abuseipdb_key'])) {
+        if ($service === 'abuseipdb' && empty($infoConfig['abuseipdb_key'])) {
             $ipSuccess = false;
             $reportResults[$service] = [
                 'success' => false,
@@ -43,8 +44,7 @@ foreach ($ips as $ip) {
             ];
             $messages[] = "[$service] API key missing";
             continue;
-        }
-        if ($service === 'ipinfo' && empty($config['ipinfo_key'])) {
+        } elseif ($service === 'ipinfo' && empty($infoConfig['ipinfo_key'])) {
             $ipSuccess = false;
             $reportResults[$service] = [
                 'success' => false,

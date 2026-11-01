@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $CONFIG_ROOT = "/opt/Fail2Ban-Report/Settings/";
 
 // Basispfad
-$ARCHIVE_ROOT = __DIR__ . "/../archive/";
+$ARCHIVE_ROOT = dirname(__DIR__) . "/archive/";
 
 // Serverliste automatisch aus archive/ generieren
 $SERVERS = [];

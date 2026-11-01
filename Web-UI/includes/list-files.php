@@ -1,9 +1,10 @@
 <?php
-
-// Path to the config file
-$configPath = '/opt/Fail2Ban-Report/fail2ban-report.config';
+// includes/list-files.php
 
 require_once __DIR__ . "/paths.php";
+
+// Path to the config file
+$configPath = $PATHS['config'] . 'fail2ban-report.config';
 
 // Read config file and parse the [Fail2Ban-Daily-List-Settings] section
 $config = [];

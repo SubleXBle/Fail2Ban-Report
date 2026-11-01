@@ -35,7 +35,7 @@ function collectAndExecuteActions(ips, action, jails = []) {
       const prefix = `[${action.toUpperCase()}] `;
       const message = data.message || 'No message returned.';
       const type = data.type || (data.success ? 'success' : 'error');
-      const duration = (action === 'report') ? 7000 : 7000;
+      const duration = (action === 'report') ? 25000 : 7000;
       showNotification(prefix + message, type, duration);
     })
     .catch(err => {

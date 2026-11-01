@@ -8,7 +8,7 @@
   <title>Fail2Ban Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=0.8">
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="icon" href="assets/css/favicon-32x32.png" type="image/png">
+  <link rel="icon" href="assets/images/favicon1.png" type="image/png">
   <script>
     const availableFiles = <?php echo $filesJson; ?>;
   </script>
@@ -64,7 +64,7 @@ if (isset($_SESSION['username'])) {
 
 
 <!-- Log in/out -->
-
+<?php if (!isset($_SESSION['username'])) : ?>
 <div>
 <form method="post" action="">
   <small>
@@ -76,12 +76,13 @@ if (isset($_SESSION['username'])) {
   <button class="button-reset" type="submit">Login</button>
 </form>
 </div>
+<?php else : ?>
 <div>
 <form method="post" action="">
   <button class="button-reset" type="submit" name="logout" value="1">Logout</button>
 </form>
 </div>
-
+<?php endif; ?>
 <!-- Log in/out -->
 
 
