@@ -172,16 +172,25 @@ document.addEventListener('DOMContentLoaded', () => {
         ? new Date(entry.timestamp).toLocaleString()
         : 'unknown time';
 
-      div.innerHTML = `
-       <span>${entry.ip} (Jail: ${jailLabel}) – Blocked at: ${timeLabel}</span>
-       <button data-ip="${entry.ip}" data-jail="${jailLabel}">Unblock</button>
-     `;
+      // 1. Create text span safely as plain text
+      const span = document.createElement('span');
+      span.textContent = `${entry.ip} (Jail: ${jailLabel}) – Blocked at: ${timeLabel}`;
 
+      // 2. Create the button safely and set attributes
+      const btn = document.createElement('button');
+      btn.setAttribute('data-ip', entry.ip || '');
+      btn.setAttribute('data-jail', jailLabel);
+      btn.textContent = 'Unblock';
 
-      const btn = div.querySelector('button');
+      // 3. Assign the click event listener to the button
       btn.addEventListener('click', () => unblockIp(entry.ip, jailLabel));
+
+      // 4. Append elements safely to the div (avoiding innerHTML)
+      div.appendChild(span);
+      div.appendChild(btn);
       container.appendChild(div);
     });
+
   }
 
   // Unblock IP action
