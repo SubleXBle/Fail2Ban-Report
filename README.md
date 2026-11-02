@@ -1,7 +1,7 @@
 # Fail2Ban-Report
 ![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20-_🕵️_V0.5.2_(Beta_5.2)-gold?style=flat&logoColor=black)
 
-## If you are using Fail2Ban-Report 0.5.0 or 0.5.1 please update as soon as possible to 0.5.2 
+## DO NOT UPDATE NOW - PATCHING
 
 - see "- [🆕 What's New in v0.5.2](#-whats-new-in-v052)" for Details!
 
