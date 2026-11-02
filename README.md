@@ -3,7 +3,7 @@
 
 ## If you are using Fail2Ban-Report 0.5.0 or 0.5.1 please update as soon as possible to 0.5.2 
 
-##### (BIG thanks to: Aluri Hruthik and Maturi Jaswanth Sai Madhu Mohan)
+- see "- [🆕 What's New in v0.5.2](#-whats-new-in-v052)" for Details!
 
 ---
 
@@ -37,7 +37,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 - [⚙️ Requirements](#️-requirements)
   - [🗄️ Server](#️-server)
   - [📡 Sync-Client](#-sync-client)
-- [🆕 What's New in v0.5.0](#-whats-new-in-v050)
+- [🆕 What's New in v0.5.2](#-whats-new-in-v052)
 - [🪳 Bugfixes (History)](#-bugfixes-history)
 - [👀 Outlook](#-outlook)
 - [🖼️ Screenshots](#-screenshots)
