@@ -42,10 +42,9 @@ if (!isset($_SESSION['last_regeneration'])) {
 }
 
 // Client binding (User-Agent + partial IP)
-$clientFingerprint = hash('sha256',
-    $_SERVER['HTTP_USER_AGENT'] .
-    substr($_SERVER['REMOTE_ADDR'], 0, strrpos($_SERVER['REMOTE_ADDR'], '.')) // IP ohne letztes Oktett
-);
+$lastDot = strrpos($_SERVER['REMOTE_ADDR'], '.');
+$ipPrefix = ($lastDot !== false) ? substr($_SERVER['REMOTE_ADDR'], 0, $lastDot) : $_SERVER['REMOTE_ADDR'];
+$clientFingerprint = hash('sha256', $_SERVER['HTTP_USER_AGENT'] . $ipPrefix);
 
 if (!isset($_SESSION['client_fingerprint'])) {
     $_SESSION['client_fingerprint'] = $clientFingerprint;
@@ -55,9 +54,32 @@ if (!isset($_SESSION['client_fingerprint'])) {
     die("Session validation failed. Please log in again.");
 }
 
-// set Standard Role
-if (!isset($_SESSION['user_role'])) {
-    $_SESSION['user_role'] = 'viewer';
+// Check current script path to allow accessing the main login landing page
+$current_script = basename($_SERVER['SCRIPT_NAME']);
+$is_login_path = ($current_script === 'index.php');
+
+// Central Authentication Gate (Fix against critical Authentication Bypass / Anonymous Read Surface)
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_role'])) {
+    // If a request hits a background read/write endpoint without an active session, drop it immediately
+    if (!$is_login_path) {
+        http_response_code(403);
+        session_unset();
+        if (session_id()) {
+            session_destroy();
+        }
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Authentication required. Access denied.',
+            'type'    => 'error'
+        ]);
+        exit;
+    }
+    
+    // Assign a highly restricted temporary guest role for the initial unauthenticated landing interface
+    if (!isset($_SESSION['user_role'])) {
+        $_SESSION['user_role'] = 'unauthenticated_guest';
+    }
 }
 
 // Load User-File
@@ -87,10 +109,11 @@ if (isset($_POST['login_user']) && isset($_POST['login_pass'])) {
             $_SESSION['username']          = $u['username'];
             $_SESSION['created_at']        = time();
             $_SESSION['last_regeneration'] = time();
-            $_SESSION['client_fingerprint'] = hash('sha256',
-                $_SERVER['HTTP_USER_AGENT'] .
-                substr($_SERVER['REMOTE_ADDR'], 0, strrpos($_SERVER['REMOTE_ADDR'], '.'))
-            );
+            
+            $lastDotInner = strrpos($_SERVER['REMOTE_ADDR'], '.');
+            $ipPrefixInner = ($lastDotInner !== false) ? substr($_SERVER['REMOTE_ADDR'], 0, $lastDotInner) : $_SERVER['REMOTE_ADDR'];
+            $_SESSION['client_fingerprint'] = hash('sha256', $_SERVER['HTTP_USER_AGENT'] . $ipPrefixInner);
+            
             $loggedIn = true;
             break;
         }
