@@ -76,6 +76,8 @@ Critical backend operations (like UFW updates) are executed via root cron script
 
 ## 📦 Features
 
+- 🌐 **Multi-server support** with HTTPS sync backend  
+- 🔐 **User authentication** with roles (Admin / Viewer)
 - 🔍 Searchable & filterable event reports  
 - 📊 Aggregated statistics (today, yesterday, 7 days, 30 days)  
 - 📂 Jail- and server-specific blocklists  
@@ -170,22 +172,19 @@ Username and Password for Blocklist manipulation is `admin`:`admin`
 ---
 
 
-## 🆕 What's New in v0.5.0
+## 🆕 What's New in v0.5.2
 
-- 🌐 **Multi-server support** with HTTPS sync backend  
-- 🔐 **User authentication** with roles (Admin / Viewer)  
-- ⚙️ **Reorganized backend**:
-  - Centralized path handling, less hardcoding  
-  - `archive/` separated per server (fail2ban / blocklists)  
-  - `/opt/Fail2Ban-Report/` cleaned and structured    
-- 🌐 **Frontend updates**:  
-  - Server selection dropdown  
-  - Admin login + logout (session handling)
-  - changed Marker Feature to show: - 🔴 repeat bans |🟡(1) ban increases with the number how often it happend ([see bug reports)](#-bugfixes-history))
-- 🔒 **Security updates**:  
-  - Bcrypt password storage  
-  - UUID and optional IP checks  
-  - Additional `.htaccess` IP whitelist
+This is a critical security update that fixes multiple vulnerabilities discovered in version 0.5.0/0.5.1. All operators are strongly urged to upgrade immediately and update both their Web-UI files and local deployment/client scripts.
+
+### 🔒 Security Fixes & Hardening
+
+* **Fixed Authentication Bypass on Read Plane (CWE-862 / CWE-285):** Resolved an architectural flaw where unauthenticated sessions were incorrectly assigned a default `viewer` role, allowing anonymous access to sensitive log history, server names, and blocklist data. Access is now centrally restricted at the session level.
+* **Fixed Shell Command Injection in Provisioning Scripts (CWE-78):** Fixed a vulnerability in `manage_users.sh` and `manage-clients.sh` where user-supplied passwords containing specific characters (like apostrophes) were executed as PHP source text. Hashing inputs are now securely passed via environment variables (`getenv()`).
+* **Fixed Credentials Leak in Client Sync Processes (CWE-522 / CWE-214):** Hardened the multi-server sync scripts (`syncback.sh` and `fail2ban_log2json.sh`) to prevent dashboard credentials (`CLIENT_PASS`) from leaking into the public process table (`argv`). Data payloads are now safely packaged via isolated, temporary configuration files.
+* **Secured API Reporting Endpoints & Input Filtering:** Restructured `action_report-ip.php` to enforce absolute administrative authentication before processing external lookups, preventing anonymous exhaustion of third-party API quotas (AbuseIPDB / IPinfo). Added full input filtering (`FILTER_VALIDATE_IP`) and strict service whitelisting.
+* **Hardened Default Storage Permissions:** Added strict permissions enforcement recommendations (`chmod 600`) to `config.env` documentation to ensure sync keys cannot be read by unprivileged local server tenants.
+
+
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
