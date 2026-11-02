@@ -3,7 +3,7 @@
 
 ## If you are using Fail2Ban-Report 0.5.0 or 0.5.1 please update as soon as possible to 0.5.2 
 
-### (BIG thanks to: Aluri Hruthik and Maturi Jaswanth Sai Madhu Mohan)
+##### (BIG thanks to: Aluri Hruthik and Maturi Jaswanth Sai Madhu Mohan)
 
 ---
 
