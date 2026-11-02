@@ -26,16 +26,6 @@
   <script src="assets/js/table-export.js"></script>
   <script src="assets/js/ufw-report.js"></script>
 
-<!-- Auth -->
-<?php
-// Enforce valid username session (Fixes dead gate authentication bypass)
-if (!isset($_SESSION['username']) || $_SESSION['user_role'] === 'unauthenticated_guest') {
-    http_response_code(403);
-    die("Session not active. Please login.");
-}
-?>
-<!-- Auth -->
-
 </head>
 <body>
 
@@ -48,22 +38,8 @@ if (!isset($_SESSION['username']) || $_SESSION['user_role'] === 'unauthenticated
     <span title="Beta 5.2"><small>Version : 0.5.2</small> 🕵️</span></div>
   </div>
 
-<!-- Show User and Server -->
-<!--
-<div>
-<?php
-if (isset($_SESSION['username'])) {
-    echo "<h3>".$_SESSION['username']." @ ".$activeServer."</h3>";
-} else {
-    echo "<h4>guest @ ".$activeServer."</h4>";
-}
-?>
-</div>
--->
-<!-- Show User and Server -->
-
-<!-- Log in/out -->
-
+<!-- Log in/out Form (Always visible for guests, shows logout for admins) -->
+<?php if (!isset($_SESSION['username'])): ?>
 <div>
 <form method="post" action="">
   <small>
@@ -75,13 +51,13 @@ if (isset($_SESSION['username'])) {
   <button class="button-reset" type="submit">Login</button>
 </form>
 </div>
+<?php else: ?>
 <div>
 <form method="post" action="">
   <button class="button-reset" type="submit" name="logout" value="1">Logout</button>
 </form>
 </div>
-
-<!-- Log in/out -->
+<?php endif; ?>
 
 <!-- Serverselect -->
 <div>
@@ -105,21 +81,19 @@ if (isset($_SESSION['username'])) {
     </select>
 </form>
 </div>
-<!-- Serverselect -->
 </div>
 
-<!-- Second row here -->
-
+<!-- Render widgets only if user is successfully authenticated -->
+<?php if (isset($_SESSION['username']) && $_SESSION['user_role'] !== 'unauthenticated_guest'): ?>
 <div class="inline-headlines">
-
   <div id="fail2ban-alerts-container">
-    <div class="headhead"><span title="Shows Jail | Events | Unique IPs">DoS/Scan/BF:</span></div>
+    <div class="headhead"><span>DoS/Scan/BF:</span></div>
     <div id="fail2ban-warning-status" class="fail2ban-status">
-      <span class="status-dot yellow" id="warning-dot" title="No warnings">🟡</span>
+      <span class="status-dot yellow" id="warning-dot">🟡</span>
       <span class="status-label" id="warning-label">none</span>
     </div>
     <div id="fail2ban-critical-status" class="fail2ban-status">
-      <span class="status-dot red" id="critical-dot" title="No criticals">🔴</span>
+      <span class="status-dot red" id="critical-dot">🔴</span>
       <span class="status-label" id="critical-label">none</span>
     </div>
   </div>
@@ -144,10 +118,8 @@ if (isset($_SESSION['username'])) {
   </div>
 
   <div id="blocklist-stats">
-  <div class="headhead">Fail2Ban-Report Blocklists:</div>
-  <div id="blocklist-stats-container">
-    <!-- JS render Jails here -->
+    <div class="headhead">Fail2Ban-Report Blocklists:</div>
+    <div id="blocklist-stats-container"></div>
   </div>
-  </div>
-
 </div>
+<?php endif; ?>
