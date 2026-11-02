@@ -1,13 +1,14 @@
 <?php
 // includes/actions/reports/abuseipdb.php
 
-require_once __DIR__ . '/../paths.php';
+// Corrected path to resolve to includes/paths.php properly (Fix against Fatal Error)
+require_once __DIR__ . '/../../paths.php';
 
-// Config laden
+// Load configuration
 $config = parse_ini_file($PATHS['config'] . "fail2ban-report.config", true);
 $apiKey = trim($config['AbuseIPDB API Key']['abuseipdb_key'] ?? '');
 
-// IP aus POST
+// Get IP from POST
 $ipToCheck = $_POST['ip'] ?? null;
 
 if (!$apiKey) {
