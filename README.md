@@ -119,7 +119,7 @@ Username and Password for Blocklist manipulation is `admin`:`admin`
 
 ### Auto-Installer
 
-> - expected with 0.5.1
+> - expected with 0.5.5
 
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
@@ -172,17 +172,24 @@ Username and Password for Blocklist manipulation is `admin`:`admin`
 ---
 
 
-## 🆕 What's New in v0.5.2
+## 🆕 What's New in v0.5.2 (Cumulative Security Release)
 
-This is a critical security update that fixes multiple vulnerabilities discovered in version 0.5.0/0.5.1. All operators are strongly urged to upgrade immediately and update both their Web-UI files and local deployment/client scripts.
+This is a critical security update that aggregates multiple major vulnerability fixes from versions 0.5.1 and 0.5.2. All operators are strongly urged to upgrade immediately and replace both their Web-UI files and fleet deployment/client scripts.
 
 ### 🔒 Security Fixes & Hardening
 
-* **Fixed Authentication Bypass on Read Plane (CWE-862 / CWE-285):** Resolved an architectural flaw where unauthenticated sessions were incorrectly assigned a default `viewer` role, allowing anonymous access to sensitive log history, server names, and blocklist data. Access is now centrally restricted at the session level.
-* **Fixed Shell Command Injection in Provisioning Scripts (CWE-78):** Fixed a vulnerability in `manage_users.sh` and `manage-clients.sh` where user-supplied passwords containing specific characters (like apostrophes) were executed as PHP source text. Hashing inputs are now securely passed via environment variables (`getenv()`).
-* **Fixed Credentials Leak in Client Sync Processes (CWE-522 / CWE-214):** Hardened the multi-server sync scripts (`syncback.sh` and `fail2ban_log2json.sh`) to prevent dashboard credentials (`CLIENT_PASS`) from leaking into the public process table (`argv`). Data payloads are now safely packaged via isolated, temporary configuration files.
-* **Secured API Reporting Endpoints & Input Filtering:** Restructured `action_report-ip.php` to enforce absolute administrative authentication before processing external lookups, preventing anonymous exhaustion of third-party API quotas (AbuseIPDB / IPinfo). Added full input filtering (`FILTER_VALIDATE_IP`) and strict service whitelisting.
-* **Hardened Default Storage Permissions:** Added strict permissions enforcement recommendations (`chmod 600`) to `config.env` documentation to ensure sync keys cannot be read by unprivileged local server tenants.
+* **Fixed Stored Cross-Site Scripting (XSS) via Client Sync (0.5.1 Hotfix):** Resolved a critical vulnerability in `backsync.php` and `blocklist-overlay.js` where malicious or compromised sync clients could upload a manipulated JSON file containing arbitrary JavaScript payloads (e.g., inside the `ip` or `jail` fields). The UI has been refactored to ban `innerHTML` usage, shifting entirely to secure `textContent` and `createElement` DOM manipulation to neutralize any script execution hazards.
+* **Fixed Authentication Bypass on Read Plane (0.5.2):** Resolved an architectural flaw where unauthenticated network sessions were automatically assigned a default `viewer` role, leaving sensitive firewall history, server configurations, and blocking aggregations open to anonymous actors. Access is now strictly guarded at the global gateway level.
+* **Fixed Shell Command Injection in Helper Scripts (0.5.2):** Patched `manage_users.sh` and `manage-clients.sh` where user-supplied inputs containing specific shell characters (like apostrophes) were interpreted as executable PHP program text. Data payloads are now passed securely using isolated environment variables (`getenv()`).
+* **Fixed Credentials Leak in Process Table (0.5.2):** Hardened the multi-server sync engine (`syncback.sh` and `fail2ban_log2json.sh`) to prevent sync passwords (`CLIENT_PASS`) from leaking into the host's public process listing (`argv`). Commands are now packaged dynamically inside localized, temporary configuration files (`chmod 600`).
+* **Secured API Lookup Restrictions & Data Sanitization:** Overhauled `action_report-ip.php` to mandate active administrator verification before reaching outbound services, preventing blind exploitation of paid lookups (AbuseIPDB / IPinfo). Integrated native IP structure enforcement (`FILTER_VALIDATE_IP`).
+
+### 🤝 Acknowledgements & Credits
+
+We heavily appreciate the dedication of the security community in making Fail2Ban-Report safer. Special honors go out to:
+1. **Aluri Hruthik** (reported by *darkknight268*) – For finding and demonstrating the critical Stored XSS vector in the client sync ecosystem.
+2. **jaswanthsai1** – For uncovering the authentication bypasses, command injection paths, and credential leakage surfaces across the dashboard core.
+
 
 
 
