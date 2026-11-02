@@ -25,6 +25,20 @@
 
 # Detailed Changes for all Versions (since 0.3.1)
 
+## Changes made for 0.5.2
+
+Helper-Scripts/manage-users.sh
+Helper-Scripts/manage-clients.sh
+Web-UI/includes/actions/action_report-ip.php
+Web-UI/includes/actions/reports/abuseipdb.php
+Web-UI/includes/actions/reports/ipinfo.php
+Backend/multi/syncback.sh
+Backend/multi/fail2ban_log2json.sh
+Docs/Adding-Clients.md
+Web-UI/includes/auth.php
+Web-UI/includes/header.php
+
+
 ## Changes made for 0.5.1
 
 Web-UI => assets => js => blocklist-overlay.js

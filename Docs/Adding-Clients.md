@@ -108,6 +108,18 @@ Server URLs
 
 change `my.server.tld/` to fit your envoirement
 
+### 🔒 Securing Configuration Permissions
+
+Since the `config.env` file contains sensitive credentials (the client password), it is critical to ensure that it cannot be read by other unprivileged local users on the server. 
+
+Run the following commands to restrict file ownership and permissions right after editing the file:
+
+```bash
+sudo chown root:root /opt/Fail2Ban-Report/Settings/config.env
+sudo chmod 600 /opt/Fail2Ban-Report/Settings/config.env
+```
+
+
 ---
 
 > If you are curious why there are 4 Sync URLs read the [Syncronisation-Concept](Sync-Concept.md)

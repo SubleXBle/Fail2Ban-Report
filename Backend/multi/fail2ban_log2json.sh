@@ -2,11 +2,11 @@
 # fail2ban_log2json.sh
 set -euo pipefail
 
-# === Config laden ===
+# === Load Configuration ===
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.env"
 
-# === Lokale Variablen ===
+# === Local Variables ===
 LOGFILE="/var/log/fail2ban.log"
 TODAY=$(date +"%Y-%m-%d")
 TODAY_SHORT=$(date +"%Y%m%d")
@@ -68,17 +68,31 @@ fi
 echo "]" >> "$OUTPUT_JSON_FILE"
 echo "✅ JSON created: $OUTPUT_JSON_FILE"
 
-# === Upload JSON to Server ===
+# === Upload JSON to Server Securely ===
 upload_file() {
     local file=$1
     echo "🔄 Uploading $file ..."
 
-    response=$(curl -s -w "\n%{http_code}" -X POST "$ENDPOINT_URL" \
-        -F "username=$CLIENT_USER" \
-        -F "password=$CLIENT_PASS" \
-        -F "uuid=$CLIENT_UUID" \
-        -F "file=@$file" || true)
+    # Prepare secure configuration file for curl (Fix against process credentials leak)
+    local authfile
+    authfile=$(mktemp)
+    chmod 600 "$authfile"
 
+    # Add auth fields and file payload securely into the config file instead of passing via argv
+    cat << EOF > "$authfile"
+form="username=${CLIENT_USER}"
+form="password=${CLIENT_PASS}"
+form="uuid=${CLIENT_UUID}"
+form="file=@${file}"
+EOF
+
+    # Execute curl request securely using the configuration file
+    response=$(curl -s -w "\n%{http_code}" -X POST "$ENDPOINT_URL" --config "$authfile" || true)
+
+    # Immediately wipe and remove the temporary authentication file to safeguard credentials
+    rm -f "$authfile"
+
+    # Parse output response
     http_code=$(tail -n1 <<< "$response")
     body=$(sed '$d' <<< "$response")
 

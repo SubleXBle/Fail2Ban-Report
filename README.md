@@ -1,7 +1,11 @@
 # Fail2Ban-Report
-![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20-_🕵️_V0.5.1_(Beta_5.1)-gold?style=flat&logoColor=black)
+![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20-_🕵️_V0.5.2_(Beta_5.2)-gold?style=flat&logoColor=black)
 
-## If you are using Fail2Ban-Report 0.5.0 please update as soon as possible to 0.5.1
+## If you are using Fail2Ban-Report 0.5.0 or 0.5.1 please update as soon as possible to 0.5.2 
+
+- see "- [🆕 What's New in v0.5.2](#-whats-new-in-v052)" for Details!
+
+---
 
 A lightweight web-based "multi-server dashboard" that transforms daily Fail2Ban logs into searchable and filterable JSON reports, while also providing centralized UFW IP blocklist management across all your servers through a pull-based client-side synchronization via secure HTTPS endpoints.
 
@@ -33,7 +37,7 @@ High flexibility comes from the backend shell scripts, which you can adapt to yo
 - [⚙️ Requirements](#️-requirements)
   - [🗄️ Server](#️-server)
   - [📡 Sync-Client](#-sync-client)
-- [🆕 What's New in v0.5.0](#-whats-new-in-v050)
+- [🆕 What's New in v0.5.2](#-whats-new-in-v052)
 - [🪳 Bugfixes (History)](#-bugfixes-history)
 - [👀 Outlook](#-outlook)
 - [🖼️ Screenshots](#-screenshots)
@@ -72,6 +76,8 @@ Critical backend operations (like UFW updates) are executed via root cron script
 
 ## 📦 Features
 
+- 🌐 **Multi-server support** with HTTPS sync backend  
+- 🔐 **User authentication** with roles (Admin / Viewer)
 - 🔍 Searchable & filterable event reports  
 - 📊 Aggregated statistics (today, yesterday, 7 days, 30 days)  
 - 📂 Jail- and server-specific blocklists  
@@ -113,7 +119,7 @@ Username and Password for Blocklist manipulation is `admin`:`admin`
 
 ### Auto-Installer
 
-> - expected with 0.5.1
+> - expected with 0.5.5
 
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
@@ -166,22 +172,26 @@ Username and Password for Blocklist manipulation is `admin`:`admin`
 ---
 
 
-## 🆕 What's New in v0.5.0
+## 🆕 What's New in v0.5.2 (Cumulative Security Release)
 
-- 🌐 **Multi-server support** with HTTPS sync backend  
-- 🔐 **User authentication** with roles (Admin / Viewer)  
-- ⚙️ **Reorganized backend**:
-  - Centralized path handling, less hardcoding  
-  - `archive/` separated per server (fail2ban / blocklists)  
-  - `/opt/Fail2Ban-Report/` cleaned and structured    
-- 🌐 **Frontend updates**:  
-  - Server selection dropdown  
-  - Admin login + logout (session handling)
-  - changed Marker Feature to show: - 🔴 repeat bans |🟡(1) ban increases with the number how often it happend ([see bug reports)](#-bugfixes-history))
-- 🔒 **Security updates**:  
-  - Bcrypt password storage  
-  - UUID and optional IP checks  
-  - Additional `.htaccess` IP whitelist
+This is a critical security update that aggregates multiple major vulnerability fixes from versions 0.5.1 and 0.5.2. All operators are strongly urged to upgrade immediately and replace both their Web-UI files and fleet deployment/client scripts.
+
+### 🔒 Security Fixes & Hardening
+
+* **Fixed Stored Cross-Site Scripting (XSS) via Client Sync (0.5.1 Hotfix):** Resolved a critical vulnerability in `backsync.php` and `blocklist-overlay.js` where malicious or compromised sync clients could upload a manipulated JSON file containing arbitrary JavaScript payloads (e.g., inside the `ip` or `jail` fields). The UI has been refactored to ban `innerHTML` usage, shifting entirely to secure `textContent` and `createElement` DOM manipulation to neutralize any script execution hazards.
+* **Fixed Authentication Bypass on Read Plane (0.5.2):** Resolved an architectural flaw where unauthenticated network sessions were automatically assigned a default `viewer` role, leaving sensitive firewall history, server configurations, and blocking aggregations open to anonymous actors. Access is now strictly guarded at the global gateway level.
+* **Fixed Shell Command Injection in Helper Scripts (0.5.2):** Patched `manage_users.sh` and `manage-clients.sh` where user-supplied inputs containing specific shell characters (like apostrophes) were interpreted as executable PHP program text. Data payloads are now passed securely using isolated environment variables (`getenv()`).
+* **Fixed Credentials Leak in Process Table (0.5.2):** Hardened the multi-server sync engine (`syncback.sh` and `fail2ban_log2json.sh`) to prevent sync passwords (`CLIENT_PASS`) from leaking into the host's public process listing (`argv`). Commands are now packaged dynamically inside localized, temporary configuration files (`chmod 600`).
+* **Secured API Lookup Restrictions & Data Sanitization:** Overhauled `action_report-ip.php` to mandate active administrator verification before reaching outbound services, preventing blind exploitation of paid lookups (AbuseIPDB / IPinfo). Integrated native IP structure enforcement (`FILTER_VALIDATE_IP`).
+
+### 🤝 Acknowledgements & Credits
+
+We heavily appreciate the dedication of the security community in making Fail2Ban-Report safer. Special honors go out to:
+1. **Aluri Hruthik** (reported by *darkknight268*) – For finding and demonstrating the critical Stored XSS vector in the client sync ecosystem.
+2. **jaswanthsai1** – For uncovering the authentication bypasses, command injection paths, and credential leakage surfaces across the dashboard core.
+
+
+
 
 ##### [↑ Table of Contents ↑](#-Table-of-Contents)
 ---
@@ -301,7 +311,7 @@ Fail2Ban-Report maintains fast performance and reliable data synchronization, pr
 Pull requests, feature ideas and bug reports are very welcome!
 
 - Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
-- Want to contribute? → Fork and submit a pull request
+- Want to contribute? → please contact me first
 - Have an idea? → Start a discussion or reach out directly : visit the 💬 [Discussions page](https://github.com/SubleXBle/Fail2Ban-Report/discussions)
 
 > 💡 “Wouldn’t it be cool if it could also do XYZ?”  

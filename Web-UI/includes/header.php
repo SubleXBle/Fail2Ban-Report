@@ -28,12 +28,13 @@
 
 <!-- Auth -->
 <?php
-if (!isset($_SESSION['user_role'])) {
+// Enforce valid username session (Fixes dead gate authentication bypass)
+if (!isset($_SESSION['username']) || $_SESSION['user_role'] === 'unauthenticated_guest') {
+    http_response_code(403);
     die("Session not active. Please login.");
 }
 ?>
 <!-- Auth -->
-
 
 </head>
 <body>
@@ -44,9 +45,8 @@ if (!isset($_SESSION['user_role'])) {
     <h1>Fail2Ban-Report</h1>
     <h2>Let's catch the bad guys!</h2>
   <div>
-    <span title="Beta 5.0"><small>Version : 0.5.0</small> 🕵️</span></div>
+    <span title="Beta 5.2"><small>Version : 0.5.2</small> 🕵️</span></div>
   </div>
-
 
 <!-- Show User and Server -->
 <!--
@@ -55,13 +55,12 @@ if (!isset($_SESSION['user_role'])) {
 if (isset($_SESSION['username'])) {
     echo "<h3>".$_SESSION['username']." @ ".$activeServer."</h3>";
 } else {
-    echo "<h4>viewer @ ".$activeServer."</h4>";
+    echo "<h4>guest @ ".$activeServer."</h4>";
 }
 ?>
 </div>
 -->
 <!-- Show User and Server -->
-
 
 <!-- Log in/out -->
 
@@ -83,7 +82,6 @@ if (isset($_SESSION['username'])) {
 </div>
 
 <!-- Log in/out -->
-
 
 <!-- Serverselect -->
 <div>
@@ -110,10 +108,9 @@ if (isset($_SESSION['username'])) {
 <!-- Serverselect -->
 </div>
 
-<!- Second row here -->
+<!-- Second row here -->
 
 <div class="inline-headlines">
-
 
   <div id="fail2ban-alerts-container">
     <div class="headhead"><span title="Shows Jail | Events | Unique IPs">DoS/Scan/BF:</span></div>
@@ -132,8 +129,6 @@ if (isset($_SESSION['username'])) {
     <div id="fail2ban-top3-jails" class="toplist"></div>
   </div>
 
-
-
   <div id="fail2ban-stats">
     <div class="headhead">Fail2Ban Today:</div>
     <div>🚫 Bans: <span id="fail2ban-bans">--</span></div>
@@ -148,13 +143,11 @@ if (isset($_SESSION['username'])) {
     <div class="headstat">📆 30 Days: <span id="fail2ban-last30">--</span></div>
   </div>
 
-
   <div id="blocklist-stats">
   <div class="headhead">Fail2Ban-Report Blocklists:</div>
   <div id="blocklist-stats-container">
     <!-- JS render Jails here -->
   </div>
   </div>
-
 
 </div>

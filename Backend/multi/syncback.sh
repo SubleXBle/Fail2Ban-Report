@@ -2,7 +2,7 @@
 # syncback.sh
 set -euo pipefail
 
-# === Config laden ===
+# === Load Configuration ===
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.env"
 
@@ -19,23 +19,31 @@ if [ "${#files[@]}" -eq 0 ]; then
     exit 0
 fi
 
-# === Prepare curl args for multiple files ===
-curl_args=()
-for f in "${files[@]}"; do
-    curl_args+=("-F" "file[]=@$f")
-done
-
-# Add auth fields
-curl_args+=(
-    "-F" "username=$CLIENT_USER"
-    "-F" "password=$CLIENT_PASS"
-    "-F" "uuid=$CLIENT_UUID"
-)
-
 log "Uploading ${#files[@]} blocklist file(s) to backsync.php ..."
 
-# === Upload to server ===
-response=$(curl -s -w "\n%{http_code}" "${curl_args[@]}" "$BACKSYNC_URL" || true)
+# === Prepare secure configuration file for curl (Fix against process credentials leak) ===
+authfile=$(mktemp)
+chmod 600 "$authfile"
+
+# Add auth fields securely into the configuration file instead of passing via argv
+cat << EOF > "$authfile"
+form="username=${CLIENT_USER}"
+form="password=${CLIENT_PASS}"
+form="uuid=${CLIENT_UUID}"
+EOF
+
+# Add files dynamically to the secure curl configuration file
+for f in "${files[@]}"; do
+    echo "form=\"file[]=@$f\"" >> "$authfile"
+done
+
+# === Upload to server securely ===
+response=$(curl -s -w "\n%{http_code}" --config "$authfile" "$BACKSYNC_URL" || true)
+
+# Immediately wipe and remove the temporary authentication file to safeguard credentials
+rm -f "$authfile"
+
+# Parse output response
 http_code=$(tail -n1 <<< "$response")
 body=$(sed '$d' <<< "$response")
 
