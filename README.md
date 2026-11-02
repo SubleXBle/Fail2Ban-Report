@@ -305,7 +305,7 @@ Fail2Ban-Report maintains fast performance and reliable data synchronization, pr
 Pull requests, feature ideas and bug reports are very welcome!
 
 - Found a bug? → [Open an issue](https://github.com/SubleXBle/Fail2Ban-Report/issues)
-- Want to contribute? → Fork and submit a pull request
+- Want to contribute? → please contact me first
 - Have an idea? → Start a discussion or reach out directly : visit the 💬 [Discussions page](https://github.com/SubleXBle/Fail2Ban-Report/discussions)
 
 > 💡 “Wouldn’t it be cool if it could also do XYZ?”  
