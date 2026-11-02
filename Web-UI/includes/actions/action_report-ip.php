@@ -3,6 +3,19 @@
 
 header('Content-Type: application/json; charset=utf-8');
 
+// 1. Enforce authorization (Fix against unauthenticated anonymous access)
+require_once __DIR__ . '/../auth.php';
+
+if (!is_admin()) {
+    http_response_code(403);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Unauthorized: Only admins can report IPs.',
+        'type'    => 'error'
+    ]);
+    exit;
+}
+
 $config = parse_ini_file('/opt/Fail2Ban-Report/Settings/fail2ban-report.config');
 
 $ips = $_POST['ip'] ?? null;
@@ -24,13 +37,42 @@ $results = [];
 $allMessages = [];
 $overallSuccess = true;
 
+// Define whitelist of allowed services to prevent path manipulation hazards
+$allowed_services = ['abuseipdb', 'ipinfo'];
+
 foreach ($ips as $ip) {
     $ip = trim($ip);
+    
+    // 2. Validate IP address format (Fix against malformed or malicious inputs)
+    if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+        $overallSuccess = false;
+        $allMessages[] = "$ip → [Error] Invalid IP address format.";
+        $results[] = [
+            'ip'      => $ip,
+            'success' => false,
+            'message' => 'Invalid IP address format.',
+            'data'    => [],
+        ];
+        continue;
+    }
+
     $reportResults = [];
     $messages = [];
     $ipSuccess = true;
 
     foreach ($services as $service) {
+        // Strict whitelist enforcement check
+        if (!in_array($service, $allowed_services, true)) {
+            $ipSuccess = false;
+            $reportResults[$service] = [
+                'success' => false,
+                'message' => "Service '$service' is not allowed.",
+                'type' => 'error'
+            ];
+            $messages[] = "[$service] disallowed service";
+            continue;
+        }
+
         $script = __DIR__ . "/reports/$service.php";
 
         // Check API keys for services that require them
