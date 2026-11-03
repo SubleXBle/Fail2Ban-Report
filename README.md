@@ -3,7 +3,8 @@
 
 ## Please Update as soon as possible when you are using 0.5.0 or 0.5.1 
 
-- see "- [## 🆕 What's New in v0.5.2 (Cumulative Security Release)](## 🆕 What's New in v0.5.2 (Cumulative Security Release))" for Details!
+- see "- [## 🆕 What's New in v0.5.2 (Cumulative Security Release)](#-whats-new-in-v052-cumulative-security-release)" for Details!
+
 
 ---
 
