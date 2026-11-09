@@ -1,7 +1,7 @@
 # Fail2Ban-Report
 ![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20-_🕵️_V0.5.2_(Beta_5.2)-gold?style=flat&logoColor=black)
 
-## Please Update as soon as possible when you are using 0.5.0 or 0.5.1 
+## Please Update as soon as possible when you are using 0.5.0, 0.5.1 or other "legacy" version.
 
 - see "- [## 🆕 What's New in v0.5.2 (Cumulative Security Release)](#-whats-new-in-v052-cumulative-security-release)" for Details!
 - see " [https://github.com/SubleXBle/Fail2Ban-Report/security/advisories](https://github.com/SubleXBle/Fail2Ban-Report/security/advisories)" for full reports
