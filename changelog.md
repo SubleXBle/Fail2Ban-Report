@@ -38,6 +38,8 @@
 - Web-UI/includes/auth.php
 - Web-UI/includes/header.php
 
+---
+
 
 * **Fixed Stored Cross-Site Scripting (XSS) via Client Sync (0.5.1 Hotfix):** Resolved a critical vulnerability in `backsync.php` and `blocklist-overlay.js` where malicious or compromised sync clients could upload a manipulated JSON file containing arbitrary JavaScript payloads (e.g., inside the `ip` or `jail` fields). The UI has been refactored to ban `innerHTML` usage, shifting entirely to secure `textContent` and `createElement` DOM manipulation to neutralize any script execution hazards.
 * **Fixed Authentication Bypass on Read Plane (0.5.2):** Resolved an architectural flaw where unauthenticated network sessions were automatically assigned a default `viewer` role, leaving sensitive firewall history, server configurations, and blocking aggregations open to anonymous actors. Access is now strictly guarded at the global gateway level.
