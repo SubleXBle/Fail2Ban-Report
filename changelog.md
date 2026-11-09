@@ -39,6 +39,13 @@
 - Web-UI/includes/header.php
 
 
+* **Fixed Stored Cross-Site Scripting (XSS) via Client Sync (0.5.1 Hotfix):** Resolved a critical vulnerability in `backsync.php` and `blocklist-overlay.js` where malicious or compromised sync clients could upload a manipulated JSON file containing arbitrary JavaScript payloads (e.g., inside the `ip` or `jail` fields). The UI has been refactored to ban `innerHTML` usage, shifting entirely to secure `textContent` and `createElement` DOM manipulation to neutralize any script execution hazards.
+* **Fixed Authentication Bypass on Read Plane (0.5.2):** Resolved an architectural flaw where unauthenticated network sessions were automatically assigned a default `viewer` role, leaving sensitive firewall history, server configurations, and blocking aggregations open to anonymous actors. Access is now strictly guarded at the global gateway level.
+* **Fixed Shell Command Injection in Helper Scripts (0.5.2):** Patched `manage_users.sh` and `manage-clients.sh` where user-supplied inputs containing specific shell characters (like apostrophes) were interpreted as executable PHP program text. Data payloads are now passed securely using isolated environment variables (`getenv()`).
+* **Fixed Credentials Leak in Process Table (0.5.2):** Hardened the multi-server sync engine (`syncback.sh` and `fail2ban_log2json.sh`) to prevent sync passwords (`CLIENT_PASS`) from leaking into the host's public process listing (`argv`). Commands are now packaged dynamically inside localized, temporary configuration files (`chmod 600`).
+* **Secured API Lookup Restrictions & Data Sanitization:** Overhauled `action_report-ip.php` to mandate active administrator verification before reaching outbound services, preventing blind exploitation of paid lookups (AbuseIPDB / IPinfo). Integrated native IP structure enforcement (`FILTER_VALIDATE_IP`).
+
+
 ## Changes made for 0.5.1
 
 Web-UI => assets => js => blocklist-overlay.js
