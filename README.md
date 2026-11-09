@@ -7,6 +7,8 @@
 - see " [https://github.com/SubleXBle/Fail2Ban-Report/security/advisories](https://github.com/SubleXBle/Fail2Ban-Report/security/advisories)" for full reports
 
 
+- for single Server Version have a look at the [Docker-Version](https://github.com/SubleXBle/Fail2Ban-Report-Docker)
+
 ---
 
 A lightweight web-based "multi-server dashboard" that transforms daily Fail2Ban logs into searchable and filterable JSON reports, while also providing centralized UFW IP blocklist management across all your servers through a pull-based client-side synchronization via secure HTTPS endpoints.
