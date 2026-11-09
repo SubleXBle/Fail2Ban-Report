@@ -48,6 +48,8 @@
 * **Secured API Lookup Restrictions & Data Sanitization:** Overhauled `action_report-ip.php` to mandate active administrator verification before reaching outbound services, preventing blind exploitation of paid lookups (AbuseIPDB / IPinfo). Integrated native IP structure enforcement (`FILTER_VALIDATE_IP`).
 
 
+---
+
 ## Changes made for 0.5.1
 
 Web-UI => assets => js => blocklist-overlay.js
