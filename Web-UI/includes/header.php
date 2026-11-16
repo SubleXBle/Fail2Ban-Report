@@ -35,7 +35,7 @@
     <h1>Fail2Ban-Report</h1>
     <h2>Let's catch the bad guys!</h2>
   <div>
-    <span title="Beta 5.2"><small>Version : 0.5.2</small> 🕵️</span></div>
+    <span title="Beta 5.3"><small>Version : 0.5.3</small> 🕵️</span></div>
   </div>
 
 <!-- Log in/out Form (Always visible for guests, shows logout for admins) -->

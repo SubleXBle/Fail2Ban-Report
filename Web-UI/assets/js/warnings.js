@@ -44,12 +44,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const j = jailStats[jailNames[0]];
         label.textContent = `${jailNames[0]} | ${j.events} | ${j.unique_ips}`;
       } else if (jailNames.length > 1) {
-        // Multiple jails, list with lines
-        const lines = jailNames.map(jail => {
+        // Multiple jails, list with lines (XSS-safe)
+        label.textContent = "";
+        jailNames.forEach((jail, index) => {
           const j = jailStats[jail];
-          return `${jail} | ${j.events} | ${j.unique_ips}`;
+          if (index > 0) {
+            label.appendChild(document.createElement("br"));
+          }
+          label.appendChild(
+            document.createTextNode(`${jail} | ${j.events} | ${j.unique_ips}`)
+          );
         });
-        label.innerHTML = lines.join('<br>');
       } else {
         // No jail name (fallback)
         label.textContent = `${totalIPs}/${totalEvents} ${capitalize(type)}${totalIPs !== 1 ? "s" : ""}`;

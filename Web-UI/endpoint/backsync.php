@@ -46,7 +46,8 @@ if (isset($client['ip']) && $client['ip'] !== $remoteIp) {
 }
 
 // === 3) Prepare temp upload directory ===
-$userTempDir = $TEMP_UPLOAD_DIR . $username . "/";
+$safeUsername = basename($username);
+$userTempDir = $TEMP_UPLOAD_DIR . $safeUsername . "/";
 if (!is_dir($userTempDir)) mkdir($userTempDir, 0770, true);
 
 // === 4) Receive files and store them temporarily ===
@@ -60,7 +61,8 @@ foreach ($_FILES['file']['name'] as $index => $name) {
     if (!is_uploaded_file($tmpName)) continue;
     if (!preg_match('/^[a-z0-9_-]+\.blocklist\.json$/i', $name)) continue;
 
-    $destPath = $userTempDir . basename($name);
+    $safeName = basename($name);
+    $destPath = $userTempDir . $safeName;
     if (!move_uploaded_file($tmpName, $destPath)) continue;
 
     // --- START SECURITY VALIDATION ---
@@ -69,31 +71,50 @@ foreach ($_FILES['file']['name'] as $index => $name) {
 
     // Verify it is valid JSON and contains an array
     if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
-        unlink($destPath); // Delete invalid file immediately
+        unlink($destPath);
         continue;
     }
 
     $fileValid = true;
     foreach ($data as $entry) {
-        // 1. Validate IP address format
-        if (!isset($entry['ip']) || !filter_var($entry['ip'], FILTER_VALIDATE_IP)) {
+        if (!is_array($entry)) {
             $fileValid = false;
             break;
         }
-        // 2. Validate jail name (alphanumeric, dashes, and underscores only)
-        if (!isset($entry['jail']) || !preg_match('/^[a-z0-9_-]+$/i', $entry['jail'])) {
+        // 1. Validate IP address format
+        if (!isset($entry['ip']) || !is_string($entry['ip']) || filter_var($entry['ip'], FILTER_VALIDATE_IP) === false) {
             $fileValid = false;
             break;
+        }
+        // 2. Validate jail name (alphanumeric, dashes, and underscores only, max 64 chars)
+        if (!isset($entry['jail']) || !is_string($entry['jail']) || !preg_match('/^[a-z0-9_-]{1,64}$/i', $entry['jail'])) {
+            $fileValid = false;
+            break;
+        }
+        // 3. Validate optional timestamp (ISO-8601 or standard YYYY-MM-DD HH:MM:SS)
+        if (isset($entry['timestamp']) && (!is_string($entry['timestamp']) || !preg_match('/^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:[.,]\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/', $entry['timestamp']))) {
+            $fileValid = false;
+            break;
+        }
+        // 4. Validate optional source/reason length
+        foreach (['source', 'reason'] as $optField) {
+            if (isset($entry[$optField]) && (!is_string($entry[$optField]) || strlen($entry[$optField]) > 255)) {
+                $fileValid = false;
+                break 2;
+            }
         }
     }
 
     if (!$fileValid) {
-        unlink($destPath); // Delete manipulated file immediately
+        unlink($destPath);
         continue;
     }
+
+    // Re-encode clean JSON back to temp file
+    file_put_contents($destPath, json_encode(array_values($data), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     // --- END SECURITY VALIDATION ---
 
-    $uploadedFiles[] = $name;
+    $uploadedFiles[] = $safeName;
 }
 
 // If no valid files, respond early
@@ -106,18 +127,18 @@ $processedFiles = [];
 
 foreach ($uploadedFiles as $file) {
     $tempFile  = $userTempDir . $file;
-    $targetDir = $ARCHIVE_BASE . $username . "/blocklists/";
+    $targetDir = $ARCHIVE_BASE . $safeUsername . "/blocklists/";
     if (!is_dir($targetDir)) mkdir($targetDir, 0770, true);
     $targetFile = $targetDir . $file;
 
     // Acquire lock on the target blocklist file
-    $blockLockFile = "/tmp/{$username}_{$file}.lock";
+    $blockLockFile = "/tmp/{$safeUsername}_{$file}.lock";
     $blockHandle = fopen($blockLockFile, 'c');
     if (!$blockHandle || !flock($blockHandle, LOCK_EX)) {
-        continue; // skip this file if lock cannot be acquired
+        continue;
     }
 
-    // Replace old file with the new one
+    // Replace old file with the validated one
     copy($tempFile, $targetFile);
 
     // Acquire lock on update.json
@@ -132,8 +153,8 @@ foreach ($uploadedFiles as $file) {
         }
 
         // Remove the entry for this blocklist
-        if (isset($updateData[$username][$file])) {
-            unset($updateData[$username][$file]);
+        if (isset($updateData[$safeUsername][$file])) {
+            unset($updateData[$safeUsername][$file]);
             file_put_contents($updateFile, json_encode($updateData, JSON_PRETTY_PRINT));
         }
 
@@ -151,7 +172,7 @@ foreach ($uploadedFiles as $file) {
 }
 
 // Optional: clean up temp directory if empty
-if (is_dir($userTempDir)) rmdir($userTempDir);
+if (is_dir($userTempDir)) @rmdir($userTempDir);
 
 // === 6) Respond to client after all processing ===
 respond(200, [

@@ -20,7 +20,7 @@
 <!-- === Filters Container === -->
 <div id="filters" style="display:flex; flex-wrap:wrap; gap:0.5em; align-items:center; margin-bottom:1em;">
 
-  <button class="button-reset" onclick="location.href=location.pathname" title="! reset and reload !">↻</button>
+  <button class="button-reset" id="resetReloadBtn" title="! reset and reload !">↻</button>
 
   <label for="dateSelect">Select Date:</label>
   <select id="dateSelect"></select>
@@ -52,7 +52,7 @@
 
   <button id="openBlocklistBtn">Blocklist</button>
 
-  <button class="button-reset" onclick="copyFilteredToClipboard()">📋</button>
+  <button class="button-reset" id="copyClipboardBtn" title="Copy filtered list">📋</button>
 
 </div>
 

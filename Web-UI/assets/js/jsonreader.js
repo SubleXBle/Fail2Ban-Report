@@ -149,18 +149,34 @@ function renderTable() {
     th.textContent = th.getAttribute('data-label') + arrow;
   });
 
-  // --- Step 9: Render table ---
+  // --- Step 9: Render table (XSS-safe) ---
   tbody.innerHTML = '';
   sorted.forEach(entry => {
     const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${entry.timestamp}</td>
-      <td>${entry.action}</td>
-      <td>${entry.marker}</td>
-      <td>${entry.ip}</td>
-      <td>${entry.jail}</td>
-      <td><input type="checkbox" class="ip-select" data-ip="${entry.ip}" data-jail="${entry.jail}"></td>
-    `;
+
+    const fields = [
+      entry.timestamp ?? '',
+      entry.action ?? '',
+      entry.marker ?? '',
+      entry.ip ?? '',
+      entry.jail ?? ''
+    ];
+
+    fields.forEach(value => {
+      const td = document.createElement('td');
+      td.textContent = value;
+      row.appendChild(td);
+    });
+
+    const checkboxTd = document.createElement('td');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'ip-select';
+    checkbox.dataset.ip = entry.ip ?? '';
+    checkbox.dataset.jail = entry.jail ?? '';
+    checkboxTd.appendChild(checkbox);
+    row.appendChild(checkboxTd);
+
     tbody.appendChild(row);
   });
 }
@@ -190,6 +206,17 @@ document.querySelectorAll('#resultTable thead th[data-sort]').forEach(th => {
     }
     renderTable();
   });
+});
+
+// === Event listeners for CSP-safe toolbar buttons
+document.getElementById('resetReloadBtn')?.addEventListener('click', () => {
+  location.href = location.pathname;
+});
+
+document.getElementById('copyClipboardBtn')?.addEventListener('click', () => {
+  if (typeof copyFilteredToClipboard === 'function') {
+    copyFilteredToClipboard();
+  }
 });
 
 // Initial loading

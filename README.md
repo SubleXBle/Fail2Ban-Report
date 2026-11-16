@@ -1,9 +1,9 @@
 # Fail2Ban-Report
-![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20-_🕵️_V0.5.2_(Beta_5.2)-gold?style=flat&logoColor=black)
+![Fail2Ban-Report Beta](https://img.shields.io/badge/Fail2Ban--Report%20-_🕵️_V0.5.3_(Beta_5.3)-gold?style=flat&logoColor=black)
 
-## Please Update as soon as possible when you are using 0.5.0, 0.5.1 or other "legacy" version.
+## Please Update ASAP when you are using 0.5.0, 0.5.1, 0.5.2, or other "legacy" version.
 
-- see "- [## 🆕 What's New in v0.5.2 (Cumulative Security Release)](#-whats-new-in-v052-cumulative-security-release)" for Details!
+- see "- [## 🆕 What's New in v0.5.3 (Cumulative Security Release)](#-whats-new-in-v053-cumulative-security-release)" for Details!
 - see " [https://github.com/SubleXBle/Fail2Ban-Report/security/advisories](https://github.com/SubleXBle/Fail2Ban-Report/security/advisories)" for full reports
 
 
@@ -176,9 +176,9 @@ Username and Password for Blocklist manipulation is `admin`:`admin`
 ---
 
 
-## 🆕 What's New in v0.5.2 (Cumulative Security Release)
+## 🆕 What's New in v0.5.3 (Cumulative Security Release)
 
-This is a critical security update that aggregates multiple major vulnerability fixes from versions 0.5.1 and 0.5.2. All operators are strongly urged to upgrade immediately and replace both their Web-UI files and fleet deployment/client scripts.
+This is a critical security update that aggregates multiple major vulnerability fixes from versions 0.5.1 and 0.5.2. and 0.5.3 All operators are strongly urged to upgrade immediately and replace both their Web-UI files and fleet deployment/client scripts.
 
 ### 🔒 Security Fixes & Hardening
 
@@ -187,6 +187,10 @@ This is a critical security update that aggregates multiple major vulnerability 
 * **Fixed Shell Command Injection in Helper Scripts (0.5.2):** Patched `manage_users.sh` and `manage-clients.sh` where user-supplied inputs containing specific shell characters (like apostrophes) were interpreted as executable PHP program text. Data payloads are now passed securely using isolated environment variables (`getenv()`).
 * **Fixed Credentials Leak in Process Table (0.5.2):** Hardened the multi-server sync engine (`syncback.sh` and `fail2ban_log2json.sh`) to prevent sync passwords (`CLIENT_PASS`) from leaking into the host's public process listing (`argv`). Commands are now packaged dynamically inside localized, temporary configuration files (`chmod 600`).
 * **Secured API Lookup Restrictions & Data Sanitization:** Overhauled `action_report-ip.php` to mandate active administrator verification before reaching outbound services, preventing blind exploitation of paid lookups (AbuseIPDB / IPinfo). Integrated native IP structure enforcement (`FILTER_VALIDATE_IP`).
+* **Stored XSS Prevention (Frontend):** Replaced unescaped `innerHTML` rendering with safe DOM manipulation (`textContent`, `createTextNode`, and `dataset`) across `jsonreader.js`, `warnings.js`, and `fail2ban-logstats.js`.
+* **Strict Upload Validation (Backend):** Added server-side JSON schema and field validation (`FILTER_VALIDATE_IP`, regex checks for `jail` and `timestamp`, and an allow-list for `action`) plus clean JSON re-encoding in `endpoint/index.php` and `endpoint/backsync.php`.
+* **Content Security Policy (CSP):** Enabled strict security headers (`Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`) in `Web-UI/.htaccess` and migrated inline button handlers in `Web-UI/index.php` to CSP-safe event listeners.
+
 
 ### 🤝 Acknowledgements & Credits
 
