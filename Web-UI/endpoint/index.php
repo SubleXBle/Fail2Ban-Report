@@ -14,7 +14,54 @@ function respond($statusCode, $data) {
     exit;
 }
 
-// === 1) Authentcation ===
+// === Helper: Validate JSON Entries ===
+function validateEntries($data, $isEvents) {
+    if (!is_array($data)) {
+        return "JSON root must be an array.";
+    }
+
+    $allowedActions = ['Ban', 'Unban', 'Increase Ban', 'Restore Ban', 'Already Banned'];
+
+    foreach ($data as $index => $entry) {
+        if (!is_array($entry)) {
+            return "Entry at index $index is not an object.";
+        }
+
+        // 1. Validate IP (required for both events and blocklists)
+        if (!isset($entry['ip']) || !is_string($entry['ip']) || filter_var($entry['ip'], FILTER_VALIDATE_IP) === false) {
+            return "Invalid IP address at index $index.";
+        }
+
+        // 2. Validate Jail (required for events, optional for blocklists)
+        if ($isEvents || isset($entry['jail'])) {
+            if (!isset($entry['jail']) || !is_string($entry['jail']) || !preg_match('/^[a-z0-9_-]{1,64}$/i', $entry['jail'])) {
+                return "Invalid jail name at index $index.";
+            }
+        }
+
+        // 3. Validate Event-specific fields
+        if ($isEvents) {
+            if (!isset($entry['action']) || !is_string($entry['action']) || !in_array($entry['action'], $allowedActions, true)) {
+                return "Invalid action at index $index.";
+            }
+
+            if (!isset($entry['timestamp']) || !is_string($entry['timestamp']) || !preg_match('/^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:[.,]\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/', $entry['timestamp'])) {
+                return "Invalid timestamp at index $index.";
+            }
+        }
+
+        // 4. Validate optional string fields (source, reason, lastModified)
+        foreach (['source', 'reason'] as $optField) {
+            if (isset($entry[$optField]) && (!is_string($entry[$optField]) || strlen($entry[$optField]) > 255)) {
+                return "Invalid $optField at index $index.";
+            }
+        }
+    }
+
+    return true;
+}
+
+// === 1) Authentication ===
 if (!file_exists($CLIENTS_FILE)) {
     respond(500, ["success" => false, "message" => "Client list not found."]);
 }
@@ -29,7 +76,7 @@ $password = $_POST['password'] ?? '';
 $uuid     = $_POST['uuid'] ?? '';
 $remoteIp = $_SERVER['REMOTE_ADDR'] ?? '';
 
-// search Client
+// Search Client
 $client = null;
 foreach ($clients as $c) {
     if ($c['username'] === $username && $c['uuid'] === $uuid) {
@@ -58,45 +105,54 @@ if (!is_uploaded_file($uploadedFile)) {
     respond(400, ["success" => false, "message" => "Invalid upload."]);
 }
 
-// get type
-$isEvents   = preg_match('/^fail2ban-events-\d+\.json$/', $originalName);
-$isBlocklist = preg_match('/^[a-z0-9_-]+\.blocklist\.json$/i', $originalName);
+// Get type
+$isEvents    = (bool) preg_match('/^fail2ban-events-\d+\.json$/', $originalName);
+$isBlocklist = (bool) preg_match('/^[a-z0-9_-]+\.blocklist\.json$/i', $originalName);
 
 if (!$isEvents && !$isBlocklist) {
     respond(400, ["success" => false, "message" => "Invalid filename: $originalName"]);
 }
 
-// === 3) prepare archive path ===
-$userArchive = $ARCHIVE_BASE . $username . "/";
+// Parse & validate JSON payload BEFORE touching disk
+$rawContent = file_get_contents($uploadedFile);
+$newData = json_decode($rawContent, true);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    respond(400, ["success" => false, "message" => "Malformed JSON in upload."]);
+}
+
+$validationResult = validateEntries($newData, $isEvents);
+if ($validationResult !== true) {
+    respond(400, ["success" => false, "message" => "Validation failed: " . $validationResult]);
+}
+
+// === 3) Prepare archive path ===
+$safeUsername = basename($username);
+$userArchive = $ARCHIVE_BASE . $safeUsername . "/";
 $targetDir = $userArchive . ($isEvents ? "fail2ban/" : "blocklists/");
 if (!is_dir($targetDir) && !mkdir($targetDir, 0770, true)) {
     respond(500, ["success" => false, "message" => "Failed to create target directory."]);
 }
-$targetFile = $targetDir . $originalName;
+$targetFile = $targetDir . basename($originalName);
 
-// === 4) Fail2Ban Events → overwrite them ===
+// === 4) Fail2Ban Events -> overwrite with re-encoded validated JSON ===
 if ($isEvents) {
-    if (!move_uploaded_file($uploadedFile, $targetFile)) {
+    $cleanJson = json_encode(array_values($newData), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    if (file_put_contents($targetFile, $cleanJson, LOCK_EX) === false) {
         respond(500, ["success" => false, "message" => "Failed to save events file."]);
     }
-    chown($targetFile, "root");
-    chgrp($targetFile, "www-data");
+    @chown($targetFile, "root");
+    @chgrp($targetFile, "www-data");
     respond(200, ["success" => true, "message" => "Events file stored."]);
 }
 
-// === 5) process eventlists  ===
-$newData = json_decode(file_get_contents($uploadedFile), true);
-if (!is_array($newData)) {
-    respond(400, ["success" => false, "message" => "Invalid JSON in upload."]);
-}
-
-$lockFile = "/tmp/" . $originalName . ".lock";
+// === 5) Process blocklists ===
+$lockFile = "/tmp/" . basename($originalName) . ".lock";
 $lockHandle = fopen($lockFile, 'c');
 if (!$lockHandle || !flock($lockHandle, LOCK_EX)) {
     respond(500, ["success" => false, "message" => "Could not acquire lock."]);
 }
 
-// load old Data
+// Load old Data
 $archiveData = [];
 if (file_exists($targetFile)) {
     $archiveData = json_decode(file_get_contents($targetFile), true);
@@ -105,16 +161,16 @@ if (file_exists($targetFile)) {
     }
 }
 
-//  Compare & Update
+// Compare & Update
 $changed = false;
 foreach ($archiveData as $key => &$entry) {
     if (!isset($entry['ip'])) continue;
     $ip = $entry['ip'];
 
     // Case 1: active=true & pending=true -> pending=false when in new List with pending=false
-    if ($entry['active'] === true && $entry['pending'] === true) {
+    if (($entry['active'] ?? false) === true && ($entry['pending'] ?? false) === true) {
         foreach ($newData as $n) {
-            if ($n['ip'] === $ip && $n['pending'] === false) {
+            if ($n['ip'] === $ip && ($n['pending'] ?? null) === false) {
                 $entry['pending'] = false;
                 $entry['lastModified'] = date('c');
                 $changed = true;
@@ -124,7 +180,7 @@ foreach ($archiveData as $key => &$entry) {
     }
 
     // Case 2: active=false & pending=true -> delete if not in List anymore
-    if ($entry['active'] === false && $entry['pending'] === true) {
+    if (($entry['active'] ?? true) === false && ($entry['pending'] ?? false) === true) {
         $found = false;
         foreach ($newData as $n) {
             if ($n['ip'] === $ip) {
@@ -148,9 +204,10 @@ if ($changed) {
         respond(500, ["success" => false, "message" => "Failed to write blocklist."]);
     }
 } else {
-    // if file is new -> save it
+    // If file is new -> save validated & re-encoded JSON
     if (!file_exists($targetFile)) {
-        if (!move_uploaded_file($uploadedFile, $targetFile)) {
+        $cleanJson = json_encode(array_values($newData), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if (file_put_contents($targetFile, $cleanJson) === false) {
             flock($lockHandle, LOCK_UN);
             fclose($lockHandle);
             respond(500, ["success" => false, "message" => "Failed to create blocklist."]);
@@ -161,7 +218,7 @@ if ($changed) {
 flock($lockHandle, LOCK_UN);
 fclose($lockHandle);
 
-chown($targetFile, "root");
-chgrp($targetFile, "www-data");
+@chown($targetFile, "root");
+@chgrp($targetFile, "www-data");
 
 respond(200, ["success" => true, "message" => "Blocklist updated."]);
