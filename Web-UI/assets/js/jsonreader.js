@@ -149,7 +149,7 @@ function renderTable() {
     th.textContent = th.getAttribute('data-label') + arrow;
   });
 
-  // --- Step 9: Render table ---
+  // --- Step 9: Render table (XSS-safe) ---
   tbody.innerHTML = '';
   sorted.forEach(entry => {
     const row = document.createElement('tr');
@@ -179,6 +179,7 @@ function renderTable() {
 
     tbody.appendChild(row);
   });
+}
 
 function getSelectedDate() {
   const filename = document.getElementById('dateSelect').value;
@@ -205,6 +206,17 @@ document.querySelectorAll('#resultTable thead th[data-sort]').forEach(th => {
     }
     renderTable();
   });
+});
+
+// === Event listeners for CSP-safe toolbar buttons
+document.getElementById('resetReloadBtn')?.addEventListener('click', () => {
+  location.href = location.pathname;
+});
+
+document.getElementById('copyClipboardBtn')?.addEventListener('click', () => {
+  if (typeof copyFilteredToClipboard === 'function') {
+    copyFilteredToClipboard();
+  }
 });
 
 // Initial loading
