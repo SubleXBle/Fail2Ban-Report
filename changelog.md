@@ -25,6 +25,29 @@
 
 # Detailed Changes for all Versions (since 0.3.1)
 
+## Changes made for 0.5.3
+
+### Security Fixes & Hardening
+
+* **Stored XSS Prevention (Frontend):** Replaced unescaped `innerHTML` rendering with safe DOM manipulation (`textContent`, `createTextNode`, and `dataset`) across `jsonreader.js`, `warnings.js`, and `fail2ban-logstats.js`.
+* **Strict Upload Validation (Backend):** Added server-side JSON schema and field validation (`FILTER_VALIDATE_IP`, regex checks for `jail` and `timestamp`, and an allow-list for `action`) plus clean JSON re-encoding in `endpoint/index.php` and `endpoint/backsync.php`.
+* **Content Security Policy (CSP):** Enabled strict security headers (`Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`) in `Web-UI/.htaccess` and migrated inline button handlers in `Web-UI/index.php` to CSP-safe event listeners.
+
+
+### Security & Code Changes
+
+* **`Web-UI/assets/js/jsonreader.js`**: Refactored `renderTable()` to use XSS-safe DOM manipulation and added CSP-safe event listeners for toolbar buttons.
+* **`Web-UI/assets/js/warnings.js`**: Refactored multi-jail status rendering to prevent XSS via safe DOM node creation.
+* **`Web-UI/assets/js/fail2ban-logstats.js`**: Refactored top-jails list rendering to be XSS-safe and removed duplicate function definitions.
+* **`Web-UI/index.php`**: Replaced inline `onclick` attributes on toolbar buttons with IDs for CSP compatibility.
+* **`Web-UI/endpoint/index.php`**: Added strict JSON validation (`ip`, `jail`, `action`, `timestamp`) and clean re-encoding for uploaded event and blocklist files.
+* **`Web-UI/endpoint/backsync.php`**: Hardened upload validation (`timestamp`, field lengths, safe path handling) and enforced JSON re-encoding before saving.
+* **`Web-UI/.htaccess`**: Enabled `Content-Security-Policy` (`script-src 'self'`) and additional HTTP security headers.
+
+
+
+---
+
 ## Changes made for 0.5.2
 
 - Helper-Scripts/manage-users.sh
