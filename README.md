@@ -197,6 +197,7 @@ This is a critical security update that aggregates multiple major vulnerability 
 We heavily appreciate the dedication of the security community in making Fail2Ban-Report safer. Special honors go out to:
 1. **Aluri Hruthik** (reported by *darkknight268*) – For finding and demonstrating the critical Stored XSS vector in the client sync ecosystem.
 2. **jaswanthsai1** – For uncovering the authentication bypasses, command injection paths, and credential leakage surfaces across the dashboard core.
+3. **Peter Wilfahrt** - For uncovering and providing a patch for the Stored XSS vulnerability in the multi-server event ingestion and dashboard rendering pipeline.
 
 
 
