@@ -3,7 +3,7 @@
 
 ## Please Update as soon as possible when you are using 0.5.0, 0.5.1, 0.5.2, or other "legacy" version.
 
-- see "- [## 🆕 What's New in v0.5.2 (Cumulative Security Release)](#-whats-new-in-v052-cumulative-security-release)" for Details!
+- see "- [## 🆕 What's New in v0.5.3 (Cumulative Security Release)](#-whats-new-in-v053-cumulative-security-release)" for Details!
 - see " [https://github.com/SubleXBle/Fail2Ban-Report/security/advisories](https://github.com/SubleXBle/Fail2Ban-Report/security/advisories)" for full reports
 
 
